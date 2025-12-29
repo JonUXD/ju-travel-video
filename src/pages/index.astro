@@ -1,0 +1,41 @@
+---
+// src/pages/index.astro
+import Layout from '../layouts/Layout.astro';
+import VideoSection from '../components/VideoSection.astro';
+import { sortedVideos } from '../data/index';
+---
+
+<Layout>
+  <main class="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <!-- Header -->
+    <header class="py-12 px-4 sm:px-8 border-b border-gray-200 bg-white">
+      <div class="max-w-6xl mx-auto">
+        <h1 class="text-5xl font-bold text-gray-900 tracking-tight mb-3">Travel Films</h1>
+        <p class="text-gray-600 text-lg">A cinematic collection of travel videos from around the world</p>
+        <div class="mt-6 text-sm text-gray-500">
+          <span class="inline-flex items-center gap-1">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+            </svg>
+            {sortedVideos.length} videos • {new Set(sortedVideos.map(v => v.metadata.country)).size} countries
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Video Sections -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-8 py-12">
+      {sortedVideos.map((video, index) => (
+        <VideoSection video={video} />
+      ))}
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-8 px-4 sm:px-8 border-t border-gray-200 bg-white">
+      <div class="max-w-6xl mx-auto text-center text-gray-500 text-sm">
+        <p class="mb-2">Travel Video Portfolio • Cinematic travel films • {new Date().getFullYear()}</p>
+        <p class="text-xs">All videos shot and edited with passion for the art of travel storytelling</p>
+      </div>
+    </footer>
+  </main>
+</Layout>

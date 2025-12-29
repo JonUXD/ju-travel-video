@@ -1,0 +1,5 @@
+{
+  "include_extensions": [".tsx", ".ts", ".json", ".js", ".css", ".md", ".html", ".astro"],
+  "exclude_folders": ["node_modules", "dist", ".git"],
+  "exclude_files": [".env", ".DS_Store", "package-lock.json", "output_all_code.txt"]
+}

@@ -1,0 +1,36 @@
+{
+  "id": "croatia-2015",
+  "title": "Croatia | 2015",
+  "slug": "croatia-2015",
+  "youtubeId": "KwQxE7g8sBw",
+  "description": "A travel film from my trip to Croatia with friends in September 2015.",
+  "metadata": {
+    "country": "Croatia",
+    "region": "Europe",
+    "places": [
+      "Dubrovnik",
+      "Korčula",
+      "Split"
+    ],
+    "date": "2015-09-01",
+    "coordinates": [
+      42.6555,
+      18.1042
+    ],
+    "gear": "GoPro Hero 3",
+    "music": {
+      "artist": "Lost Frequencies",
+      "title": "Are You With Me",
+      "spotify": "https://open.spotify.com/track/4255amV4enzl28KAn16rUO",
+      "youtube": "https://www.youtube.com/watch?v=TUmUrvIaG8k"
+    }
+  },
+  "stills": [
+    "/images/stills/croatia-2015/croatia-2016-stills-01.png",
+    "/images/stills/croatia-2015/croatia-2016-stills-02.png",
+    "/images/stills/croatia-2015/croatia-2016-stills-03.png",
+    "/images/stills/croatia-2015/croatia-2016-stills-04.png",
+    "/images/stills/croatia-2015/croatia-2016-stills-05.png",
+    "/images/stills/croatia-2015/croatia-2016-stills-06.png"
+  ]
+}

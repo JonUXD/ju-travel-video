@@ -1,0 +1,33 @@
+{
+  "id": "venice-2018",
+  "title": "Venice | 2018",
+  "slug": "venice-2018",
+  "youtubeId": "f-c1w6Ka5Vg",
+  "description": "A travel film with my family from my trip to Venice during Easter 2018.",
+  "metadata": {
+    "country": "Italy",
+    "region": "Europe",
+    "places": [
+      "Venice"
+    ],
+    "date": "2018-04-01",
+    "coordinates": [
+      45.4408,
+      12.3155
+    ],
+    "gear": "Olympus EM5 Mark II, Olympus 12-40mm f/2.8 PRO",
+    "music": {
+      "artist": "Of Monsters and Men",
+      "title": "Mountain Sound",
+      "spotify": "https://open.spotify.com/track/3SPVZJzf1Hs30rB6yXVf2y",
+      "youtube": "https://www.youtube.com/watch?v=qt7ox1M_XG4"
+    }
+  },
+  "stills": [
+    "/images/stills/venice-2018/venice-2018-stills-01.png",
+    "/images/stills/venice-2018/venice-2018-stills-02.png",
+    "/images/stills/venice-2018/venice-2018-stills-03.png",
+    "/images/stills/venice-2018/venice-2018-stills-04.png",
+    "/images/stills/venice-2018/venice-2018-stills-05.png"
+  ]
+}

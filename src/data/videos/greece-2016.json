@@ -1,0 +1,34 @@
+{
+  "id": "greece-2016",
+  "title": "Greece | 2016",
+  "slug": "greece-2016",
+  "youtubeId": "Cfc8_m17rHc",
+  "description": "A travel film from my trip to Greece with some friends (Athens and Crete) in August 2016.",
+  "metadata": {
+    "country": "Greece",
+    "region": "Europe",
+    "places": [
+      "Athens",
+      "Crete"
+    ],
+    "date": "2016-08-15",
+    "coordinates": [
+      35.3387,
+      25.1442
+    ],
+    "gear": "GoPro Hero 3",
+    "music": {
+      "artist": "Alle Farben feat. YouNotUs",
+      "title": "Please Tell Rosie",
+      "spotify": "https://open.spotify.com/track/5gF9zOYM9TmSzKHukbNjpB",
+      "youtube": "https://www.youtube.com/watch?v=TQLgLcU81e4"
+    }
+  },
+  "stills": [
+    "/images/stills/greece-2016/greece-2015-stills-01.png",
+    "/images/stills/greece-2016/greece-2015-stills-02.png",
+    "/images/stills/greece-2016/greece-2015-stills-03.png",
+    "/images/stills/greece-2016/greece-2015-stills-04.png",
+    "/images/stills/greece-2016/greece-2015-stills-05.png"
+  ]
+}

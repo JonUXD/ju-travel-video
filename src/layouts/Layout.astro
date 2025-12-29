@@ -1,0 +1,19 @@
+---
+// src/layouts/Layout.astro
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <!-- Import global CSS - FIXED PATH -->
+    <link rel="stylesheet" href={Astro.url.pathname.startsWith('/test') ? '/styles/global.css' : '/src/styles/global.css'} />
+    <title>Travel Video Portfolio</title>
+  </head>
+  <body class="bg-white text-gray-900">
+    <slot />
+  </body>
+</html>

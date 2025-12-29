@@ -1,0 +1,33 @@
+{
+  "id": "london-2017",
+  "title": "London | 2017",
+  "slug": "london-2017",
+  "youtubeId": "e_1Ubu9k9T8",
+  "description": "A travel film from my trip to London in autumn 2017 with my mum and sister.",
+  "metadata": {
+    "country": "United Kingdom",
+    "region": "Europe",
+    "places": [
+      "London"
+    ],
+    "date": "2017-10-15",
+    "coordinates": [
+      51.5014,
+      -0.1244
+    ],
+    "gear": "Olympus EM5 Mark II, Olympus 12-40mm f/2.8 PRO, GoPro Hero 3",
+    "music": {
+      "artist": "OneRepublic",
+      "title": "Good Life",
+      "spotify": "https://open.spotify.com/track/6OtCIsQZ64Vs1EbzztvAv4",
+      "youtube": "https://www.youtube.com/watch?v=jZhQOvvV45w"
+    }
+  },
+  "stills": [
+    "/images/stills/london-2017/london-2017-stills-01.png",
+    "/images/stills/london-2017/london-2017-stills-02.png",
+    "/images/stills/london-2017/london-2017-stills-03.png",
+    "/images/stills/london-2017/london-2017-stills-04.png",
+    "/images/stills/london-2017/london-2017-stills-05.png"
+  ]
+}

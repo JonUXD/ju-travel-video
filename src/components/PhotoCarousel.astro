@@ -1,0 +1,49 @@
+---
+// src/components/PhotoCarousel.astro
+interface Props {
+  stills: string[];
+  title: string;
+}
+
+const { stills, title } = Astro.props;
+---
+
+<div class="photo-carousel mt-6">
+  <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">
+    Stills from the film ({stills.length})
+  </h3>
+  
+  {stills.length > 0 ? (
+    <div class="flex space-x-4 overflow-x-auto pb-4 scrollbar-hide">
+      {stills.map((image, index) => (
+        <div class="flex-shrink-0 w-64">
+          <div class="relative rounded-lg overflow-hidden bg-gray-200 aspect-[16/9] group">
+            <img
+              src={image}
+              alt={`Still ${index + 1} from ${title}`}
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
+              width="400"
+              height="225"
+            />
+          </div>
+          <div class="mt-2 text-xs text-gray-500 text-center">
+            Still {index + 1}
+          </div>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <p class="text-gray-500 text-sm italic">No stills available</p>
+  )}
+  
+  <style>
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+</div>
