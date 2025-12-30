@@ -8,33 +8,45 @@ interface Props {
 const { stills, title } = Astro.props;
 ---
 
-<div class="photo-carousel mt-6">
-  <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">
-    Stills from the film ({stills.length})
-  </h3>
+<div class="photo-carousel mt-8">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-xs font-medium text-gray-500 uppercase tracking-widest">
+      Film Stills • {stills.length} images
+    </h3>
+    <span class="text-xs text-gray-400">Scroll →</span>
+  </div>
   
   {stills.length > 0 ? (
-    <div class="flex space-x-4 overflow-x-auto pb-4 scrollbar-hide">
-      {stills.map((image, index) => (
-        <div class="flex-shrink-0 w-64">
-          <div class="relative rounded-lg overflow-hidden bg-gray-200 aspect-[16/9] group">
-            <img
-              src={image}
-              alt={`Still ${index + 1} from ${title}`}
-              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              loading="lazy"
-              width="400"
-              height="225"
-            />
+    <div class="relative">
+      <!-- Gradient fade on edges -->
+      <div class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+      <div class="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+      
+      <div class="flex space-x-4 overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory">
+        {stills.map((image, index) => (
+          <div class="flex-shrink-0 w-72 snap-center">
+            <div class="relative rounded-lg overflow-hidden bg-gray-100 aspect-[16/9] group cursor-pointer">
+              <img
+                src={image}
+                alt={`Still ${index + 1} from ${title}`}
+                class="w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-110"
+                loading="lazy"
+                width="400"
+                height="225"
+              />
+              <!-- Overlay gradient -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <!-- Number badge -->
+              <div class="absolute top-3 right-3 bg-black/80 text-white text-xs font-medium px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                {index + 1}/{stills.length}
+              </div>
+            </div>
           </div>
-          <div class="mt-2 text-xs text-gray-500 text-center">
-            Still {index + 1}
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   ) : (
-    <p class="text-gray-500 text-sm italic">No stills available</p>
+    <p class="text-gray-400 text-sm italic">No stills available</p>
   )}
   
   <style>
@@ -44,6 +56,11 @@ const { stills, title } = Astro.props;
     }
     .scrollbar-hide::-webkit-scrollbar {
       display: none;
+    }
+    
+    /* Smooth scrolling */
+    .snap-x {
+      scroll-behavior: smooth;
     }
   </style>
 </div>

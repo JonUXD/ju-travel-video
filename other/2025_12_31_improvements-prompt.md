@@ -1,3 +1,93 @@
+# 🎬 Travel Video Portfolio — UI/UX Design Iteration Prompt
+
+## Current Status & Context
+We have a functional Astro + Tailwind portfolio showing 4 travel videos with:
+- YouTube embeds (66%/33% split with metadata)
+- Photo carousels with numbered badges on hover  
+- Monochrome palette with Inter font
+- Automated image-to-JSON script
+- Responsive grid layout
+
+## Key Issues to Address:
+
+### 1. Layout Density & Spacing
+**Problem:** Too much vertical separation between videos (only 1 visible on MacBook Air)  
+**Goal:** More compact, horizontal-friendly layout  
+**Questions:**
+- Should we reduce `mb-24 pb-16` margins between sections?
+- Consider horizontal scroll for videos instead of vertical stack?
+- Grid layout with 2 videos per row on desktop?
+
+### 2. Visual Framing & Aesthetics  
+**Problem:** Videos feel "floating" without container  
+**Goal:** Postcard/cinematic frame around each video section  
+**Questions:**
+- Add subtle border/box-shadow container for entire video section?
+- Dark thin border like film strip?
+- Polaroid-style white border with drop shadow?
+- Cinematic aspect: black bars top/bottom?
+
+### 3. Dark Mode Exploration
+**Observation:** Light mode works but dark may be more cinematic  
+**Goal:** Test dark background with light text  
+**Questions:**
+- Full dark theme or option to toggle?
+- Dark gray (`#0a0a0a`) or pure black?
+- How would carousel/images look on dark?
+- Should metadata cards invert colors?
+
+### 4. Carousel Refinement
+**Observation:** Gradient edges may be unnecessary  
+**Goal:** Cleaner carousel that fits monochrome aesthetic  
+**Questions:**
+- Remove side gradients completely?
+- Add subtle arrows for navigation?
+- Thinner border on images?
+- Different hover effect (brightness instead of scale)?
+
+### 5. Browser Zoom Optimization  
+**Observation:** Looks best at 80% zoom  
+**Goal:** Design should work well at 100%  
+**Questions:**
+- Is font size too large?
+- Are margins/padding excessive at default zoom?
+- Should we use `clamp()` for responsive typography?
+
+### 6. Metadata Layout Efficiency
+**Observation:** Right column has empty vertical space  
+**Goal:** Better use of vertical space in metadata column  
+**Questions:**
+- Move gear/music to align with video bottom?
+- Add "Watch on YouTube" button below video?
+- Include video duration/likes stats?
+
+## Design References to Discuss:
+1. **VSCO Grid** - Minimal, dense, photographic
+2. **Vimeo Staff Picks** - Cinematic framing  
+3. **Instagram Explore** - Horizontal scroll galleries
+4. **Film credit sequences** - Typography hierarchy
+5. **Movie poster design** - Dramatic composition
+
+## Technical Considerations:
+- Maintain current Astro/Tailwind structure
+- Keep automated image script  
+- Ensure YouTube embeds remain performant
+- Mobile responsiveness must not regress
+
+## Success Metrics for Next Iteration:
+- [ ] 2+ videos visible on MacBook Air screen
+- [ ] Clear visual hierarchy (video → metadata → carousel)
+- [ ] Cinematic "feel" (dark theme or framing)
+- [ ] Clean carousel without visual clutter  
+- [ ] Comfortable reading at 100% zoom
+
+---
+**Next session:** We'll tackle these points one-by-one, starting with **Layout Density & Spacing** (most critical UX issue). I'll provide specific CSS/Tailwind adjustments for each concern, and we can A/B test dark vs light themes.
+
+**Ready when you are to begin with Point #1: Layout Density.**
+
+Full code for reference:
+
 --- README.md ---
 # Astro Starter Kit: Basics
 
