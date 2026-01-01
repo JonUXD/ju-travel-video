@@ -1655,6 +1655,1735 @@ UTC:   2025-12-30 23:06:34 UTC
 Timestamp: 1767135994
 
 
+--- other/2026_01-01_improvements-look-and-feel.md ---
+# 🎬 Travel Video Portfolio - Improvement Roadmap
+# Version 1.1: Scale, Sidebar & Gallery Enhancement
+
+## CURRENT STATE
+- Only 1 video visible on MacBook Air (looks best at 80% zoom)
+- No navigation between videos  
+- Carousel images can't be viewed fullscreen
+
+## STAGE 1: FIX SCALING (Week 1)
+
+### GOAL
+Make 2-3 videos visible on screen without zooming out.
+
+### APPROACH
+1. **Reduce text sizes globally** (headers, metadata, stats)
+2. **Adjust grid layout** to use space more efficiently  
+3. **Compact spacing** between elements
+4. **Scale down carousel** images slightly
+
+### EXPECTED OUTCOME
+- Better information density
+- 2+ videos visible at 100% zoom
+- Maintains clean, readable design
+
+## STAGE 2: ADD SIDEBAR (Week 2)
+
+### GOAL  
+Elegant left sidebar for desktop navigation (20% width).
+
+### APPROACH
+1. **Create Sidebar component** with video list
+2. **Add anchor links** to each video section
+3. **Adjust main layout** to accommodate sidebar
+4. **Style sidebar** to match existing aesthetic
+5. **Mobile adaptation** (hamburger menu)
+
+### EXPECTED OUTCOME
+- Fixed sidebar on desktop
+- Click to jump between videos
+- Clean integration with current design
+
+## STAGE 3: PHOTO GALLERY (Week 3)
+
+### GOAL
+Click carousel images → fullscreen gallery with navigation.
+
+### APPROACH
+1. **Create Gallery component** (overlay with navigation)
+2. **Add click handlers** to carousel images
+3. **Implement keyboard navigation** (arrows, ESC)
+4. **Add image preloading** for smooth transitions
+
+### EXPECTED OUTCOME
+- Professional photo viewing experience
+- Keyboard navigation support
+- Maintains performance
+
+## TIMELINE
+- **Week 1:** Scaling fixes
+- **Week 2:** Sidebar implementation  
+- **Week 3:** Photo gallery
+- **Week 4:** Polish & testing
+
+## SUCCESS METRICS
+- [ ] 2+ videos visible on MacBook Air at 100% zoom
+- [ ] Sidebar navigation works smoothly
+- [ ] Gallery overlay functions properly
+- [ ] Mobile experience remains good
+
+all code
+
+--- README.md ---
+# Astro Starter Kit: Basics
+
+```sh
+npm create astro@latest -- --template basics
+```
+
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+
+## 🚀 Project Structure
+
+Inside of your Astro project, you'll see the following folders and files:
+
+```text
+/
+├── public/
+│   └── favicon.svg
+├── src
+│   ├── assets
+│   │   └── astro.svg
+│   ├── components
+│   │   └── Welcome.astro
+│   ├── layouts
+│   │   └── Layout.astro
+│   └── pages
+│       └── index.astro
+└── package.json
+```
+
+To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+
+## 🧞 Commands
+
+All commands are run from the root of the project, from a terminal:
+
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
+
+## 👀 Want to learn more?
+
+Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+
+--- package.json ---
+{
+  "name": "ju-travel-video",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "update-stills": "node scripts/update-stills.js"
+  },
+  "dependencies": {
+    "astro": "^5.16.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.10",
+    "autoprefixer": "^10.4.16",
+    "tailwindcss": "^3.4.0"
+  }
+}
+
+
+--- tsconfig.json ---
+{
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist"]
+}
+
+
+--- .astro/content.d.ts ---
+declare module 'astro:content' {
+	export interface RenderResult {
+		Content: import('astro/runtime/server/index.js').AstroComponentFactory;
+		headings: import('astro').MarkdownHeading[];
+		remarkPluginFrontmatter: Record<string, any>;
+	}
+	interface Render {
+		'.md': Promise<RenderResult>;
+	}
+
+	export interface RenderedContent {
+		html: string;
+		metadata?: {
+			imagePaths: Array<string>;
+			[key: string]: unknown;
+		};
+	}
+}
+
+declare module 'astro:content' {
+	type Flatten<T> = T extends { [K: string]: infer U } ? U : never;
+
+	export type CollectionKey = keyof AnyEntryMap;
+	export type CollectionEntry<C extends CollectionKey> = Flatten<AnyEntryMap[C]>;
+
+	export type ContentCollectionKey = keyof ContentEntryMap;
+	export type DataCollectionKey = keyof DataEntryMap;
+
+	type AllValuesOf<T> = T extends any ? T[keyof T] : never;
+	type ValidContentEntrySlug<C extends keyof ContentEntryMap> = AllValuesOf<
+		ContentEntryMap[C]
+	>['slug'];
+
+	export type ReferenceDataEntry<
+		C extends CollectionKey,
+		E extends keyof DataEntryMap[C] = string,
+	> = {
+		collection: C;
+		id: E;
+	};
+	export type ReferenceContentEntry<
+		C extends keyof ContentEntryMap,
+		E extends ValidContentEntrySlug<C> | (string & {}) = string,
+	> = {
+		collection: C;
+		slug: E;
+	};
+	export type ReferenceLiveEntry<C extends keyof LiveContentConfig['collections']> = {
+		collection: C;
+		id: string;
+	};
+
+	/** @deprecated Use `getEntry` instead. */
+	export function getEntryBySlug<
+		C extends keyof ContentEntryMap,
+		E extends ValidContentEntrySlug<C> | (string & {}),
+	>(
+		collection: C,
+		// Note that this has to accept a regular string too, for SSR
+		entrySlug: E,
+	): E extends ValidContentEntrySlug<C>
+		? Promise<CollectionEntry<C>>
+		: Promise<CollectionEntry<C> | undefined>;
+
+	/** @deprecated Use `getEntry` instead. */
+	export function getDataEntryById<C extends keyof DataEntryMap, E extends keyof DataEntryMap[C]>(
+		collection: C,
+		entryId: E,
+	): Promise<CollectionEntry<C>>;
+
+	export function getCollection<C extends keyof AnyEntryMap, E extends CollectionEntry<C>>(
+		collection: C,
+		filter?: (entry: CollectionEntry<C>) => entry is E,
+	): Promise<E[]>;
+	export function getCollection<C extends keyof AnyEntryMap>(
+		collection: C,
+		filter?: (entry: CollectionEntry<C>) => unknown,
+	): Promise<CollectionEntry<C>[]>;
+
+	export function getLiveCollection<C extends keyof LiveContentConfig['collections']>(
+		collection: C,
+		filter?: LiveLoaderCollectionFilterType<C>,
+	): Promise<
+		import('astro').LiveDataCollectionResult<LiveLoaderDataType<C>, LiveLoaderErrorType<C>>
+	>;
+
+	export function getEntry<
+		C extends keyof ContentEntryMap,
+		E extends ValidContentEntrySlug<C> | (string & {}),
+	>(
+		entry: ReferenceContentEntry<C, E>,
+	): E extends ValidContentEntrySlug<C>
+		? Promise<CollectionEntry<C>>
+		: Promise<CollectionEntry<C> | undefined>;
+	export function getEntry<
+		C extends keyof DataEntryMap,
+		E extends keyof DataEntryMap[C] | (string & {}),
+	>(
+		entry: ReferenceDataEntry<C, E>,
+	): E extends keyof DataEntryMap[C]
+		? Promise<DataEntryMap[C][E]>
+		: Promise<CollectionEntry<C> | undefined>;
+	export function getEntry<
+		C extends keyof ContentEntryMap,
+		E extends ValidContentEntrySlug<C> | (string & {}),
+	>(
+		collection: C,
+		slug: E,
+	): E extends ValidContentEntrySlug<C>
+		? Promise<CollectionEntry<C>>
+		: Promise<CollectionEntry<C> | undefined>;
+	export function getEntry<
+		C extends keyof DataEntryMap,
+		E extends keyof DataEntryMap[C] | (string & {}),
+	>(
+		collection: C,
+		id: E,
+	): E extends keyof DataEntryMap[C]
+		? string extends keyof DataEntryMap[C]
+			? Promise<DataEntryMap[C][E]> | undefined
+			: Promise<DataEntryMap[C][E]>
+		: Promise<CollectionEntry<C> | undefined>;
+	export function getLiveEntry<C extends keyof LiveContentConfig['collections']>(
+		collection: C,
+		filter: string | LiveLoaderEntryFilterType<C>,
+	): Promise<import('astro').LiveDataEntryResult<LiveLoaderDataType<C>, LiveLoaderErrorType<C>>>;
+
+	/** Resolve an array of entry references from the same collection */
+	export function getEntries<C extends keyof ContentEntryMap>(
+		entries: ReferenceContentEntry<C, ValidContentEntrySlug<C>>[],
+	): Promise<CollectionEntry<C>[]>;
+	export function getEntries<C extends keyof DataEntryMap>(
+		entries: ReferenceDataEntry<C, keyof DataEntryMap[C]>[],
+	): Promise<CollectionEntry<C>[]>;
+
+	export function render<C extends keyof AnyEntryMap>(
+		entry: AnyEntryMap[C][string],
+	): Promise<RenderResult>;
+
+	export function reference<C extends keyof AnyEntryMap>(
+		collection: C,
+	): import('astro/zod').ZodEffects<
+		import('astro/zod').ZodString,
+		C extends keyof ContentEntryMap
+			? ReferenceContentEntry<C, ValidContentEntrySlug<C>>
+			: ReferenceDataEntry<C, keyof DataEntryMap[C]>
+	>;
+	// Allow generic `string` to avoid excessive type errors in the config
+	// if `dev` is not running to update as you edit.
+	// Invalid collection names will be caught at build time.
+	export function reference<C extends string>(
+		collection: C,
+	): import('astro/zod').ZodEffects<import('astro/zod').ZodString, never>;
+
+	type ReturnTypeOrOriginal<T> = T extends (...args: any[]) => infer R ? R : T;
+	type InferEntrySchema<C extends keyof AnyEntryMap> = import('astro/zod').infer<
+		ReturnTypeOrOriginal<Required<ContentConfig['collections'][C]>['schema']>
+	>;
+
+	type ContentEntryMap = {
+		
+	};
+
+	type DataEntryMap = {
+		
+	};
+
+	type AnyEntryMap = ContentEntryMap & DataEntryMap;
+
+	type ExtractLoaderTypes<T> = T extends import('astro/loaders').LiveLoader<
+		infer TData,
+		infer TEntryFilter,
+		infer TCollectionFilter,
+		infer TError
+	>
+		? { data: TData; entryFilter: TEntryFilter; collectionFilter: TCollectionFilter; error: TError }
+		: { data: never; entryFilter: never; collectionFilter: never; error: never };
+	type ExtractDataType<T> = ExtractLoaderTypes<T>['data'];
+	type ExtractEntryFilterType<T> = ExtractLoaderTypes<T>['entryFilter'];
+	type ExtractCollectionFilterType<T> = ExtractLoaderTypes<T>['collectionFilter'];
+	type ExtractErrorType<T> = ExtractLoaderTypes<T>['error'];
+
+	type LiveLoaderDataType<C extends keyof LiveContentConfig['collections']> =
+		LiveContentConfig['collections'][C]['schema'] extends undefined
+			? ExtractDataType<LiveContentConfig['collections'][C]['loader']>
+			: import('astro/zod').infer<
+					Exclude<LiveContentConfig['collections'][C]['schema'], undefined>
+				>;
+	type LiveLoaderEntryFilterType<C extends keyof LiveContentConfig['collections']> =
+		ExtractEntryFilterType<LiveContentConfig['collections'][C]['loader']>;
+	type LiveLoaderCollectionFilterType<C extends keyof LiveContentConfig['collections']> =
+		ExtractCollectionFilterType<LiveContentConfig['collections'][C]['loader']>;
+	type LiveLoaderErrorType<C extends keyof LiveContentConfig['collections']> = ExtractErrorType<
+		LiveContentConfig['collections'][C]['loader']
+	>;
+
+	export type ContentConfig = typeof import("../src/content.config.mjs");
+	export type LiveContentConfig = never;
+}
+
+
+--- .astro/data-store.json ---
+[["Map",1,2],"meta::meta",["Map",3,4,5,6],"astro-version","5.16.6","astro-config-digest","{\"root\":{},\"srcDir\":{},\"publicDir\":{},\"outDir\":{},\"cacheDir\":{},\"compressHTML\":true,\"base\":\"/\",\"trailingSlash\":\"ignore\",\"output\":\"static\",\"scopedStyleStrategy\":\"attribute\",\"build\":{\"format\":\"directory\",\"client\":{},\"server\":{},\"assets\":\"_astro\",\"serverEntry\":\"entry.mjs\",\"redirects\":true,\"inlineStylesheets\":\"auto\",\"concurrency\":1},\"server\":{\"open\":false,\"host\":false,\"port\":4321,\"streaming\":true,\"allowedHosts\":[]},\"redirects\":{},\"image\":{\"endpoint\":{\"route\":\"/_image\"},\"service\":{\"entrypoint\":\"astro/assets/services/sharp\",\"config\":{}},\"domains\":[],\"remotePatterns\":[],\"responsiveStyles\":false},\"devToolbar\":{\"enabled\":true},\"markdown\":{\"syntaxHighlight\":{\"type\":\"shiki\",\"excludeLangs\":[\"math\"]},\"shikiConfig\":{\"langs\":[],\"langAlias\":{},\"theme\":\"github-dark\",\"themes\":{},\"wrap\":false,\"transformers\":[]},\"remarkPlugins\":[],\"rehypePlugins\":[],\"remarkRehype\":{},\"gfm\":true,\"smartypants\":true},\"security\":{\"checkOrigin\":true,\"allowedDomains\":[]},\"env\":{\"schema\":{},\"validateSecrets\":false},\"experimental\":{\"clientPrerender\":false,\"contentIntellisense\":false,\"headingIdCompat\":false,\"preserveScriptOrder\":false,\"liveContentCollections\":false,\"csp\":false,\"staticImportMetaEnv\":false,\"chromeDevtoolsWorkspace\":false,\"failOnPrerenderConflict\":false,\"svgo\":false},\"legacy\":{\"collections\":false}}"]
+
+--- .astro/settings.json ---
+{
+	"_variables": {
+		"lastUpdateCheck": 1767043951795
+	}
+}
+
+--- .astro/types.d.ts ---
+/// <reference types="astro/client" />
+
+
+--- tools/config.json ---
+{
+  "include_extensions": [".tsx", ".ts", ".json", ".js", ".css", ".md", ".html", ".astro"],
+  "exclude_folders": ["node_modules", "dist", ".git"],
+  "exclude_files": [".env", ".DS_Store", "package-lock.json", "output_all_code.txt"]
+}
+
+
+--- other/2025_12_31_improvements-prompt.md ---
+# 🎬 Travel Video Portfolio — UI/UX Design Iteration Prompt
+
+## Current Status & Context
+We have a functional Astro + Tailwind portfolio showing 4 travel videos with:
+- YouTube embeds (66%/33% split with metadata)
+- Photo carousels with numbered badges on hover  
+- Monochrome palette with Inter font
+- Automated image-to-JSON script
+- Responsive grid layout
+
+## Key Issues to Address:
+
+### 1. Layout Density & Spacing
+**Problem:** Too much vertical separation between videos (only 1 visible on MacBook Air)  
+**Goal:** More compact, horizontal-friendly layout  
+**Questions:**
+- Should we reduce `mb-24 pb-16` margins between sections?
+- Consider horizontal scroll for videos instead of vertical stack?
+- Grid layout with 2 videos per row on desktop?
+
+### 2. Visual Framing & Aesthetics  
+**Problem:** Videos feel "floating" without container  
+**Goal:** Postcard/cinematic frame around each video section  
+**Questions:**
+- Add subtle border/box-shadow container for entire video section?
+- Dark thin border like film strip?
+- Polaroid-style white border with drop shadow?
+- Cinematic aspect: black bars top/bottom?
+
+### 3. Dark Mode Exploration
+**Observation:** Light mode works but dark may be more cinematic  
+**Goal:** Test dark background with light text  
+**Questions:**
+- Full dark theme or option to toggle?
+- Dark gray (`#0a0a0a`) or pure black?
+- How would carousel/images look on dark?
+- Should metadata cards invert colors?
+
+### 4. Carousel Refinement
+**Observation:** Gradient edges may be unnecessary  
+**Goal:** Cleaner carousel that fits monochrome aesthetic  
+**Questions:**
+- Remove side gradients completely?
+- Add subtle arrows for navigation?
+- Thinner border on images?
+- Different hover effect (brightness instead of scale)?
+
+### 5. Browser Zoom Optimization  
+**Observation:** Looks best at 80% zoom  
+**Goal:** Design should work well at 100%  
+**Questions:**
+- Is font size too large?
+- Are margins/padding excessive at default zoom?
+- Should we use `clamp()` for responsive typography?
+
+### 6. Metadata Layout Efficiency
+**Observation:** Right column has empty vertical space  
+**Goal:** Better use of vertical space in metadata column  
+**Questions:**
+- Move gear/music to align with video bottom?
+- Add "Watch on YouTube" button below video?
+- Include video duration/likes stats?
+
+## Design References to Discuss:
+1. **VSCO Grid** - Minimal, dense, photographic
+2. **Vimeo Staff Picks** - Cinematic framing  
+3. **Instagram Explore** - Horizontal scroll galleries
+4. **Film credit sequences** - Typography hierarchy
+5. **Movie poster design** - Dramatic composition
+
+## Technical Considerations:
+- Maintain current Astro/Tailwind structure
+- Keep automated image script  
+- Ensure YouTube embeds remain performant
+- Mobile responsiveness must not regress
+
+## Success Metrics for Next Iteration:
+- [ ] 2+ videos visible on MacBook Air screen
+- [ ] Clear visual hierarchy (video → metadata → carousel)
+- [ ] Cinematic "feel" (dark theme or framing)
+- [ ] Clean carousel without visual clutter  
+- [ ] Comfortable reading at 100% zoom
+
+---
+**Next session:** We'll tackle these points one-by-one, starting with **Layout Density & Spacing** (most critical UX issue). I'll provide specific CSS/Tailwind adjustments for each concern, and we can A/B test dark vs light themes.
+
+**Ready when you are to begin with Point #1: Layout Density.**
+
+Full code for reference:
+
+--- README.md ---
+# Astro Starter Kit: Basics
+
+```sh
+npm create astro@latest -- --template basics
+```
+
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+
+## 🚀 Project Structure
+
+Inside of your Astro project, you'll see the following folders and files:
+
+```text
+/
+├── public/
+│   └── favicon.svg
+├── src
+│   ├── assets
+│   │   └── astro.svg
+│   ├── components
+│   │   └── Welcome.astro
+│   ├── layouts
+│   │   └── Layout.astro
+│   └── pages
+│       └── index.astro
+└── package.json
+```
+
+To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+
+## 🧞 Commands
+
+All commands are run from the root of the project, from a terminal:
+
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
+
+## 👀 Want to learn more?
+
+Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+
+--- package.json ---
+{
+  "name": "ju-travel-video",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "update-stills": "node scripts/update-stills.js"
+  },
+  "dependencies": {
+    "astro": "^5.16.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.10",
+    "autoprefixer": "^10.4.16",
+    "tailwindcss": "^3.4.0"
+  }
+}
+
+
+--- tsconfig.json ---
+{
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist"]
+}
+
+
+--- .astro/content.d.ts ---
+declare module 'astro:content' {
+	export interface RenderResult {
+		Content: import('astro/runtime/server/index.js').AstroComponentFactory;
+		headings: import('astro').MarkdownHeading[];
+		remarkPluginFrontmatter: Record<string, any>;
+	}
+	interface Render {
+		'.md': Promise<RenderResult>;
+	}
+
+	export interface RenderedContent {
+		html: string;
+		metadata?: {
+			imagePaths: Array<string>;
+			[key: string]: unknown;
+		};
+	}
+}
+
+declare module 'astro:content' {
+	type Flatten<T> = T extends { [K: string]: infer U } ? U : never;
+
+	export type CollectionKey = keyof AnyEntryMap;
+	export type CollectionEntry<C extends CollectionKey> = Flatten<AnyEntryMap[C]>;
+
+	export type ContentCollectionKey = keyof ContentEntryMap;
+	export type DataCollectionKey = keyof DataEntryMap;
+
+	type AllValuesOf<T> = T extends any ? T[keyof T] : never;
+	type ValidContentEntrySlug<C extends keyof ContentEntryMap> = AllValuesOf<
+		ContentEntryMap[C]
+	>['slug'];
+
+	export type ReferenceDataEntry<
+		C extends CollectionKey,
+		E extends keyof DataEntryMap[C] = string,
+	> = {
+		collection: C;
+		id: E;
+	};
+	export type ReferenceContentEntry<
+		C extends keyof ContentEntryMap,
+		E extends ValidContentEntrySlug<C> | (string & {}) = string,
+	> = {
+		collection: C;
+		slug: E;
+	};
+	export type ReferenceLiveEntry<C extends keyof LiveContentConfig['collections']> = {
+		collection: C;
+		id: string;
+	};
+
+	/** @deprecated Use `getEntry` instead. */
+	export function getEntryBySlug<
+		C extends keyof ContentEntryMap,
+		E extends ValidContentEntrySlug<C> | (string & {}),
+	>(
+		collection: C,
+		// Note that this has to accept a regular string too, for SSR
+		entrySlug: E,
+	): E extends ValidContentEntrySlug<C>
+		? Promise<CollectionEntry<C>>
+		: Promise<CollectionEntry<C> | undefined>;
+
+	/** @deprecated Use `getEntry` instead. */
+	export function getDataEntryById<C extends keyof DataEntryMap, E extends keyof DataEntryMap[C]>(
+		collection: C,
+		entryId: E,
+	): Promise<CollectionEntry<C>>;
+
+	export function getCollection<C extends keyof AnyEntryMap, E extends CollectionEntry<C>>(
+		collection: C,
+		filter?: (entry: CollectionEntry<C>) => entry is E,
+	): Promise<E[]>;
+	export function getCollection<C extends keyof AnyEntryMap>(
+		collection: C,
+		filter?: (entry: CollectionEntry<C>) => unknown,
+	): Promise<CollectionEntry<C>[]>;
+
+	export function getLiveCollection<C extends keyof LiveContentConfig['collections']>(
+		collection: C,
+		filter?: LiveLoaderCollectionFilterType<C>,
+	): Promise<
+		import('astro').LiveDataCollectionResult<LiveLoaderDataType<C>, LiveLoaderErrorType<C>>
+	>;
+
+	export function getEntry<
+		C extends keyof ContentEntryMap,
+		E extends ValidContentEntrySlug<C> | (string & {}),
+	>(
+		entry: ReferenceContentEntry<C, E>,
+	): E extends ValidContentEntrySlug<C>
+		? Promise<CollectionEntry<C>>
+		: Promise<CollectionEntry<C> | undefined>;
+	export function getEntry<
+		C extends keyof DataEntryMap,
+		E extends keyof DataEntryMap[C] | (string & {}),
+	>(
+		entry: ReferenceDataEntry<C, E>,
+	): E extends keyof DataEntryMap[C]
+		? Promise<DataEntryMap[C][E]>
+		: Promise<CollectionEntry<C> | undefined>;
+	export function getEntry<
+		C extends keyof ContentEntryMap,
+		E extends ValidContentEntrySlug<C> | (string & {}),
+	>(
+		collection: C,
+		slug: E,
+	): E extends ValidContentEntrySlug<C>
+		? Promise<CollectionEntry<C>>
+		: Promise<CollectionEntry<C> | undefined>;
+	export function getEntry<
+		C extends keyof DataEntryMap,
+		E extends keyof DataEntryMap[C] | (string & {}),
+	>(
+		collection: C,
+		id: E,
+	): E extends keyof DataEntryMap[C]
+		? string extends keyof DataEntryMap[C]
+			? Promise<DataEntryMap[C][E]> | undefined
+			: Promise<DataEntryMap[C][E]>
+		: Promise<CollectionEntry<C> | undefined>;
+	export function getLiveEntry<C extends keyof LiveContentConfig['collections']>(
+		collection: C,
+		filter: string | LiveLoaderEntryFilterType<C>,
+	): Promise<import('astro').LiveDataEntryResult<LiveLoaderDataType<C>, LiveLoaderErrorType<C>>>;
+
+	/** Resolve an array of entry references from the same collection */
+	export function getEntries<C extends keyof ContentEntryMap>(
+		entries: ReferenceContentEntry<C, ValidContentEntrySlug<C>>[],
+	): Promise<CollectionEntry<C>[]>;
+	export function getEntries<C extends keyof DataEntryMap>(
+		entries: ReferenceDataEntry<C, keyof DataEntryMap[C]>[],
+	): Promise<CollectionEntry<C>[]>;
+
+	export function render<C extends keyof AnyEntryMap>(
+		entry: AnyEntryMap[C][string],
+	): Promise<RenderResult>;
+
+	export function reference<C extends keyof AnyEntryMap>(
+		collection: C,
+	): import('astro/zod').ZodEffects<
+		import('astro/zod').ZodString,
+		C extends keyof ContentEntryMap
+			? ReferenceContentEntry<C, ValidContentEntrySlug<C>>
+			: ReferenceDataEntry<C, keyof DataEntryMap[C]>
+	>;
+	// Allow generic `string` to avoid excessive type errors in the config
+	// if `dev` is not running to update as you edit.
+	// Invalid collection names will be caught at build time.
+	export function reference<C extends string>(
+		collection: C,
+	): import('astro/zod').ZodEffects<import('astro/zod').ZodString, never>;
+
+	type ReturnTypeOrOriginal<T> = T extends (...args: any[]) => infer R ? R : T;
+	type InferEntrySchema<C extends keyof AnyEntryMap> = import('astro/zod').infer<
+		ReturnTypeOrOriginal<Required<ContentConfig['collections'][C]>['schema']>
+	>;
+
+	type ContentEntryMap = {
+		
+	};
+
+	type DataEntryMap = {
+		
+	};
+
+	type AnyEntryMap = ContentEntryMap & DataEntryMap;
+
+	type ExtractLoaderTypes<T> = T extends import('astro/loaders').LiveLoader<
+		infer TData,
+		infer TEntryFilter,
+		infer TCollectionFilter,
+		infer TError
+	>
+		? { data: TData; entryFilter: TEntryFilter; collectionFilter: TCollectionFilter; error: TError }
+		: { data: never; entryFilter: never; collectionFilter: never; error: never };
+	type ExtractDataType<T> = ExtractLoaderTypes<T>['data'];
+	type ExtractEntryFilterType<T> = ExtractLoaderTypes<T>['entryFilter'];
+	type ExtractCollectionFilterType<T> = ExtractLoaderTypes<T>['collectionFilter'];
+	type ExtractErrorType<T> = ExtractLoaderTypes<T>['error'];
+
+	type LiveLoaderDataType<C extends keyof LiveContentConfig['collections']> =
+		LiveContentConfig['collections'][C]['schema'] extends undefined
+			? ExtractDataType<LiveContentConfig['collections'][C]['loader']>
+			: import('astro/zod').infer<
+					Exclude<LiveContentConfig['collections'][C]['schema'], undefined>
+				>;
+	type LiveLoaderEntryFilterType<C extends keyof LiveContentConfig['collections']> =
+		ExtractEntryFilterType<LiveContentConfig['collections'][C]['loader']>;
+	type LiveLoaderCollectionFilterType<C extends keyof LiveContentConfig['collections']> =
+		ExtractCollectionFilterType<LiveContentConfig['collections'][C]['loader']>;
+	type LiveLoaderErrorType<C extends keyof LiveContentConfig['collections']> = ExtractErrorType<
+		LiveContentConfig['collections'][C]['loader']
+	>;
+
+	export type ContentConfig = typeof import("../src/content.config.mjs");
+	export type LiveContentConfig = never;
+}
+
+
+--- .astro/data-store.json ---
+[["Map",1,2],"meta::meta",["Map",3,4,5,6],"astro-version","5.16.6","astro-config-digest","{\"root\":{},\"srcDir\":{},\"publicDir\":{},\"outDir\":{},\"cacheDir\":{},\"compressHTML\":true,\"base\":\"/\",\"trailingSlash\":\"ignore\",\"output\":\"static\",\"scopedStyleStrategy\":\"attribute\",\"build\":{\"format\":\"directory\",\"client\":{},\"server\":{},\"assets\":\"_astro\",\"serverEntry\":\"entry.mjs\",\"redirects\":true,\"inlineStylesheets\":\"auto\",\"concurrency\":1},\"server\":{\"open\":false,\"host\":false,\"port\":4321,\"streaming\":true,\"allowedHosts\":[]},\"redirects\":{},\"image\":{\"endpoint\":{\"route\":\"/_image\"},\"service\":{\"entrypoint\":\"astro/assets/services/sharp\",\"config\":{}},\"domains\":[],\"remotePatterns\":[],\"responsiveStyles\":false},\"devToolbar\":{\"enabled\":true},\"markdown\":{\"syntaxHighlight\":{\"type\":\"shiki\",\"excludeLangs\":[\"math\"]},\"shikiConfig\":{\"langs\":[],\"langAlias\":{},\"theme\":\"github-dark\",\"themes\":{},\"wrap\":false,\"transformers\":[]},\"remarkPlugins\":[],\"rehypePlugins\":[],\"remarkRehype\":{},\"gfm\":true,\"smartypants\":true},\"security\":{\"checkOrigin\":true,\"allowedDomains\":[]},\"env\":{\"schema\":{},\"validateSecrets\":false},\"experimental\":{\"clientPrerender\":false,\"contentIntellisense\":false,\"headingIdCompat\":false,\"preserveScriptOrder\":false,\"liveContentCollections\":false,\"csp\":false,\"staticImportMetaEnv\":false,\"chromeDevtoolsWorkspace\":false,\"failOnPrerenderConflict\":false,\"svgo\":false},\"legacy\":{\"collections\":false}}"]
+
+--- .astro/settings.json ---
+{
+	"_variables": {
+		"lastUpdateCheck": 1767043951795
+	}
+}
+
+--- .astro/types.d.ts ---
+/// <reference types="astro/client" />
+
+
+--- tools/config.json ---
+{
+  "include_extensions": [".tsx", ".ts", ".json", ".js", ".css", ".md", ".html", ".astro"],
+  "exclude_folders": ["node_modules", "dist", ".git"],
+  "exclude_files": [".env", ".DS_Store", "package-lock.json", "output_all_code.txt"]
+}
+
+
+--- other/2025_12_31_improvements-prompt.md ---
+
+
+--- scripts/update-stills.js ---
+// scripts/update-stills.js
+import { readdirSync, readFileSync, writeFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const videos = [
+  'croatia-2015',
+  'greece-2016',
+  'london-2017',
+  'venice-2018'
+];
+
+console.log('📸 Updating stills in JSON files...\n');
+
+videos.forEach(slug => {
+  const jsonPath = join(__dirname, '..', 'src', 'data', 'videos', `${slug}.json`);
+  const imagesPath = join(__dirname, '..', 'public', 'images', 'stills', slug);
+  
+  try {
+    // Read current JSON
+    const jsonContent = JSON.parse(readFileSync(jsonPath, 'utf8'));
+    
+    // Get image files
+    const imageFiles = readdirSync(imagesPath)
+      .filter(file => file.endsWith('.png') || file.endsWith('.jpg') || file.endsWith('.jpeg'))
+      .sort() // Sort alphabetically (01, 02, 03...)
+      .map(file => `/images/stills/${slug}/${file}`);
+    
+    console.log(`✅ ${slug}: Found ${imageFiles.length} images`);
+    
+    // Update JSON
+    jsonContent.stills = imageFiles;
+    
+    // Write back
+    writeFileSync(jsonPath, JSON.stringify(jsonContent, null, 2));
+    console.log(`   Updated ${jsonPath}\n`);
+    
+  } catch (error) {
+    console.error(`❌ Error processing ${slug}:`, error.message);
+  }
+});
+
+console.log('🎉 All JSON files updated!');
+
+--- .vscode/extensions.json ---
+{
+  "recommendations": ["astro-build.astro-vscode"],
+  "unwantedRecommendations": []
+}
+
+
+--- .vscode/launch.json ---
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "command": "./node_modules/.bin/astro dev",
+      "name": "Development server",
+      "request": "launch",
+      "type": "node-terminal"
+    }
+  ]
+}
+
+
+--- src/styles/global.css ---
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom base styles */
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply antialiased;
+    font-feature-settings: "kern", "liga", "clig", "calt";
+  }
+}
+
+/* Custom utilities */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .bg-grid-white {
+    background-image: linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+}
+
+--- src/components/Icons.astro ---
+---
+// src/components/Icons.astro
+
+interface Props {
+  name: 'location' | 'calendar' | 'spotify' | 'youtube';
+  className?: string;
+}
+
+const { name, className = 'w-4 h-4' } = Astro.props;
+---
+
+{name === 'location' && (
+  <svg class={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+  </svg>
+)}
+
+{name === 'calendar' && (
+  <svg class={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+  </svg>
+)}
+
+{name === 'spotify' && (
+  <svg class={className} fill="currentColor" viewBox="0 0 24 24">
+    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.601-1.559.3z"/>
+  </svg>
+)}
+
+{name === 'youtube' && (
+  <svg class={className} fill="currentColor" viewBox="0 0 24 24">
+    <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+  </svg>
+)}
+
+--- src/components/Welcome.astro ---
+---
+import astroLogo from '../assets/astro.svg';
+import background from '../assets/background.svg';
+---
+
+<div id="container">
+	<img id="background" src={background.src} alt="" fetchpriority="high" />
+	<main>
+		<section id="hero">
+			<a href="https://astro.build"
+				><img src={astroLogo.src} width="115" height="48" alt="Astro Homepage" /></a
+			>
+			<h1>
+				To get started, open the <code><pre>src/pages</pre></code> directory in your project.
+			</h1>
+			<section id="links">
+				<a class="button" href="https://docs.astro.build">Read our docs</a>
+				<a href="https://astro.build/chat"
+					>Join our Discord <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36"
+						><path
+							fill="currentColor"
+							d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69Zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69Z"
+						></path></svg
+					>
+				</a>
+			</section>
+		</section>
+	</main>
+
+	<a href="https://astro.build/blog/astro-5/" id="news" class="box">
+		<svg width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg"
+			><path
+				d="M24.667 12c1.333 1.414 2 3.192 2 5.334 0 4.62-4.934 5.7-7.334 12C18.444 28.567 18 27.456 18 26c0-4.642 6.667-7.053 6.667-14Zm-5.334-5.333c1.6 1.65 2.4 3.43 2.4 5.333 0 6.602-8.06 7.59-6.4 17.334C13.111 27.787 12 25.564 12 22.666c0-4.434 7.333-8 7.333-16Zm-6-5.333C15.111 3.555 16 5.556 16 7.333c0 8.333-11.333 10.962-5.333 22-3.488-.774-6-4-6-8 0-8.667 8.666-10 8.666-20Z"
+				fill="#111827"></path></svg
+		>
+		<h2>What's New in Astro 5.0?</h2>
+		<p>
+			From content layers to server islands, click to learn more about the new features and
+			improvements in Astro 5.0
+		</p>
+	</a>
+</div>
+
+<style>
+	#background {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
+		filter: blur(100px);
+	}
+
+	#container {
+		font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
+		height: 100%;
+	}
+
+	main {
+		height: 100%;
+		display: flex;
+		justify-content: center;
+	}
+
+	#hero {
+		display: flex;
+		align-items: start;
+		flex-direction: column;
+		justify-content: center;
+		padding: 16px;
+	}
+
+	h1 {
+		font-size: 22px;
+		margin-top: 0.25em;
+	}
+
+	#links {
+		display: flex;
+		gap: 16px;
+	}
+
+	#links a {
+		display: flex;
+		align-items: center;
+		padding: 10px 12px;
+		color: #111827;
+		text-decoration: none;
+		transition: color 0.2s;
+	}
+
+	#links a:hover {
+		color: rgb(78, 80, 86);
+	}
+
+	#links a svg {
+		height: 1em;
+		margin-left: 8px;
+	}
+
+	#links a.button {
+		color: white;
+		background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
+		box-shadow:
+			inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+			inset 0 -2px 0 rgba(0, 0, 0, 0.24);
+		border-radius: 10px;
+	}
+
+	#links a.button:hover {
+		color: rgb(230, 230, 230);
+		box-shadow: none;
+	}
+
+	pre {
+		font-family:
+			ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono',
+			monospace;
+		font-weight: normal;
+		background: linear-gradient(14deg, #d83333 0%, #f041ff 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		margin: 0;
+	}
+
+	h2 {
+		margin: 0 0 1em;
+		font-weight: normal;
+		color: #111827;
+		font-size: 20px;
+	}
+
+	p {
+		color: #4b5563;
+		font-size: 16px;
+		line-height: 24px;
+		letter-spacing: -0.006em;
+		margin: 0;
+	}
+
+	code {
+		display: inline-block;
+		background:
+			linear-gradient(66.77deg, #f3cddd 0%, #f5cee7 100%) padding-box,
+			linear-gradient(155deg, #d83333 0%, #f041ff 18%, #f5cee7 45%) border-box;
+		border-radius: 8px;
+		border: 1px solid transparent;
+		padding: 6px 8px;
+	}
+
+	.box {
+		padding: 16px;
+		background: rgba(255, 255, 255, 1);
+		border-radius: 16px;
+		border: 1px solid white;
+	}
+
+	#news {
+		position: absolute;
+		bottom: 16px;
+		right: 16px;
+		max-width: 300px;
+		text-decoration: none;
+		transition: background 0.2s;
+		backdrop-filter: blur(50px);
+	}
+
+	#news:hover {
+		background: rgba(255, 255, 255, 0.55);
+	}
+
+	@media screen and (max-height: 368px) {
+		#news {
+			display: none;
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		#container {
+			display: flex;
+			flex-direction: column;
+		}
+
+		#hero {
+			display: block;
+			padding-top: 10%;
+		}
+
+		#links {
+			flex-wrap: wrap;
+		}
+
+		#links a.button {
+			padding: 14px 18px;
+		}
+
+		#news {
+			right: 16px;
+			left: 16px;
+			bottom: 2.5rem;
+			max-width: 100%;
+		}
+
+		h1 {
+			line-height: 1.5;
+		}
+	}
+</style>
+
+
+--- src/components/VideoSection.astro ---
+---
+// src/components/VideoSection.astro
+import type { Video } from '../data/index';
+import PhotoCarousel from './PhotoCarousel.astro';
+import Icons from './Icons.astro';
+
+interface Props {
+  video: Video;
+}
+
+const { video } = Astro.props;
+---
+
+<section class="video-section mb-24 pb-16 border-b border-gray-100 last:border-b-0">
+  <!-- Video + Metadata Side by Side -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-12">
+    <!-- Left Column: Video -->
+    <div class="lg:col-span-2 flex items-center">
+      <div class="w-full">
+        <div class="relative pb-[56.25%] bg-black rounded-xl overflow-hidden shadow-lg">
+          <iframe
+            src={`https://www.youtube.com/embed/${video.youtubeId}?modestbranding=1&rel=0`}
+            title={video.title}
+            class="absolute top-0 left-0 w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Metadata -->
+    <div class="lg:col-span-1 lg:pl-6 flex flex-col justify-center space-y-8">
+      <!-- 2x2 Grid -->
+      <div class="grid grid-cols-2 gap-6">
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-gray-500">
+            <Icons name="location" className="w-4 h-4" />
+            <span class="text-xs font-medium uppercase tracking-wider">Location</span>
+          </div>
+          <p class="text-gray-800 font-medium">{video.metadata.places.join(', ')}</p>
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-gray-500">
+            <Icons name="calendar" className="w-4 h-4" />
+            <span class="text-xs font-medium uppercase tracking-wider">Date</span>
+          </div>
+          <p class="text-gray-800 font-medium">
+            {new Date(video.metadata.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Country</div>
+          <p class="text-gray-800 font-medium">{video.metadata.country}</p>
+        </div>
+
+        <div class="space-y-2">
+          <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Region</div>
+          <p class="text-gray-800 font-medium">{video.metadata.region}</p>
+        </div>
+      </div>
+
+      <!-- Gear -->
+      <div class="space-y-2">
+        <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Gear</div>
+        <p class="text-gray-700 text-sm leading-relaxed">{video.metadata.gear}</p>
+      </div>
+
+      <!-- Music -->
+      <div class="space-y-3">
+        <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Music</div>
+        <div>
+          <p class="text-gray-900 font-medium">{video.metadata.music.artist}</p>
+          <p class="text-gray-600 text-sm mt-1">{video.metadata.music.title}</p>
+        </div>
+        <div class="flex gap-4 pt-2">
+          <a 
+            href={video.metadata.music.spotify} 
+            target="_blank" 
+            class="text-sm text-gray-600 hover:text-gray-900 inline-flex items-center gap-2 transition-colors"
+          >
+            <Icons name="spotify" className="w-4 h-4" />
+            Spotify
+          </a>
+          <a 
+            href={video.metadata.music.youtube} 
+            target="_blank" 
+            class="text-sm text-gray-600 hover:text-gray-900 inline-flex items-center gap-2 transition-colors"
+          >
+            <Icons name="youtube" className="w-4 h-4" />
+            YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Photo Carousel Below (Full width) -->
+  <div class="mt-8">
+    <PhotoCarousel stills={video.stills} title={video.title} />
+  </div>
+</section>
+
+--- src/components/PhotoCarousel.astro ---
+---
+// src/components/PhotoCarousel.astro
+interface Props {
+  stills: string[];
+  title: string;
+}
+
+const { stills, title } = Astro.props;
+---
+
+<div class="photo-carousel mt-8">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-xs font-medium text-gray-500 uppercase tracking-widest">
+      Film Stills • {stills.length} images
+    </h3>
+    <span class="text-xs text-gray-400">Scroll →</span>
+  </div>
+  
+  {stills.length > 0 ? (
+    <div class="relative">
+      <!-- Gradient fade on edges -->
+      <div class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+      <div class="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+      
+      <div class="flex space-x-4 overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory">
+        {stills.map((image, index) => (
+          <div class="flex-shrink-0 w-72 snap-center">
+            <div class="relative rounded-lg overflow-hidden bg-gray-100 aspect-[16/9] group cursor-pointer">
+              <img
+                src={image}
+                alt={`Still ${index + 1} from ${title}`}
+                class="w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-110"
+                loading="lazy"
+                width="400"
+                height="225"
+              />
+              <!-- Overlay gradient -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <!-- Number badge -->
+              <div class="absolute top-3 right-3 bg-black/80 text-white text-xs font-medium px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                {index + 1}/{stills.length}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  ) : (
+    <p class="text-gray-400 text-sm italic">No stills available</p>
+  )}
+  
+  <style>
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    
+    /* Smooth scrolling */
+    .snap-x {
+      scroll-behavior: smooth;
+    }
+  </style>
+</div>
+
+--- src/layouts/Layout.astro ---
+---
+// src/layouts/Layout.astro
+---
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <!-- Import global CSS - FIXED PATH -->
+    <link rel="stylesheet" href="/src/styles/global.css" />
+    <title>Travel Video Portfolio</title>
+  </head>
+  <body class="bg-white text-gray-900">
+    <slot />
+  </body>
+</html>
+
+--- src/data/index.ts ---
+// src/data/index.ts - FIXED
+import london2017 from './videos/london-2017.json';
+import venice2018 from './videos/venice-2018.json';
+import croatia2015 from './videos/croatia-2015.json';
+import greece2016 from './videos/greece-2016.json';
+
+export interface Video {
+  id: string;
+  title: string;
+  slug: string;
+  youtubeId: string;
+  description: string;
+  stills: string[];
+  metadata: {
+    country: string;
+    region: string;
+    places: string[];
+    date: string;
+    coordinates: number[];
+    gear: string;
+    music: {
+      artist: string;
+      title: string;
+      spotify: string;
+      youtube: string;
+    };
+  };
+}
+
+// All videos in an array
+export const allVideos: Video[] = [
+  venice2018,
+  london2017,
+  greece2016,
+  croatia2015
+];
+
+// Sorted by date (newest first)
+export const sortedVideos = [...allVideos].sort(
+  (a, b) => new Date(b.metadata.date).getTime() - new Date(a.metadata.date).getTime()
+);
+
+// Helper to get a video by slug
+export function getVideoBySlug(slug: string): Video | undefined {
+  return allVideos.find(video => video.slug === slug);
+}
+
+--- src/data/videos/greece-2016.json ---
+{
+  "id": "greece-2016",
+  "title": "Greece | 2016",
+  "slug": "greece-2016",
+  "youtubeId": "Cfc8_m17rHc",
+  "description": "A travel film from my trip to Greece with some friends (Athens and Crete) in August 2016.",
+  "metadata": {
+    "country": "Greece",
+    "region": "Europe",
+    "places": [
+      "Athens",
+      "Crete"
+    ],
+    "date": "2016-08-15",
+    "coordinates": [
+      35.3387,
+      25.1442
+    ],
+    "gear": "GoPro Hero 3",
+    "music": {
+      "artist": "Alle Farben feat. YouNotUs",
+      "title": "Please Tell Rosie",
+      "spotify": "https://open.spotify.com/track/5gF9zOYM9TmSzKHukbNjpB",
+      "youtube": "https://www.youtube.com/watch?v=TQLgLcU81e4"
+    }
+  },
+  "stills": [
+    "/images/stills/greece-2016/greece-2016-stills-01.png",
+    "/images/stills/greece-2016/greece-2016-stills-02.png",
+    "/images/stills/greece-2016/greece-2016-stills-03.png",
+    "/images/stills/greece-2016/greece-2016-stills-04.png",
+    "/images/stills/greece-2016/greece-2016-stills-05.png"
+  ]
+}
+
+--- src/data/videos/venice-2018.json ---
+{
+  "id": "venice-2018",
+  "title": "Venice | 2018",
+  "slug": "venice-2018",
+  "youtubeId": "f-c1w6Ka5Vg",
+  "description": "A travel film with my family from my trip to Venice during Easter 2018.",
+  "metadata": {
+    "country": "Italy",
+    "region": "Europe",
+    "places": [
+      "Venice"
+    ],
+    "date": "2018-04-01",
+    "coordinates": [
+      45.4408,
+      12.3155
+    ],
+    "gear": "Olympus EM5 Mark II, Olympus 12-40mm f/2.8 PRO",
+    "music": {
+      "artist": "Of Monsters and Men",
+      "title": "Mountain Sound",
+      "spotify": "https://open.spotify.com/track/3SPVZJzf1Hs30rB6yXVf2y",
+      "youtube": "https://www.youtube.com/watch?v=qt7ox1M_XG4"
+    }
+  },
+  "stills": [
+    "/images/stills/venice-2018/venice-2018-stills-01.png",
+    "/images/stills/venice-2018/venice-2018-stills-02.png",
+    "/images/stills/venice-2018/venice-2018-stills-03.png",
+    "/images/stills/venice-2018/venice-2018-stills-04.png",
+    "/images/stills/venice-2018/venice-2018-stills-05.png"
+  ]
+}
+
+--- src/data/videos/london-2017.json ---
+{
+  "id": "london-2017",
+  "title": "London | 2017",
+  "slug": "london-2017",
+  "youtubeId": "e_1Ubu9k9T8",
+  "description": "A travel film from my trip to London in autumn 2017 with my mum and sister.",
+  "metadata": {
+    "country": "United Kingdom",
+    "region": "Europe",
+    "places": [
+      "London"
+    ],
+    "date": "2017-10-15",
+    "coordinates": [
+      51.5014,
+      -0.1244
+    ],
+    "gear": "Olympus EM5 Mark II, Olympus 12-40mm f/2.8 PRO, GoPro Hero 3",
+    "music": {
+      "artist": "OneRepublic",
+      "title": "Good Life",
+      "spotify": "https://open.spotify.com/track/6OtCIsQZ64Vs1EbzztvAv4",
+      "youtube": "https://www.youtube.com/watch?v=jZhQOvvV45w"
+    }
+  },
+  "stills": [
+    "/images/stills/london-2017/london-2017-stills-01.png",
+    "/images/stills/london-2017/london-2017-stills-02.png",
+    "/images/stills/london-2017/london-2017-stills-03.png",
+    "/images/stills/london-2017/london-2017-stills-04.png",
+    "/images/stills/london-2017/london-2017-stills-05.png"
+  ]
+}
+
+--- src/data/videos/croatia-2015.json ---
+{
+  "id": "croatia-2015",
+  "title": "Croatia | 2015",
+  "slug": "croatia-2015",
+  "youtubeId": "KwQxE7g8sBw",
+  "description": "A travel film from my trip to Croatia with friends in September 2015.",
+  "metadata": {
+    "country": "Croatia",
+    "region": "Europe",
+    "places": [
+      "Dubrovnik",
+      "Korčula",
+      "Split"
+    ],
+    "date": "2015-09-01",
+    "coordinates": [
+      42.6555,
+      18.1042
+    ],
+    "gear": "GoPro Hero 3",
+    "music": {
+      "artist": "Lost Frequencies",
+      "title": "Are You With Me",
+      "spotify": "https://open.spotify.com/track/4255amV4enzl28KAn16rUO",
+      "youtube": "https://www.youtube.com/watch?v=TUmUrvIaG8k"
+    }
+  },
+  "stills": [
+    "/images/stills/croatia-2015/croatia-2015-stills-01.png",
+    "/images/stills/croatia-2015/croatia-2015-stills-02.png",
+    "/images/stills/croatia-2015/croatia-2015-stills-03.png",
+    "/images/stills/croatia-2015/croatia-2015-stills-04.png",
+    "/images/stills/croatia-2015/croatia-2015-stills-05.png",
+    "/images/stills/croatia-2015/croatia-2015-stills-06.png"
+  ]
+}
+
+--- src/pages/index.astro ---
+---
+// src/pages/index.astro
+import Layout from '../layouts/Layout.astro';
+import VideoSection from '../components/VideoSection.astro';
+import { sortedVideos } from '../data/index';
+---
+
+<Layout>
+  <main class="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+  <!-- Header -->
+  <header class="py-16 px-4 sm:px-8 bg-gradient-to-b from-gray-50 to-white">
+    <div class="max-w-6xl mx-auto">
+      <div class="mb-4">
+        <span class="text-xs font-medium text-gray-500 uppercase tracking-widest">Cinematic Portfolio</span>
+      </div>
+      <h1 class="text-5xl font-light text-gray-900 tracking-tight mb-4">
+        Travel
+        <span class="font-medium text-gray-700">Films</span>
+      </h1>
+      <p class="text-gray-600 text-lg max-w-2xl mb-8">
+        A collection of cinematic travel videos shot around the world. 
+        Each film tells a story through movement, music, and moments.
+      </p>
+      <div class="flex items-center gap-6 text-sm text-gray-500">
+        <span class="inline-flex items-center gap-2">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+          </svg>
+          {sortedVideos.length} films
+        </span>
+        <span class="inline-flex items-center gap-2">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+          </svg>
+          {new Set(sortedVideos.map(v => v.metadata.country)).size} countries
+        </span>
+        <span class="inline-flex items-center gap-2">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd"/>
+          </svg>
+          {sortedVideos.reduce((sum, video) => sum + video.stills.length, 0)} stills
+        </span>
+      </div>
+    </div>
+  </header>
+
+    <!-- Video Sections -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-8 py-12">
+      {sortedVideos.map((video, index) => (
+        <VideoSection video={video} />
+      ))}
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-8 px-4 sm:px-8 border-t border-gray-200 bg-white">
+      <div class="max-w-6xl mx-auto text-center text-gray-500 text-sm">
+        <p class="mb-2">Travel Video Portfolio • Cinematic travel films • {new Date().getFullYear()}</p>
+        <p class="text-xs">All videos shot and edited with passion for the art of travel storytelling</p>
+      </div>
+    </footer>
+  </main>
+</Layout>
+
+--- src/pages/test2.astro ---
+---
+// src/pages/test2.astro
+---
+
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* Direct CSS to test */
+    .test-red { background: red; color: white; padding: 1rem; margin: 1rem; }
+    .test-blue { background: blue; color: white; padding: 1rem; margin: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="test-red">Direct CSS - should be red</div>
+  <div class="test-blue">Direct CSS - should be blue</div>
+  
+  <!-- Also test Tailwind if it loads -->
+  <div class="bg-green-500 text-white p-4 m-4">Tailwind - should be green</div>
+</body>
+</html>
+
+--- src/pages/test.html.astro ---
+---
+// Test if Tailwind works
+---
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="/styles/global.css" />
+</head>
+<body class="p-8">
+  <!-- Test Tailwind classes -->
+  <div class="bg-red-500 text-white p-4 rounded mb-4">
+    This should be red with white text
+  </div>
+  <div class="bg-blue-500 text-white p-4 rounded mb-4">
+    This should be blue with white text
+  </div>
+  <div class="grid grid-cols-3 gap-4">
+    <div class="bg-green-500 p-4">Grid 1</div>
+    <div class="bg-yellow-500 p-4">Grid 2</div>
+    <div class="bg-purple-500 p-4">Grid 3</div>
+  </div>
+</body>
+</html>
+
+
+================================================================================
+METADATA
+================================================================================
+
+Files Parsed: 26
+Total Characters: 36354
+
+File List:
+----------------------------------------
+.astro/content.d.ts: 6942 characters
+.astro/data-store.json: 1549 characters
+.astro/settings.json: 58 characters
+.astro/types.d.ts: 39 characters
+.vscode/extensions.json: 87 characters
+.vscode/launch.json: 207 characters
+README.md: 1522 characters
+other/2025_12_31_improvements-prompt.md: 0 characters
+package.json: 431 characters
+scripts/update-stills.js: 1346 characters
+src/components/Icons.astro: 1947 characters
+src/components/PhotoCarousel.astro: 2329 characters
+src/components/VideoSection.astro: 3905 characters
+src/components/Welcome.astro: 4921 characters
+src/data/index.ts: 1082 characters
+src/data/videos/croatia-2015.json: 1074 characters
+src/data/videos/greece-2016.json: 1010 characters
+src/data/videos/london-2017.json: 1014 characters
+src/data/videos/venice-2018.json: 1000 characters
+src/layouts/Layout.astro: 758 characters
+src/pages/index.astro: 2932 characters
+src/pages/test.html.astro: 594 characters
+src/pages/test2.astro: 543 characters
+src/styles/global.css: 720 characters
+tools/config.json: 235 characters
+tsconfig.json: 109 characters
+
+Directory Structure:
+----------------------------------------
+ju-travel-video/
+├── .astro/
+│   ├── collections/
+│   ├── content.d.ts
+│   ├── data-store.json
+│   ├── settings.json
+│   └── types.d.ts
+├── .vscode/
+│   ├── extensions.json
+│   └── launch.json
+├── other/
+│   └── 2025_12_31_improvements-prompt.md
+├── public/
+│   ├── images/
+│   │   └── stills/
+│   │       ├── croatia-2015/
+│   │       ├── greece-2016/
+│   │       ├── london-2017/
+│   │       └── venice-2018/
+│   └── styles/
+├── scripts/
+│   └── update-stills.js
+├── src/
+│   ├── assets/
+│   ├── components/
+│   │   ├── Icons.astro
+│   │   ├── PhotoCarousel.astro
+│   │   ├── VideoSection.astro
+│   │   └── Welcome.astro
+│   ├── data/
+│   │   ├── videos/
+│   │   │   ├── croatia-2015.json
+│   │   │   ├── greece-2016.json
+│   │   │   ├── london-2017.json
+│   │   │   └── venice-2018.json
+│   │   └── index.ts
+│   ├── layouts/
+│   │   └── Layout.astro
+│   ├── pages/
+│   │   ├── index.astro
+│   │   ├── test.html.astro
+│   │   └── test2.astro
+│   └── styles/
+│       └── global.css
+├── tools/
+│   └── config.json
+├── README.md
+├── package.json
+└── tsconfig.json
+
+Generated at:
+Local: 2025-12-31 00:06:34 
+UTC:   2025-12-30 23:06:34 UTC
+Timestamp: 1767135994
+
+
 --- scripts/update-stills.js ---
 // scripts/update-stills.js
 import { readdirSync, readFileSync, writeFileSync } from 'fs';
@@ -2635,3 +4364,1143 @@ Generated at:
 Local: 2026-01-01 13:56:41 
 UTC:   2026-01-01 12:56:41 UTC
 Timestamp: 1767272201
+
+
+--- scripts/update-stills.js ---
+// scripts/update-stills.js
+import { readdirSync, readFileSync, writeFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const videos = [
+  'croatia-2015',
+  'greece-2016',
+  'london-2017',
+  'venice-2018'
+];
+
+console.log('📸 Updating stills in JSON files...\n');
+
+videos.forEach(slug => {
+  const jsonPath = join(__dirname, '..', 'src', 'data', 'videos', `${slug}.json`);
+  const imagesPath = join(__dirname, '..', 'public', 'images', 'stills', slug);
+  
+  try {
+    // Read current JSON
+    const jsonContent = JSON.parse(readFileSync(jsonPath, 'utf8'));
+    
+    // Get image files
+    const imageFiles = readdirSync(imagesPath)
+      .filter(file => file.endsWith('.png') || file.endsWith('.jpg') || file.endsWith('.jpeg'))
+      .sort() // Sort alphabetically (01, 02, 03...)
+      .map(file => `/images/stills/${slug}/${file}`);
+    
+    console.log(`✅ ${slug}: Found ${imageFiles.length} images`);
+    
+    // Update JSON
+    jsonContent.stills = imageFiles;
+    
+    // Write back
+    writeFileSync(jsonPath, JSON.stringify(jsonContent, null, 2));
+    console.log(`   Updated ${jsonPath}\n`);
+    
+  } catch (error) {
+    console.error(`❌ Error processing ${slug}:`, error.message);
+  }
+});
+
+console.log('🎉 All JSON files updated!');
+
+--- .vscode/extensions.json ---
+{
+  "recommendations": ["astro-build.astro-vscode"],
+  "unwantedRecommendations": []
+}
+
+
+--- .vscode/launch.json ---
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "command": "./node_modules/.bin/astro dev",
+      "name": "Development server",
+      "request": "launch",
+      "type": "node-terminal"
+    }
+  ]
+}
+
+
+--- src/styles/global.css ---
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom base styles */
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply antialiased;
+    font-feature-settings: "kern", "liga", "clig", "calt";
+  }
+}
+
+/* Custom utilities */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .bg-grid-white {
+    background-image: linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+}
+
+--- src/components/Icons.astro ---
+---
+// src/components/Icons.astro
+
+interface Props {
+  name: 'location' | 'calendar' | 'spotify' | 'youtube' | 'region' | 'country' | 'gear' | 'music' | 'film';
+  className?: string;
+}
+
+const { name, className = 'w-4 h-4' } = Astro.props;
+---
+
+{name === 'location' && (
+  <svg class={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+  </svg>
+)}
+
+{name === 'calendar' && (
+  <svg class={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+  </svg>
+)}
+
+{name === 'spotify' && (
+  <svg class={className} fill="currentColor" viewBox="0 0 24 24">
+    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.601-1.559.3z"/>
+  </svg>
+)}
+
+{name === 'youtube' && (
+  <svg class={className} fill="currentColor" viewBox="0 0 24 24">
+    <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+  </svg>
+)}
+
+{name === 'country' && (
+  <svg class={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+  </svg>
+)}
+
+{name === 'region' && (
+  <svg class={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+  </svg>
+)}
+
+{name === 'gear' && (
+  <svg class={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+  </svg>
+)}
+
+{name === 'music' && (
+  <svg class={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+  </svg>
+)}
+
+{name === 'film' && (
+  <svg class={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/>
+  </svg>
+)}
+
+--- src/components/VideoSectionTest.astro ---
+---
+// src/components/VideoSection.astro - UPDATED with all icons
+import type { Video } from '../data/index';
+import PhotoCarousel from './PhotoCarousel.astro';
+import Icons from './Icons.astro';
+
+interface Props {
+  video: Video;
+}
+
+const { video } = Astro.props;
+---
+
+<section class="video-section mb-12 pb-8 last:mb-0 last:pb-0">
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
+    <!-- Left Column: Video -->
+    <div class="lg:col-span-2">
+      <div class="w-full max-w-2xl">
+        <div class="relative pb-[56.25%] bg-black rounded-lg overflow-hidden shadow-md">
+          <iframe
+            src={`https://www.youtube.com/embed/${video.youtubeId}?modestbranding=1&rel=0`}
+            title={video.title}
+            class="absolute top-0 left-0 w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Metadata with icons -->
+    <div class="lg:col-span-1 lg:pl-4">
+      <div class="space-y-6">
+        <!-- 2x2 Grid with icons -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 text-gray-500">
+              <Icons name="location" className="w-3.5 h-3.5" />
+              <span class="text-xs font-medium uppercase tracking-wider">Location</span>
+            </div>
+            <p class="text-gray-800 font-medium text-sm">{video.metadata.places.join(', ')}</p>
+          </div>
+
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 text-gray-500">
+              <Icons name="calendar" className="w-3.5 h-3.5" />
+              <span class="text-xs font-medium uppercase tracking-wider">Date</span>
+            </div>
+            <p class="text-gray-800 font-medium text-sm">
+              {new Date(video.metadata.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+            </p>
+          </div>
+
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 text-gray-500">
+              <Icons name="country" className="w-3.5 h-3.5" />
+              <span class="text-xs font-medium uppercase tracking-wider">Country</span>
+            </div>
+            <p class="text-gray-800 font-medium text-sm">{video.metadata.country}</p>
+          </div>
+
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 text-gray-500">
+              <Icons name="region" className="w-3.5 h-3.5" />
+              <span class="text-xs font-medium uppercase tracking-wider">Region</span>
+            </div>
+            <p class="text-gray-800 font-medium text-sm">{video.metadata.region}</p>
+          </div>
+        </div>
+
+        <!-- Gear with icon -->
+        <div class="space-y-1">
+          <div class="flex items-center gap-2 text-gray-500">
+            <Icons name="gear" className="w-3.5 h-3.5" />
+            <span class="text-xs font-medium uppercase tracking-wider">Gear</span>
+          </div>
+          <p class="text-gray-700 text-xs leading-snug">{video.metadata.gear}</p>
+        </div>
+
+        <!-- Music with icon -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-gray-500">
+            <Icons name="music" className="w-3.5 h-3.5" />
+            <span class="text-xs font-medium uppercase tracking-wider">Music</span>
+          </div>
+          <div>
+            <p class="text-gray-900 font-medium text-sm">{video.metadata.music.artist}</p>
+            <p class="text-gray-600 text-xs mt-0.5">{video.metadata.music.title}</p>
+          </div>
+          <div class="flex gap-3 pt-1">
+            <a 
+              href={video.metadata.music.spotify} 
+              target="_blank" 
+              class="text-xs text-gray-600 hover:text-gray-900 inline-flex items-center gap-1.5 transition-colors"
+            >
+              <Icons name="spotify" className="w-3.5 h-3.5" />
+              Spotify
+            </a>
+            <a 
+              href={video.metadata.music.youtube} 
+              target="_blank" 
+              class="text-xs text-gray-600 hover:text-gray-900 inline-flex items-center gap-1.5 transition-colors"
+            >
+              <Icons name="youtube" className="w-3.5 h-3.5" />
+              YouTube
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Photo Carousel Below (Full width) -->
+  <div class="mt-6">
+    <PhotoCarousel stills={video.stills} title={video.title} />
+  </div>
+</section>
+
+--- src/components/Welcome.astro ---
+---
+import astroLogo from '../assets/astro.svg';
+import background from '../assets/background.svg';
+---
+
+<div id="container">
+	<img id="background" src={background.src} alt="" fetchpriority="high" />
+	<main>
+		<section id="hero">
+			<a href="https://astro.build"
+				><img src={astroLogo.src} width="115" height="48" alt="Astro Homepage" /></a
+			>
+			<h1>
+				To get started, open the <code><pre>src/pages</pre></code> directory in your project.
+			</h1>
+			<section id="links">
+				<a class="button" href="https://docs.astro.build">Read our docs</a>
+				<a href="https://astro.build/chat"
+					>Join our Discord <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36"
+						><path
+							fill="currentColor"
+							d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69Zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69Z"
+						></path></svg
+					>
+				</a>
+			</section>
+		</section>
+	</main>
+
+	<a href="https://astro.build/blog/astro-5/" id="news" class="box">
+		<svg width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg"
+			><path
+				d="M24.667 12c1.333 1.414 2 3.192 2 5.334 0 4.62-4.934 5.7-7.334 12C18.444 28.567 18 27.456 18 26c0-4.642 6.667-7.053 6.667-14Zm-5.334-5.333c1.6 1.65 2.4 3.43 2.4 5.333 0 6.602-8.06 7.59-6.4 17.334C13.111 27.787 12 25.564 12 22.666c0-4.434 7.333-8 7.333-16Zm-6-5.333C15.111 3.555 16 5.556 16 7.333c0 8.333-11.333 10.962-5.333 22-3.488-.774-6-4-6-8 0-8.667 8.666-10 8.666-20Z"
+				fill="#111827"></path></svg
+		>
+		<h2>What's New in Astro 5.0?</h2>
+		<p>
+			From content layers to server islands, click to learn more about the new features and
+			improvements in Astro 5.0
+		</p>
+	</a>
+</div>
+
+<style>
+	#background {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
+		filter: blur(100px);
+	}
+
+	#container {
+		font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
+		height: 100%;
+	}
+
+	main {
+		height: 100%;
+		display: flex;
+		justify-content: center;
+	}
+
+	#hero {
+		display: flex;
+		align-items: start;
+		flex-direction: column;
+		justify-content: center;
+		padding: 16px;
+	}
+
+	h1 {
+		font-size: 22px;
+		margin-top: 0.25em;
+	}
+
+	#links {
+		display: flex;
+		gap: 16px;
+	}
+
+	#links a {
+		display: flex;
+		align-items: center;
+		padding: 10px 12px;
+		color: #111827;
+		text-decoration: none;
+		transition: color 0.2s;
+	}
+
+	#links a:hover {
+		color: rgb(78, 80, 86);
+	}
+
+	#links a svg {
+		height: 1em;
+		margin-left: 8px;
+	}
+
+	#links a.button {
+		color: white;
+		background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
+		box-shadow:
+			inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+			inset 0 -2px 0 rgba(0, 0, 0, 0.24);
+		border-radius: 10px;
+	}
+
+	#links a.button:hover {
+		color: rgb(230, 230, 230);
+		box-shadow: none;
+	}
+
+	pre {
+		font-family:
+			ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono',
+			monospace;
+		font-weight: normal;
+		background: linear-gradient(14deg, #d83333 0%, #f041ff 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		margin: 0;
+	}
+
+	h2 {
+		margin: 0 0 1em;
+		font-weight: normal;
+		color: #111827;
+		font-size: 20px;
+	}
+
+	p {
+		color: #4b5563;
+		font-size: 16px;
+		line-height: 24px;
+		letter-spacing: -0.006em;
+		margin: 0;
+	}
+
+	code {
+		display: inline-block;
+		background:
+			linear-gradient(66.77deg, #f3cddd 0%, #f5cee7 100%) padding-box,
+			linear-gradient(155deg, #d83333 0%, #f041ff 18%, #f5cee7 45%) border-box;
+		border-radius: 8px;
+		border: 1px solid transparent;
+		padding: 6px 8px;
+	}
+
+	.box {
+		padding: 16px;
+		background: rgba(255, 255, 255, 1);
+		border-radius: 16px;
+		border: 1px solid white;
+	}
+
+	#news {
+		position: absolute;
+		bottom: 16px;
+		right: 16px;
+		max-width: 300px;
+		text-decoration: none;
+		transition: background 0.2s;
+		backdrop-filter: blur(50px);
+	}
+
+	#news:hover {
+		background: rgba(255, 255, 255, 0.55);
+	}
+
+	@media screen and (max-height: 368px) {
+		#news {
+			display: none;
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		#container {
+			display: flex;
+			flex-direction: column;
+		}
+
+		#hero {
+			display: block;
+			padding-top: 10%;
+		}
+
+		#links {
+			flex-wrap: wrap;
+		}
+
+		#links a.button {
+			padding: 14px 18px;
+		}
+
+		#news {
+			right: 16px;
+			left: 16px;
+			bottom: 2.5rem;
+			max-width: 100%;
+		}
+
+		h1 {
+			line-height: 1.5;
+		}
+	}
+</style>
+
+
+--- src/components/VideoSection.astro ---
+---
+// src/components/VideoSection.astro - UPDATED with all icons
+import type { Video } from '../data/index';
+import PhotoCarousel from './PhotoCarousel.astro';
+import Icons from './Icons.astro';
+
+interface Props {
+  video: Video;
+}
+
+const { video } = Astro.props;
+---
+
+<section class="video-section mb-12 pb-8 last:mb-0 last:pb-0">
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
+    <!-- Left Column: Video -->
+    <div class="lg:col-span-2">
+      <div class="w-full max-w-2xl">
+        <div class="relative pb-[56.25%] bg-black rounded-lg overflow-hidden shadow-md">
+          <iframe
+            src={`https://www.youtube.com/embed/${video.youtubeId}?modestbranding=1&rel=0`}
+            title={video.title}
+            class="absolute top-0 left-0 w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Metadata with icons -->
+    <div class="lg:col-span-1 lg:pl-4">
+      <div class="space-y-6">
+        <!-- 2x2 Grid with icons -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 text-gray-500">
+              <Icons name="location" className="w-3.5 h-3.5" />
+              <span class="text-xs font-medium uppercase tracking-wider">Location</span>
+            </div>
+            <p class="text-gray-800 font-medium text-sm">{video.metadata.places.join(', ')}</p>
+          </div>
+
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 text-gray-500">
+              <Icons name="calendar" className="w-3.5 h-3.5" />
+              <span class="text-xs font-medium uppercase tracking-wider">Date</span>
+            </div>
+            <p class="text-gray-800 font-medium text-sm">
+              {new Date(video.metadata.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+            </p>
+          </div>
+
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 text-gray-500">
+              <Icons name="country" className="w-3.5 h-3.5" />
+              <span class="text-xs font-medium uppercase tracking-wider">Country</span>
+            </div>
+            <p class="text-gray-800 font-medium text-sm">{video.metadata.country}</p>
+          </div>
+
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 text-gray-500">
+              <Icons name="region" className="w-3.5 h-3.5" />
+              <span class="text-xs font-medium uppercase tracking-wider">Region</span>
+            </div>
+            <p class="text-gray-800 font-medium text-sm">{video.metadata.region}</p>
+          </div>
+        </div>
+
+        <!-- Gear with icon -->
+        <div class="space-y-1">
+          <div class="flex items-center gap-2 text-gray-500">
+            <Icons name="gear" className="w-3.5 h-3.5" />
+            <span class="text-xs font-medium uppercase tracking-wider">Gear</span>
+          </div>
+          <p class="text-gray-700 text-xs leading-snug">{video.metadata.gear}</p>
+        </div>
+
+        <!-- Music with icon -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-gray-500">
+            <Icons name="music" className="w-3.5 h-3.5" />
+            <span class="text-xs font-medium uppercase tracking-wider">Music</span>
+          </div>
+          <div>
+            <p class="text-gray-900 font-medium text-sm">{video.metadata.music.artist}</p>
+            <p class="text-gray-600 text-xs mt-0.5">{video.metadata.music.title}</p>
+          </div>
+          <div class="flex gap-3 pt-1">
+            <a 
+              href={video.metadata.music.spotify} 
+              target="_blank" 
+              class="text-xs text-gray-600 hover:text-gray-900 inline-flex items-center gap-1.5 transition-colors"
+            >
+              <Icons name="spotify" className="w-3.5 h-3.5" />
+              Spotify
+            </a>
+            <a 
+              href={video.metadata.music.youtube} 
+              target="_blank" 
+              class="text-xs text-gray-600 hover:text-gray-900 inline-flex items-center gap-1.5 transition-colors"
+            >
+              <Icons name="youtube" className="w-3.5 h-3.5" />
+              YouTube
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Photo Carousel Below (Full width) -->
+  <div class="mt-6">
+    <PhotoCarousel stills={video.stills} title={video.title} />
+  </div>
+</section>
+
+--- src/components/Frame.astro ---
+---
+// Frame.astro - SUPER SIMPLE WHITE CONTAINER
+---
+
+<div class="frame simple-container">
+  <slot />
+</div>
+
+<style>
+  .frame.simple-container {
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    margin: 32px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+</style>
+
+--- src/components/PhotoCarousel.astro ---
+---
+// src/components/PhotoCarousel.astro - UPDATED
+interface Props {
+  stills: string[];
+  title: string;
+}
+
+const { stills, title } = Astro.props;
+---
+
+<div class="photo-carousel mt-6">
+  <div class="flex items-center justify-between mb-3">
+    <h3 class="text-xs font-medium text-gray-500 uppercase tracking-widest">
+      Film Stills • {stills.length} images
+    </h3>
+    <span class="text-xs text-gray-400">Scroll →</span>
+  </div>
+  
+  {stills.length > 0 ? (
+    <div class="relative">
+      <!-- Removed gradients for cleaner look -->
+      <div class="flex space-x-3 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
+        {stills.map((image, index) => (
+          <div class="flex-shrink-0 w-64 snap-center">
+            <div class="relative rounded overflow-hidden bg-gray-100 aspect-[16/9] group cursor-pointer">
+              <img
+                src={image}
+                alt={`Still ${index + 1} from ${title}`}
+                class="w-full h-full object-cover transition-all duration-400 ease-out group-hover:scale-105"
+                loading="lazy"
+                width="384"
+                height="216"
+              />
+              <!-- Simplified overlay -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <!-- Number badge - smaller -->
+              <div class="absolute top-2 right-2 bg-black/80 text-white text-xs font-medium px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                {index + 1}/{stills.length}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  ) : (
+    <p class="text-gray-400 text-sm italic">No stills available</p>
+  )}
+  
+  <style>
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    
+    /* Smooth scrolling */
+    .snap-x {
+      scroll-behavior: smooth;
+    }
+  </style>
+</div>
+
+--- src/layouts/Layout.astro ---
+---
+// src/layouts/Layout.astro
+---
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <!-- Import global CSS - FIXED PATH -->
+    <link rel="stylesheet" href="/src/styles/global.css" />
+    <title>Travel Video Portfolio</title>
+  </head>
+  <body class="bg-white text-gray-900">
+    <slot />
+  </body>
+</html>
+
+--- src/data/index.ts ---
+// src/data/index.ts - FIXED
+import london2017 from './videos/london-2017.json';
+import venice2018 from './videos/venice-2018.json';
+import croatia2015 from './videos/croatia-2015.json';
+import greece2016 from './videos/greece-2016.json';
+
+export interface Video {
+  id: string;
+  title: string;
+  slug: string;
+  youtubeId: string;
+  description: string;
+  stills: string[];
+  metadata: {
+    country: string;
+    region: string;
+    places: string[];
+    date: string;
+    coordinates: number[];
+    gear: string;
+    music: {
+      artist: string;
+      title: string;
+      spotify: string;
+      youtube: string;
+    };
+  };
+}
+
+// All videos in an array
+export const allVideos: Video[] = [
+  venice2018,
+  london2017,
+  greece2016,
+  croatia2015
+];
+
+// Sorted by date (newest first)
+export const sortedVideos = [...allVideos].sort(
+  (a, b) => new Date(b.metadata.date).getTime() - new Date(a.metadata.date).getTime()
+);
+
+// Helper to get a video by slug
+export function getVideoBySlug(slug: string): Video | undefined {
+  return allVideos.find(video => video.slug === slug);
+}
+
+--- src/data/videos/greece-2016.json ---
+{
+  "id": "greece-2016",
+  "title": "Greece | 2016",
+  "slug": "greece-2016",
+  "youtubeId": "Cfc8_m17rHc",
+  "description": "A travel film from my trip to Greece with some friends (Athens and Crete) in August 2016.",
+  "metadata": {
+    "country": "Greece",
+    "region": "Europe",
+    "places": [
+      "Athens",
+      "Crete"
+    ],
+    "date": "2016-08-15",
+    "coordinates": [
+      35.3387,
+      25.1442
+    ],
+    "gear": "GoPro Hero 3",
+    "music": {
+      "artist": "Alle Farben feat. YouNotUs",
+      "title": "Please Tell Rosie",
+      "spotify": "https://open.spotify.com/track/5gF9zOYM9TmSzKHukbNjpB",
+      "youtube": "https://www.youtube.com/watch?v=TQLgLcU81e4"
+    }
+  },
+  "stills": [
+    "/images/stills/greece-2016/greece-2016-stills-01.png",
+    "/images/stills/greece-2016/greece-2016-stills-02.png",
+    "/images/stills/greece-2016/greece-2016-stills-03.png",
+    "/images/stills/greece-2016/greece-2016-stills-04.png",
+    "/images/stills/greece-2016/greece-2016-stills-05.png"
+  ]
+}
+
+--- src/data/videos/venice-2018.json ---
+{
+  "id": "venice-2018",
+  "title": "Venice | 2018",
+  "slug": "venice-2018",
+  "youtubeId": "f-c1w6Ka5Vg",
+  "description": "A travel film with my family from my trip to Venice during Easter 2018.",
+  "metadata": {
+    "country": "Italy",
+    "region": "Europe",
+    "places": [
+      "Venice"
+    ],
+    "date": "2018-04-01",
+    "coordinates": [
+      45.4408,
+      12.3155
+    ],
+    "gear": "Olympus EM5 Mark II, Olympus 12-40mm f/2.8 PRO",
+    "music": {
+      "artist": "Of Monsters and Men",
+      "title": "Mountain Sound",
+      "spotify": "https://open.spotify.com/track/3SPVZJzf1Hs30rB6yXVf2y",
+      "youtube": "https://www.youtube.com/watch?v=qt7ox1M_XG4"
+    }
+  },
+  "stills": [
+    "/images/stills/venice-2018/venice-2018-stills-01.png",
+    "/images/stills/venice-2018/venice-2018-stills-02.png",
+    "/images/stills/venice-2018/venice-2018-stills-03.png",
+    "/images/stills/venice-2018/venice-2018-stills-04.png",
+    "/images/stills/venice-2018/venice-2018-stills-05.png"
+  ]
+}
+
+--- src/data/videos/london-2017.json ---
+{
+  "id": "london-2017",
+  "title": "London | 2017",
+  "slug": "london-2017",
+  "youtubeId": "e_1Ubu9k9T8",
+  "description": "A travel film from my trip to London in autumn 2017 with my mum and sister.",
+  "metadata": {
+    "country": "United Kingdom",
+    "region": "Europe",
+    "places": [
+      "London"
+    ],
+    "date": "2017-10-15",
+    "coordinates": [
+      51.5014,
+      -0.1244
+    ],
+    "gear": "Olympus EM5 Mark II, Olympus 12-40mm f/2.8 PRO, GoPro Hero 3",
+    "music": {
+      "artist": "OneRepublic",
+      "title": "Good Life",
+      "spotify": "https://open.spotify.com/track/6OtCIsQZ64Vs1EbzztvAv4",
+      "youtube": "https://www.youtube.com/watch?v=jZhQOvvV45w"
+    }
+  },
+  "stills": [
+    "/images/stills/london-2017/london-2017-stills-01.png",
+    "/images/stills/london-2017/london-2017-stills-02.png",
+    "/images/stills/london-2017/london-2017-stills-03.png",
+    "/images/stills/london-2017/london-2017-stills-04.png",
+    "/images/stills/london-2017/london-2017-stills-05.png"
+  ]
+}
+
+--- src/data/videos/croatia-2015.json ---
+{
+  "id": "croatia-2015",
+  "title": "Croatia | 2015",
+  "slug": "croatia-2015",
+  "youtubeId": "KwQxE7g8sBw",
+  "description": "A travel film from my trip to Croatia with friends in September 2015.",
+  "metadata": {
+    "country": "Croatia",
+    "region": "Europe",
+    "places": [
+      "Dubrovnik",
+      "Korčula",
+      "Split"
+    ],
+    "date": "2015-09-01",
+    "coordinates": [
+      42.6555,
+      18.1042
+    ],
+    "gear": "GoPro Hero 3",
+    "music": {
+      "artist": "Lost Frequencies",
+      "title": "Are You With Me",
+      "spotify": "https://open.spotify.com/track/4255amV4enzl28KAn16rUO",
+      "youtube": "https://www.youtube.com/watch?v=TUmUrvIaG8k"
+    }
+  },
+  "stills": [
+    "/images/stills/croatia-2015/croatia-2015-stills-01.png",
+    "/images/stills/croatia-2015/croatia-2015-stills-02.png",
+    "/images/stills/croatia-2015/croatia-2015-stills-03.png",
+    "/images/stills/croatia-2015/croatia-2015-stills-04.png",
+    "/images/stills/croatia-2015/croatia-2015-stills-05.png",
+    "/images/stills/croatia-2015/croatia-2015-stills-06.png"
+  ]
+}
+
+--- src/pages/index.astro ---
+---
+// src/pages/index.astro - UPDATED HEADER with film icon
+import Layout from '../layouts/Layout.astro';
+import VideoSection from '../components/VideoSectionTest.astro';
+import { sortedVideos } from '../data/index';
+import Frame from '../components/Frame.astro'
+import Icons from '../components/Icons.astro';
+---
+
+<Layout>
+  <main class="min-h-screen bg-gradient-to-b from-gray-100 to-white">
+    <!-- Header - Centered -->
+    <header class="py-12 px-4 sm:px-8 text-center">
+      <div class="max-w-3xl mx-auto">
+        <div class="mb-4">
+          <span class="text-xs font-medium text-gray-500 uppercase tracking-widest">JON UGARTE</span>
+        </div>
+        <h1 class="text-4xl font-light text-gray-900 tracking-tight mb-4">
+          Travel Videos
+        </h1>
+        
+        <!-- Simple Stats - Using consistent icons from Icons component -->
+        <div class="flex flex-wrap justify-center items-center gap-6 text-sm text-gray-600">
+          <span class="inline-flex items-center gap-2">
+            <Icons name="film" className="w-4 h-4" />
+            {sortedVideos.length} videos
+          </span>
+          
+          <span class="inline-flex items-center gap-2">
+            <Icons name="country" className="w-4 h-4" />
+            {new Set(sortedVideos.map(v => v.metadata.country)).size} countries
+          </span>
+          
+          <span class="inline-flex items-center gap-2">
+            <Icons name="gear" className="w-4 h-4" />
+            {sortedVideos.reduce((sum, video) => sum + video.stills.length, 0)} stills
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Video Sections -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-8 pb-12">
+      <div class="space-y-8">
+        {sortedVideos.map((video, index) => (
+          <Frame>
+            <VideoSection video={video} />
+          </Frame>
+        ))}
+      </div>
+    </div>
+
+    <!-- Footer - centered -->
+    <footer class="py-6 px-4 sm:px-8 border-t border-gray-300 bg-white">
+      <div class="max-w-3xl mx-auto text-center text-gray-500 text-sm">
+        <p class="mb-1">Travel Video Portfolio • {new Date().getFullYear()}</p>
+        <p class="text-xs">All videos shot and edited by Jon Ugarte</p>
+      </div>
+    </footer>
+  </main>
+</Layout>
+
+--- src/pages/test2.astro ---
+---
+// src/pages/test2.astro
+---
+
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* Direct CSS to test */
+    .test-red { background: red; color: white; padding: 1rem; margin: 1rem; }
+    .test-blue { background: blue; color: white; padding: 1rem; margin: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="test-red">Direct CSS - should be red</div>
+  <div class="test-blue">Direct CSS - should be blue</div>
+  
+  <!-- Also test Tailwind if it loads -->
+  <div class="bg-green-500 text-white p-4 m-4">Tailwind - should be green</div>
+</body>
+</html>
+
+--- src/pages/test.html.astro ---
+---
+// Test if Tailwind works
+---
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="/styles/global.css" />
+</head>
+<body class="p-8">
+  <!-- Test Tailwind classes -->
+  <div class="bg-red-500 text-white p-4 rounded mb-4">
+    This should be red with white text
+  </div>
+  <div class="bg-blue-500 text-white p-4 rounded mb-4">
+    This should be blue with white text
+  </div>
+  <div class="grid grid-cols-3 gap-4">
+    <div class="bg-green-500 p-4">Grid 1</div>
+    <div class="bg-yellow-500 p-4">Grid 2</div>
+    <div class="bg-purple-500 p-4">Grid 3</div>
+  </div>
+</body>
+</html>
+
+
+================================================================================
+METADATA
+================================================================================
+
+Files Parsed: 29
+Total Characters: 171758
+
+File List:
+----------------------------------------
+.astro/content.d.ts: 6942 characters
+.astro/data-store.json: 1549 characters
+.astro/settings.json: 58 characters
+.astro/types.d.ts: 39 characters
+.vscode/extensions.json: 87 characters
+.vscode/launch.json: 207 characters
+README.md: 1522 characters
+other/2025_12_31_improvements-prompt.md: 43195 characters
+other/2026_01-01_improvements-look-and-feel.md: 85577 characters
+package.json: 431 characters
+scripts/update-stills.js: 1346 characters
+src/components/Frame.astro: 293 characters
+src/components/Icons.astro: 3888 characters
+src/components/PhotoCarousel.astro: 2093 characters
+src/components/VideoSection.astro: 4605 characters
+src/components/VideoSectionTest.astro: 4605 characters
+src/components/Welcome.astro: 4921 characters
+src/data/index.ts: 1082 characters
+src/data/videos/croatia-2015.json: 1074 characters
+src/data/videos/greece-2016.json: 1010 characters
+src/data/videos/london-2017.json: 1014 characters
+src/data/videos/venice-2018.json: 1000 characters
+src/layouts/Layout.astro: 758 characters
+src/pages/index.astro: 2261 characters
+src/pages/test.html.astro: 594 characters
+src/pages/test2.astro: 543 characters
+src/styles/global.css: 720 characters
+tools/config.json: 235 characters
+tsconfig.json: 109 characters
+
+Directory Structure:
+----------------------------------------
+ju-travel-video/
+├── .astro/
+│   ├── collections/
+│   ├── content.d.ts
+│   ├── data-store.json
+│   ├── settings.json
+│   └── types.d.ts
+├── .vscode/
+│   ├── extensions.json
+│   └── launch.json
+├── other/
+│   ├── 2025_12_31_improvements-prompt.md
+│   └── 2026_01-01_improvements-look-and-feel.md
+├── public/
+│   ├── images/
+│   │   └── stills/
+│   │       ├── croatia-2015/
+│   │       ├── greece-2016/
+│   │       ├── london-2017/
+│   │       └── venice-2018/
+│   └── styles/
+├── scripts/
+│   └── update-stills.js
+├── src/
+│   ├── assets/
+│   ├── components/
+│   │   ├── Frame.astro
+│   │   ├── Icons.astro
+│   │   ├── PhotoCarousel.astro
+│   │   ├── VideoSection.astro
+│   │   ├── VideoSectionTest.astro
+│   │   └── Welcome.astro
+│   ├── data/
+│   │   ├── videos/
+│   │   │   ├── croatia-2015.json
+│   │   │   ├── greece-2016.json
+│   │   │   ├── london-2017.json
+│   │   │   └── venice-2018.json
+│   │   └── index.ts
+│   ├── layouts/
+│   │   └── Layout.astro
+│   ├── pages/
+│   │   ├── index.astro
+│   │   ├── test.html.astro
+│   │   └── test2.astro
+│   └── styles/
+│       └── global.css
+├── tools/
+│   └── config.json
+├── README.md
+├── package.json
+└── tsconfig.json
+
+Generated at:
+Local: 2026-01-01 22:15:21 
+UTC:   2026-01-01 21:15:21 UTC
+Timestamp: 1767302121

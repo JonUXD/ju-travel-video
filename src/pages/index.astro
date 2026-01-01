@@ -1,9 +1,10 @@
 ---
-// src/pages/index.astro - UPDATED HEADER (Simple stats)
+// src/pages/index.astro - UPDATED HEADER with film icon
 import Layout from '../layouts/Layout.astro';
 import VideoSection from '../components/VideoSection.astro';
 import { sortedVideos } from '../data/index';
 import Frame from '../components/Frame.astro'
+import Icons from '../components/Icons.astro';
 ---
 
 <Layout>
@@ -18,26 +19,20 @@ import Frame from '../components/Frame.astro'
           Travel Videos
         </h1>
         
-        <!-- Simple Stats - Like before but centered -->
+        <!-- Simple Stats - Using consistent icons from Icons component -->
         <div class="flex flex-wrap justify-center items-center gap-6 text-sm text-gray-600">
           <span class="inline-flex items-center gap-2">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-            </svg>
+            <Icons name="film" className="w-4 h-4" />
             {sortedVideos.length} videos
           </span>
           
           <span class="inline-flex items-center gap-2">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
-            </svg>
+            <Icons name="country" className="w-4 h-4" />
             {new Set(sortedVideos.map(v => v.metadata.country)).size} countries
           </span>
           
           <span class="inline-flex items-center gap-2">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd"/>
-            </svg>
+            <Icons name="gear" className="w-4 h-4" />
             {sortedVideos.reduce((sum, video) => sum + video.stills.length, 0)} stills
           </span>
         </div>
