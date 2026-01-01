@@ -1,61 +1,65 @@
 ---
-// src/pages/index.astro
+// src/pages/index.astro - UPDATED HEADER (Simple stats)
 import Layout from '../layouts/Layout.astro';
 import VideoSection from '../components/VideoSection.astro';
 import { sortedVideos } from '../data/index';
+import Frame from '../components/Frame.astro'
 ---
 
 <Layout>
-  <main class="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-  <!-- Header -->
-  <header class="py-16 px-4 sm:px-8 bg-gradient-to-b from-gray-50 to-white">
-    <div class="max-w-6xl mx-auto">
-      <div class="mb-4">
-        <span class="text-xs font-medium text-gray-500 uppercase tracking-widest">Cinematic Portfolio</span>
+  <main class="min-h-screen bg-gradient-to-b from-gray-100 to-white">
+    <!-- Header - Centered -->
+    <header class="py-12 px-4 sm:px-8 text-center">
+      <div class="max-w-3xl mx-auto">
+        <div class="mb-4">
+          <span class="text-xs font-medium text-gray-500 uppercase tracking-widest">JON UGARTE</span>
+        </div>
+        <h1 class="text-4xl font-light text-gray-900 tracking-tight mb-4">
+          Travel Videos
+        </h1>
+        
+        <!-- Simple Stats - Like before but centered -->
+        <div class="flex flex-wrap justify-center items-center gap-6 text-sm text-gray-600">
+          <span class="inline-flex items-center gap-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+            </svg>
+            {sortedVideos.length} videos
+          </span>
+          
+          <span class="inline-flex items-center gap-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+            </svg>
+            {new Set(sortedVideos.map(v => v.metadata.country)).size} countries
+          </span>
+          
+          <span class="inline-flex items-center gap-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd"/>
+            </svg>
+            {sortedVideos.reduce((sum, video) => sum + video.stills.length, 0)} stills
+          </span>
+        </div>
       </div>
-      <h1 class="text-5xl font-light text-gray-900 tracking-tight mb-4">
-        Travel
-        <span class="font-medium text-gray-700">Films</span>
-      </h1>
-      <p class="text-gray-600 text-lg max-w-2xl mb-8">
-        A collection of cinematic travel videos shot around the world. 
-        Each film tells a story through movement, music, and moments.
-      </p>
-      <div class="flex items-center gap-6 text-sm text-gray-500">
-        <span class="inline-flex items-center gap-2">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-          </svg>
-          {sortedVideos.length} films
-        </span>
-        <span class="inline-flex items-center gap-2">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
-          </svg>
-          {new Set(sortedVideos.map(v => v.metadata.country)).size} countries
-        </span>
-        <span class="inline-flex items-center gap-2">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd"/>
-          </svg>
-          {sortedVideos.reduce((sum, video) => sum + video.stills.length, 0)} stills
-        </span>
-      </div>
-    </div>
-  </header>
+    </header>
 
     <!-- Video Sections -->
-    <div class="max-w-6xl mx-auto px-4 sm:px-8 py-12">
-      {sortedVideos.map((video, index) => (
-        <VideoSection video={video} />
-      ))}
+    <div class="max-w-6xl mx-auto px-4 sm:px-8 pb-12">
+      <div class="space-y-8">
+        {sortedVideos.map((video, index) => (
+          <Frame>
+            <VideoSection video={video} />
+          </Frame>
+        ))}
+      </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="py-8 px-4 sm:px-8 border-t border-gray-200 bg-white">
-      <div class="max-w-6xl mx-auto text-center text-gray-500 text-sm">
-        <p class="mb-2">Travel Video Portfolio • Cinematic travel films • {new Date().getFullYear()}</p>
-        <p class="text-xs">All videos shot and edited with passion for the art of travel storytelling</p>
+    <!-- Footer - centered -->
+    <footer class="py-6 px-4 sm:px-8 border-t border-gray-300 bg-white">
+      <div class="max-w-3xl mx-auto text-center text-gray-500 text-sm">
+        <p class="mb-1">Travel Video Portfolio • {new Date().getFullYear()}</p>
+        <p class="text-xs">All videos shot and edited by Jon Ugarte</p>
       </div>
     </footer>
   </main>

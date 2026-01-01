@@ -1,8 +1,9 @@
 ---
-// src/components/VideoSection.astro
+// src/components/VideoSection.astro - UPDATED
 import type { Video } from '../data/index';
 import PhotoCarousel from './PhotoCarousel.astro';
 import Icons from './Icons.astro';
+import Frame from './Frame.astro'
 
 interface Props {
   video: Video;
@@ -11,95 +12,99 @@ interface Props {
 const { video } = Astro.props;
 ---
 
-<section class="video-section mb-24 pb-16 border-b border-gray-100 last:border-b-0">
-  <!-- Video + Metadata Side by Side -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-12">
-    <!-- Left Column: Video -->
-    <div class="lg:col-span-2 flex items-center">
-      <div class="w-full">
-        <div class="relative pb-[56.25%] bg-black rounded-xl overflow-hidden shadow-lg">
-          <iframe
-            src={`https://www.youtube.com/embed/${video.youtubeId}?modestbranding=1&rel=0`}
-            title={video.title}
-            class="absolute top-0 left-0 w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            loading="lazy"
-          ></iframe>
+<section class="video-section mb-12 pb-8 last:mb-0 last:pb-0">
+  <!-- <Frame> -->
+    <!-- Video + Metadata Side by Side -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
+      <!-- Left Column: Video -->
+      <div class="lg:col-span-2">
+        <div class="w-full max-w-2xl">
+          <div class="relative pb-[56.25%] bg-black rounded-lg overflow-hidden shadow-md">
+            <iframe
+              src={`https://www.youtube.com/embed/${video.youtubeId}?modestbranding=1&rel=0`}
+              title={video.title}
+              class="absolute top-0 left-0 w-full h-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Metadata - Compact layout -->
+      <div class="lg:col-span-1 lg:pl-4">
+        <div class="space-y-6">
+          <!-- 2x2 Grid - tighter spacing -->
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2 text-gray-500">
+                <Icons name="location" className="w-3.5 h-3.5" />
+                <span class="text-xs font-medium uppercase tracking-wider">Location</span>
+              </div>
+              <p class="text-gray-800 font-medium text-sm">{video.metadata.places.join(', ')}</p>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex items-center gap-2 text-gray-500">
+                <Icons name="calendar" className="w-3.5 h-3.5" />
+                <span class="text-xs font-medium uppercase tracking-wider">Date</span>
+              </div>
+              <p class="text-gray-800 font-medium text-sm">
+                {new Date(video.metadata.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+              </p>
+            </div>
+
+            <div class="space-y-1">
+              <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Country</div>
+              <p class="text-gray-800 font-medium text-sm">{video.metadata.country}</p>
+            </div>
+
+            <div class="space-y-1">
+              <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Region</div>
+              <p class="text-gray-800 font-medium text-sm">{video.metadata.region}</p>
+            </div>
+          </div>
+
+          <!-- Gear - single line -->
+          <div class="space-y-1">
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Gear</div>
+            <p class="text-gray-700 text-xs leading-snug">{video.metadata.gear}</p>
+          </div>
+
+          <!-- Music - compact -->
+          <div class="space-y-2">
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Music</div>
+            <div>
+              <p class="text-gray-900 font-medium text-sm">{video.metadata.music.artist}</p>
+              <p class="text-gray-600 text-xs mt-0.5">{video.metadata.music.title}</p>
+            </div>
+            <div class="flex gap-3 pt-1">
+              <a 
+                href={video.metadata.music.spotify} 
+                target="_blank" 
+                class="text-xs text-gray-600 hover:text-gray-900 inline-flex items-center gap-1.5 transition-colors"
+              >
+                <Icons name="spotify" className="w-3.5 h-3.5" />
+                Spotify
+              </a>
+              <a 
+                href={video.metadata.music.youtube} 
+                target="_blank" 
+                class="text-xs text-gray-600 hover:text-gray-900 inline-flex items-center gap-1.5 transition-colors"
+              >
+                <Icons name="youtube" className="w-3.5 h-3.5" />
+                YouTube
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Right Column: Metadata -->
-    <div class="lg:col-span-1 lg:pl-6 flex flex-col justify-center space-y-8">
-      <!-- 2x2 Grid -->
-      <div class="grid grid-cols-2 gap-6">
-        <div class="space-y-2">
-          <div class="flex items-center gap-2 text-gray-500">
-            <Icons name="location" className="w-4 h-4" />
-            <span class="text-xs font-medium uppercase tracking-wider">Location</span>
-          </div>
-          <p class="text-gray-800 font-medium">{video.metadata.places.join(', ')}</p>
-        </div>
-
-        <div class="space-y-2">
-          <div class="flex items-center gap-2 text-gray-500">
-            <Icons name="calendar" className="w-4 h-4" />
-            <span class="text-xs font-medium uppercase tracking-wider">Date</span>
-          </div>
-          <p class="text-gray-800 font-medium">
-            {new Date(video.metadata.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-          </p>
-        </div>
-
-        <div class="space-y-2">
-          <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Country</div>
-          <p class="text-gray-800 font-medium">{video.metadata.country}</p>
-        </div>
-
-        <div class="space-y-2">
-          <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Region</div>
-          <p class="text-gray-800 font-medium">{video.metadata.region}</p>
-        </div>
-      </div>
-
-      <!-- Gear -->
-      <div class="space-y-2">
-        <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Gear</div>
-        <p class="text-gray-700 text-sm leading-relaxed">{video.metadata.gear}</p>
-      </div>
-
-      <!-- Music -->
-      <div class="space-y-3">
-        <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Music</div>
-        <div>
-          <p class="text-gray-900 font-medium">{video.metadata.music.artist}</p>
-          <p class="text-gray-600 text-sm mt-1">{video.metadata.music.title}</p>
-        </div>
-        <div class="flex gap-4 pt-2">
-          <a 
-            href={video.metadata.music.spotify} 
-            target="_blank" 
-            class="text-sm text-gray-600 hover:text-gray-900 inline-flex items-center gap-2 transition-colors"
-          >
-            <Icons name="spotify" className="w-4 h-4" />
-            Spotify
-          </a>
-          <a 
-            href={video.metadata.music.youtube} 
-            target="_blank" 
-            class="text-sm text-gray-600 hover:text-gray-900 inline-flex items-center gap-2 transition-colors"
-          >
-            <Icons name="youtube" className="w-4 h-4" />
-            YouTube
-          </a>
-        </div>
-      </div>
+    <!-- Photo Carousel Below (Full width) -->
+    <div class="mt-6">
+      <PhotoCarousel stills={video.stills} title={video.title} />
     </div>
-  </div>
-
-  <!-- Photo Carousel Below (Full width) -->
-  <div class="mt-8">
-    <PhotoCarousel stills={video.stills} title={video.title} />
-  </div>
+<!-- </Frame> -->
 </section>

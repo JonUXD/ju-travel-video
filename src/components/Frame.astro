@@ -1,0 +1,17 @@
+---
+// Frame.astro - SUPER SIMPLE WHITE CONTAINER
+---
+
+<div class="frame simple-container">
+  <slot />
+</div>
+
+<style>
+  .frame.simple-container {
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    margin: 32px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+</style>

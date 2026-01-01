@@ -1,5 +1,5 @@
 ---
-// src/components/PhotoCarousel.astro
+// src/components/PhotoCarousel.astro - UPDATED
 interface Props {
   stills: string[];
   title: string;
@@ -8,8 +8,8 @@ interface Props {
 const { stills, title } = Astro.props;
 ---
 
-<div class="photo-carousel mt-8">
-  <div class="flex items-center justify-between mb-4">
+<div class="photo-carousel mt-6">
+  <div class="flex items-center justify-between mb-3">
     <h3 class="text-xs font-medium text-gray-500 uppercase tracking-widest">
       Film Stills • {stills.length} images
     </h3>
@@ -18,26 +18,23 @@ const { stills, title } = Astro.props;
   
   {stills.length > 0 ? (
     <div class="relative">
-      <!-- Gradient fade on edges -->
-      <div class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-      <div class="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
-      
-      <div class="flex space-x-4 overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory">
+      <!-- Removed gradients for cleaner look -->
+      <div class="flex space-x-3 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
         {stills.map((image, index) => (
-          <div class="flex-shrink-0 w-72 snap-center">
-            <div class="relative rounded-lg overflow-hidden bg-gray-100 aspect-[16/9] group cursor-pointer">
+          <div class="flex-shrink-0 w-64 snap-center">
+            <div class="relative rounded overflow-hidden bg-gray-100 aspect-[16/9] group cursor-pointer">
               <img
                 src={image}
                 alt={`Still ${index + 1} from ${title}`}
-                class="w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-110"
+                class="w-full h-full object-cover transition-all duration-400 ease-out group-hover:scale-105"
                 loading="lazy"
-                width="400"
-                height="225"
+                width="384"
+                height="216"
               />
-              <!-- Overlay gradient -->
-              <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <!-- Number badge -->
-              <div class="absolute top-3 right-3 bg-black/80 text-white text-xs font-medium px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <!-- Simplified overlay -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <!-- Number badge - smaller -->
+              <div class="absolute top-2 right-2 bg-black/80 text-white text-xs font-medium px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 {index + 1}/{stills.length}
               </div>
             </div>
