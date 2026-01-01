@@ -1,3 +1,74 @@
+# 🎬 Travel Video Portfolio - Improvement Roadmap
+# Version 1.1: Scale, Sidebar & Gallery Enhancement
+
+## CURRENT STATE
+- Only 1 video visible on MacBook Air (looks best at 80% zoom)
+- No navigation between videos  
+- Carousel images can't be viewed fullscreen
+
+## STAGE 1: FIX SCALING (Week 1)
+
+### GOAL
+Make 2-3 videos visible on screen without zooming out.
+
+### APPROACH
+1. **Reduce text sizes globally** (headers, metadata, stats)
+2. **Adjust grid layout** to use space more efficiently  
+3. **Compact spacing** between elements
+4. **Scale down carousel** images slightly
+
+### EXPECTED OUTCOME
+- Better information density
+- 2+ videos visible at 100% zoom
+- Maintains clean, readable design
+
+## STAGE 2: ADD SIDEBAR (Week 2)
+
+### GOAL  
+Elegant left sidebar for desktop navigation (20% width).
+
+### APPROACH
+1. **Create Sidebar component** with video list
+2. **Add anchor links** to each video section
+3. **Adjust main layout** to accommodate sidebar
+4. **Style sidebar** to match existing aesthetic
+5. **Mobile adaptation** (hamburger menu)
+
+### EXPECTED OUTCOME
+- Fixed sidebar on desktop
+- Click to jump between videos
+- Clean integration with current design
+
+## STAGE 3: PHOTO GALLERY (Week 3)
+
+### GOAL
+Click carousel images → fullscreen gallery with navigation.
+
+### APPROACH
+1. **Create Gallery component** (overlay with navigation)
+2. **Add click handlers** to carousel images
+3. **Implement keyboard navigation** (arrows, ESC)
+4. **Add image preloading** for smooth transitions
+
+### EXPECTED OUTCOME
+- Professional photo viewing experience
+- Keyboard navigation support
+- Maintains performance
+
+## TIMELINE
+- **Week 1:** Scaling fixes
+- **Week 2:** Sidebar implementation  
+- **Week 3:** Photo gallery
+- **Week 4:** Polish & testing
+
+## SUCCESS METRICS
+- [ ] 2+ videos visible on MacBook Air at 100% zoom
+- [ ] Sidebar navigation works smoothly
+- [ ] Gallery overlay functions properly
+- [ ] Mobile experience remains good
+
+all code
+
 --- README.md ---
 # Astro Starter Kit: Basics
 
