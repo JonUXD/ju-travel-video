@@ -1,0 +1,89 @@
+---
+// src/components/FilterBar.astro
+import type { Video } from '../data/index';
+
+interface Props {
+  videos: Video[];
+  activeFilters?: {
+    country?: string;
+    region?: string;
+    year?: string;
+    gear?: string;
+  };
+}
+
+const { videos, activeFilters = {} } = Astro.props;
+
+// Extract unique filter options from videos
+const countries = [...new Set(videos.map(v => v.metadata.country))];
+const regions = [...new Set(videos.map(v => v.metadata.region))];
+const years = [...new Set(videos.map(v => new Date(v.metadata.date).getFullYear().toString()))];
+const gearTypes = [...new Set(videos.map(v => v.metadata.gear.split(',').map(g => g.trim())).flat())];
+---
+
+<div class="filter-bar mb-8 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+  <div class="flex flex-wrap items-center gap-4">
+    <!-- Filter by Country -->
+    <div class="filter-group">
+      <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
+        Country
+      </label>
+      <select class="filter-select text-sm border border-gray-300 rounded px-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent">
+        <option value="">All countries</option>
+        {countries.map(country => (
+          <option value={country} selected={activeFilters.country === country}>
+            {country}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    <!-- Filter by Region -->
+    <div class="filter-group">
+      <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
+        Region
+      </label>
+      <select class="filter-select text-sm border border-gray-300 rounded px-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent">
+        <option value="">All regions</option>
+        {regions.map(region => (
+          <option value={region} selected={activeFilters.region === region}>
+            {region}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    <!-- Filter by Year -->
+    <div class="filter-group">
+      <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
+        Year
+      </label>
+      <select class="filter-select text-sm border border-gray-300 rounded px-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent">
+        <option value="">All years</option>
+        {years.sort((a, b) => b.localeCompare(a)).map(year => (
+          <option value={year} selected={activeFilters.year === year}>
+            {year}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    <!-- Clear Filters Button -->
+    <div class="filter-group flex items-end">
+      <button class="clear-filters text-sm text-gray-600 hover:text-gray-900 px-3 py-1.5 border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+        Clear filters
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .filter-select {
+    min-width: 140px;
+  }
+  
+  /* Optional: Add smooth transitions */
+  .filter-select, .clear-filters {
+    transition: all 0.2s ease;
+  }
+</style>

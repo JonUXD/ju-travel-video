@@ -4542,7 +4542,7 @@ const { name, className = 'w-4 h-4' } = Astro.props;
 
 --- src/components/VideoSectionTest.astro ---
 ---
-// src/components/VideoSection.astro - UPDATED with all icons
+// src/components/VideoSectionTest.astro - Final version with spacing and size fixes
 import type { Video } from '../data/index';
 import PhotoCarousel from './PhotoCarousel.astro';
 import Icons from './Icons.astro';
@@ -4572,87 +4572,109 @@ const { video } = Astro.props;
       </div>
     </div>
 
-    <!-- Right Column: Metadata with icons -->
-    <div class="lg:col-span-1 lg:pl-4">
-      <div class="space-y-6">
-        <!-- 2x2 Grid with icons -->
-        <div class="grid grid-cols-2 gap-4">
-          <div class="space-y-1">
-            <div class="flex items-center gap-2 text-gray-500">
-              <Icons name="location" className="w-3.5 h-3.5" />
-              <span class="text-xs font-medium uppercase tracking-wider">Location</span>
-            </div>
-            <p class="text-gray-800 font-medium text-sm">{video.metadata.places.join(', ')}</p>
+    <!-- Right Column: Metadata - 4x2 grid + music -->
+    <div class="lg:col-span-2 lg:pl-4">
+      
+      <!-- 4x2 GRID: 4 columns wide, 2 rows tall -->
+      <div class="grid grid-cols-4 grid-rows-2 gap-5 mb-6">
+        
+        <!-- CELL 1: Location (row 1, col 1) -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-gray-500">
+            <Icons name="location" className="w-3.5 h-3.5" />
+            <span class="text-xs font-medium uppercase tracking-wider">Location</span>
           </div>
-
-          <div class="space-y-1">
-            <div class="flex items-center gap-2 text-gray-500">
-              <Icons name="calendar" className="w-3.5 h-3.5" />
-              <span class="text-xs font-medium uppercase tracking-wider">Date</span>
-            </div>
-            <p class="text-gray-800 font-medium text-sm">
-              {new Date(video.metadata.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-            </p>
-          </div>
-
-          <div class="space-y-1">
-            <div class="flex items-center gap-2 text-gray-500">
-              <Icons name="country" className="w-3.5 h-3.5" />
-              <span class="text-xs font-medium uppercase tracking-wider">Country</span>
-            </div>
-            <p class="text-gray-800 font-medium text-sm">{video.metadata.country}</p>
-          </div>
-
-          <div class="space-y-1">
-            <div class="flex items-center gap-2 text-gray-500">
-              <Icons name="region" className="w-3.5 h-3.5" />
-              <span class="text-xs font-medium uppercase tracking-wider">Region</span>
-            </div>
-            <p class="text-gray-800 font-medium text-sm">{video.metadata.region}</p>
-          </div>
+          <p class="text-gray-800 font-medium text-sm">{video.metadata.places.join(', ')}</p>
         </div>
 
-        <!-- Gear with icon -->
-        <div class="space-y-1">
+        <!-- CELL 2: Date (row 1, col 2) -->
+        <div class="space-y-2">
           <div class="flex items-center gap-2 text-gray-500">
+            <Icons name="calendar" className="w-3.5 h-3.5" />
+            <span class="text-xs font-medium uppercase tracking-wider">Date</span>
+          </div>
+          <p class="text-gray-800 font-medium text-sm">
+            {new Date(video.metadata.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+          </p>
+        </div>
+
+        <!-- CELLS 3 & 4: GEAR (row 1-2, col 3-4 - spans 2 rows × 2 columns) -->
+        <div class="col-span-2 row-span-2 space-y-2">
+          <div class="flex items-center gap-2 text-gray-500 mb-2">
             <Icons name="gear" className="w-3.5 h-3.5" />
             <span class="text-xs font-medium uppercase tracking-wider">Gear</span>
           </div>
-          <p class="text-gray-700 text-xs leading-snug">{video.metadata.gear}</p>
+          <p class="text-gray-800 font-medium text-sm">
+            {video.metadata.gear}
+          </p>
         </div>
 
-        <!-- Music with icon -->
+        <!-- CELL 5: Country (row 2, col 1) -->
         <div class="space-y-2">
           <div class="flex items-center gap-2 text-gray-500">
-            <Icons name="music" className="w-3.5 h-3.5" />
-            <span class="text-xs font-medium uppercase tracking-wider">Music</span>
+            <Icons name="country" className="w-3.5 h-3.5" />
+            <span class="text-xs font-medium uppercase tracking-wider">Country</span>
           </div>
-          <div>
-            <p class="text-gray-900 font-medium text-sm">{video.metadata.music.artist}</p>
-            <p class="text-gray-600 text-xs mt-0.5">{video.metadata.music.title}</p>
+          <p class="text-gray-800 font-medium text-sm">{video.metadata.country}</p>
+        </div>
+
+        <!-- CELL 6: Region (row 2, col 2) -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-gray-500">
+            <Icons name="region" className="w-3.5 h-3.5" />
+            <span class="text-xs font-medium uppercase tracking-wider">Region</span>
           </div>
-          <div class="flex gap-3 pt-1">
-            <a 
-              href={video.metadata.music.spotify} 
-              target="_blank" 
-              class="text-xs text-gray-600 hover:text-gray-900 inline-flex items-center gap-1.5 transition-colors"
-            >
-              <Icons name="spotify" className="w-3.5 h-3.5" />
-              Spotify
-            </a>
-            <a 
-              href={video.metadata.music.youtube} 
-              target="_blank" 
-              class="text-xs text-gray-600 hover:text-gray-900 inline-flex items-center gap-1.5 transition-colors"
-            >
-              <Icons name="youtube" className="w-3.5 h-3.5" />
-              YouTube
-            </a>
+          <p class="text-gray-800 font-medium text-sm">{video.metadata.region}</p>
+        </div>
+        
+      </div> <!-- End 4x2 grid -->
+
+      <!-- Separator line -->
+      <div class="border-t border-gray-200 my-8"></div>
+
+      <!-- Music Section -->
+      <div class="space-y-3">
+        <div class="flex items-center gap-2 text-gray-500">
+          <Icons name="music" className="w-3.5 h-3.5" />
+          <span class="text-xs font-medium uppercase tracking-wider">Music</span>
+        </div>
+        
+        <!-- Music details -->
+        <div>
+          <!-- Row 1: Artist + Links (inline) -->
+          <div class="flex items-center gap-8 mb-1">
+            <!-- Artist name -->
+            <p class="text-gray-900 font-medium text-sm flex-shrink-0">{video.metadata.music.artist}</p>
+            
+            <!-- Spotify and YouTube links -->
+            <div class="flex gap-6 items-center">
+              <a 
+                href={video.metadata.music.spotify} 
+                target="_blank" 
+                class="text-gray-600 hover:text-gray-900 inline-flex items-center gap-2 transition-colors"
+              >
+                <Icons name="spotify" className="w-4 h-4" />
+                <span class="text-sm">Spotify</span>
+              </a>
+              <a 
+                href={video.metadata.music.youtube} 
+                target="_blank" 
+                class="text-gray-600 hover:text-gray-900 inline-flex items-center gap-2 transition-colors"
+              >
+                <Icons name="youtube" className="w-4 h-4" />
+                <span class="text-sm">YouTube</span>
+              </a>
+            </div>
           </div>
+          
+          <!-- Row 2: Song title -->
+          <p class="text-gray-600 text-sm">{video.metadata.music.title}</p>
         </div>
       </div>
-    </div>
-  </div>
+      
+    </div> <!-- End right column -->
+    
+  </div> <!-- End main grid -->
 
   <!-- Photo Carousel Below (Full width) -->
   <div class="mt-6">
@@ -4875,7 +4897,7 @@ import background from '../assets/background.svg';
 
 --- src/components/VideoSection.astro ---
 ---
-// src/components/VideoSection.astro - UPDATED with all icons
+// src/components/VideoSectionTest.astro - Final version with spacing and size fixes
 import type { Video } from '../data/index';
 import PhotoCarousel from './PhotoCarousel.astro';
 import Icons from './Icons.astro';
@@ -4905,93 +4927,206 @@ const { video } = Astro.props;
       </div>
     </div>
 
-    <!-- Right Column: Metadata with icons -->
-    <div class="lg:col-span-1 lg:pl-4">
-      <div class="space-y-6">
-        <!-- 2x2 Grid with icons -->
-        <div class="grid grid-cols-2 gap-4">
-          <div class="space-y-1">
-            <div class="flex items-center gap-2 text-gray-500">
-              <Icons name="location" className="w-3.5 h-3.5" />
-              <span class="text-xs font-medium uppercase tracking-wider">Location</span>
-            </div>
-            <p class="text-gray-800 font-medium text-sm">{video.metadata.places.join(', ')}</p>
+    <!-- Right Column: Metadata - 4x2 grid + music -->
+    <div class="lg:col-span-2 lg:pl-4">
+      
+      <!-- 4x2 GRID: 4 columns wide, 2 rows tall -->
+      <div class="grid grid-cols-4 grid-rows-2 gap-5 mb-6">
+        
+        <!-- CELL 1: Location (row 1, col 1) -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-gray-500">
+            <Icons name="location" className="w-3.5 h-3.5" />
+            <span class="text-xs font-medium uppercase tracking-wider">Location</span>
           </div>
-
-          <div class="space-y-1">
-            <div class="flex items-center gap-2 text-gray-500">
-              <Icons name="calendar" className="w-3.5 h-3.5" />
-              <span class="text-xs font-medium uppercase tracking-wider">Date</span>
-            </div>
-            <p class="text-gray-800 font-medium text-sm">
-              {new Date(video.metadata.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-            </p>
-          </div>
-
-          <div class="space-y-1">
-            <div class="flex items-center gap-2 text-gray-500">
-              <Icons name="country" className="w-3.5 h-3.5" />
-              <span class="text-xs font-medium uppercase tracking-wider">Country</span>
-            </div>
-            <p class="text-gray-800 font-medium text-sm">{video.metadata.country}</p>
-          </div>
-
-          <div class="space-y-1">
-            <div class="flex items-center gap-2 text-gray-500">
-              <Icons name="region" className="w-3.5 h-3.5" />
-              <span class="text-xs font-medium uppercase tracking-wider">Region</span>
-            </div>
-            <p class="text-gray-800 font-medium text-sm">{video.metadata.region}</p>
-          </div>
+          <p class="text-gray-800 font-medium text-sm">{video.metadata.places.join(', ')}</p>
         </div>
 
-        <!-- Gear with icon -->
-        <div class="space-y-1">
+        <!-- CELL 2: Date (row 1, col 2) -->
+        <div class="space-y-2">
           <div class="flex items-center gap-2 text-gray-500">
+            <Icons name="calendar" className="w-3.5 h-3.5" />
+            <span class="text-xs font-medium uppercase tracking-wider">Date</span>
+          </div>
+          <p class="text-gray-800 font-medium text-sm">
+            {new Date(video.metadata.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+          </p>
+        </div>
+
+        <!-- CELLS 3 & 4: GEAR (row 1-2, col 3-4 - spans 2 rows × 2 columns) -->
+        <div class="col-span-2 row-span-2 space-y-1">
+          <div class="flex items-center gap-2 text-gray-500 mb-2">
             <Icons name="gear" className="w-3.5 h-3.5" />
             <span class="text-xs font-medium uppercase tracking-wider">Gear</span>
           </div>
-          <p class="text-gray-700 text-xs leading-snug">{video.metadata.gear}</p>
+          <p class="text-gray-700 text-xs leading-relaxed">
+            {video.metadata.camera}{video.metadata.gear ? `, ${video.metadata.gear}` : ''}
+          </p>
         </div>
 
-        <!-- Music with icon -->
+        <!-- CELL 5: Country (row 2, col 1) -->
         <div class="space-y-2">
           <div class="flex items-center gap-2 text-gray-500">
-            <Icons name="music" className="w-3.5 h-3.5" />
-            <span class="text-xs font-medium uppercase tracking-wider">Music</span>
+            <Icons name="country" className="w-3.5 h-3.5" />
+            <span class="text-xs font-medium uppercase tracking-wider">Country</span>
           </div>
-          <div>
-            <p class="text-gray-900 font-medium text-sm">{video.metadata.music.artist}</p>
-            <p class="text-gray-600 text-xs mt-0.5">{video.metadata.music.title}</p>
+          <p class="text-gray-800 font-medium text-sm">{video.metadata.country}</p>
+        </div>
+
+        <!-- CELL 6: Region (row 2, col 2) -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-gray-500">
+            <Icons name="region" className="w-3.5 h-3.5" />
+            <span class="text-xs font-medium uppercase tracking-wider">Region</span>
           </div>
-          <div class="flex gap-3 pt-1">
-            <a 
-              href={video.metadata.music.spotify} 
-              target="_blank" 
-              class="text-xs text-gray-600 hover:text-gray-900 inline-flex items-center gap-1.5 transition-colors"
-            >
-              <Icons name="spotify" className="w-3.5 h-3.5" />
-              Spotify
-            </a>
-            <a 
-              href={video.metadata.music.youtube} 
-              target="_blank" 
-              class="text-xs text-gray-600 hover:text-gray-900 inline-flex items-center gap-1.5 transition-colors"
-            >
-              <Icons name="youtube" className="w-3.5 h-3.5" />
-              YouTube
-            </a>
+          <p class="text-gray-800 font-medium text-sm">{video.metadata.region}</p>
+        </div>
+        
+      </div> <!-- End 4x2 grid -->
+
+      <!-- Separator line -->
+      <div class="border-t border-gray-200 my-8"></div>
+
+      <!-- Music Section -->
+      <div class="space-y-3">
+        <div class="flex items-center gap-2 text-gray-500">
+          <Icons name="music" className="w-3.5 h-3.5" />
+          <span class="text-xs font-medium uppercase tracking-wider">Music</span>
+        </div>
+        
+        <!-- Music details -->
+        <div>
+          <!-- Row 1: Artist + Links (inline) -->
+          <div class="flex items-center gap-8 mb-1">
+            <!-- Artist name -->
+            <p class="text-gray-900 font-medium text-sm flex-shrink-0">{video.metadata.music.artist}</p>
+            
+            <!-- Spotify and YouTube links -->
+            <div class="flex gap-6 items-center">
+              <a 
+                href={video.metadata.music.spotify} 
+                target="_blank" 
+                class="text-gray-600 hover:text-gray-900 inline-flex items-center gap-2 transition-colors"
+              >
+                <Icons name="spotify" className="w-4 h-4" />
+                <span class="text-sm">Spotify</span>
+              </a>
+              <a 
+                href={video.metadata.music.youtube} 
+                target="_blank" 
+                class="text-gray-600 hover:text-gray-900 inline-flex items-center gap-2 transition-colors"
+              >
+                <Icons name="youtube" className="w-4 h-4" />
+                <span class="text-sm">YouTube</span>
+              </a>
+            </div>
           </div>
+          
+          <!-- Row 2: Song title -->
+          <p class="text-gray-600 text-sm">{video.metadata.music.title}</p>
         </div>
       </div>
-    </div>
-  </div>
+      
+    </div> <!-- End right column -->
+    
+  </div> <!-- End main grid -->
 
   <!-- Photo Carousel Below (Full width) -->
   <div class="mt-6">
     <PhotoCarousel stills={video.stills} title={video.title} />
   </div>
 </section>
+
+--- src/components/FilterBar.astro ---
+---
+// src/components/FilterBar.astro
+import type { Video } from '../data/index';
+
+interface Props {
+  videos: Video[];
+  activeFilters?: {
+    country?: string;
+    region?: string;
+    year?: string;
+    gear?: string;
+  };
+}
+
+const { videos, activeFilters = {} } = Astro.props;
+
+// Extract unique filter options from videos
+const countries = [...new Set(videos.map(v => v.metadata.country))];
+const regions = [...new Set(videos.map(v => v.metadata.region))];
+const years = [...new Set(videos.map(v => new Date(v.metadata.date).getFullYear().toString()))];
+const gearTypes = [...new Set(videos.map(v => v.metadata.gear.split(',').map(g => g.trim())).flat())];
+---
+
+<div class="filter-bar mb-8 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+  <div class="flex flex-wrap items-center gap-4">
+    <!-- Filter by Country -->
+    <div class="filter-group">
+      <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
+        Country
+      </label>
+      <select class="filter-select text-sm border border-gray-300 rounded px-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent">
+        <option value="">All countries</option>
+        {countries.map(country => (
+          <option value={country} selected={activeFilters.country === country}>
+            {country}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    <!-- Filter by Region -->
+    <div class="filter-group">
+      <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
+        Region
+      </label>
+      <select class="filter-select text-sm border border-gray-300 rounded px-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent">
+        <option value="">All regions</option>
+        {regions.map(region => (
+          <option value={region} selected={activeFilters.region === region}>
+            {region}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    <!-- Filter by Year -->
+    <div class="filter-group">
+      <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
+        Year
+      </label>
+      <select class="filter-select text-sm border border-gray-300 rounded px-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent">
+        <option value="">All years</option>
+        {years.sort((a, b) => b.localeCompare(a)).map(year => (
+          <option value={year} selected={activeFilters.year === year}>
+            {year}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    <!-- Clear Filters Button -->
+    <div class="filter-group flex items-end">
+      <button class="clear-filters text-sm text-gray-600 hover:text-gray-900 px-3 py-1.5 border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+        Clear filters
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .filter-select {
+    min-width: 140px;
+  }
+  
+  /* Optional: Add smooth transitions */
+  .filter-select, .clear-filters {
+    transition: all 0.2s ease;
+  }
+</style>
 
 --- src/components/Frame.astro ---
 ---
@@ -5121,6 +5256,7 @@ export interface Video {
     places: string[];
     date: string;
     coordinates: number[];
+    camera: string;
     gear: string;
     music: {
       artist: string;
@@ -5168,7 +5304,8 @@ export function getVideoBySlug(slug: string): Video | undefined {
       35.3387,
       25.1442
     ],
-    "gear": "GoPro Hero 3",
+    "camera": "GoPro Hero 3",
+    "gear": "",
     "music": {
       "artist": "Alle Farben feat. YouNotUs",
       "title": "Please Tell Rosie",
@@ -5203,7 +5340,8 @@ export function getVideoBySlug(slug: string): Video | undefined {
       45.4408,
       12.3155
     ],
-    "gear": "Olympus EM5 Mark II, Olympus 12-40mm f/2.8 PRO",
+    "camera": "Olympus EM5 Mark II",
+    "gear": "Olympus 12-40mm f/2.8 PRO",
     "music": {
       "artist": "Of Monsters and Men",
       "title": "Mountain Sound",
@@ -5238,7 +5376,8 @@ export function getVideoBySlug(slug: string): Video | undefined {
       51.5014,
       -0.1244
     ],
-    "gear": "Olympus EM5 Mark II, Olympus 12-40mm f/2.8 PRO, GoPro Hero 3",
+    "camera": "Olympus EM5 Mark II",
+    "gear": "Olympus 12-40mm f/2.8 PRO, GoPro Hero 3",
     "music": {
       "artist": "OneRepublic",
       "title": "Good Life",
@@ -5275,7 +5414,8 @@ export function getVideoBySlug(slug: string): Video | undefined {
       42.6555,
       18.1042
     ],
-    "gear": "GoPro Hero 3",
+    "camera": "GoPro Hero 3",
+    "gear": "",
     "music": {
       "artist": "Lost Frequencies",
       "title": "Are You With Me",
@@ -5297,7 +5437,7 @@ export function getVideoBySlug(slug: string): Video | undefined {
 ---
 // src/pages/index.astro - UPDATED HEADER with film icon
 import Layout from '../layouts/Layout.astro';
-import VideoSection from '../components/VideoSectionTest.astro';
+import VideoSection from '../components/VideoSection.astro';
 import { sortedVideos } from '../data/index';
 import Frame from '../components/Frame.astro'
 import Icons from '../components/Icons.astro';
@@ -5410,8 +5550,8 @@ import Icons from '../components/Icons.astro';
 METADATA
 ================================================================================
 
-Files Parsed: 29
-Total Characters: 171758
+Files Parsed: 30
+Total Characters: 176595
 
 File List:
 ----------------------------------------
@@ -5426,19 +5566,20 @@ other/2025_12_31_improvements-prompt.md: 43195 characters
 other/2026_01-01_improvements-look-and-feel.md: 85577 characters
 package.json: 431 characters
 scripts/update-stills.js: 1346 characters
+src/components/FilterBar.astro: 3092 characters
 src/components/Frame.astro: 293 characters
 src/components/Icons.astro: 3888 characters
 src/components/PhotoCarousel.astro: 2093 characters
-src/components/VideoSection.astro: 4605 characters
-src/components/VideoSectionTest.astro: 4605 characters
+src/components/VideoSection.astro: 5466 characters
+src/components/VideoSectionTest.astro: 5405 characters
 src/components/Welcome.astro: 4921 characters
-src/data/index.ts: 1082 characters
-src/data/videos/croatia-2015.json: 1074 characters
-src/data/videos/greece-2016.json: 1010 characters
-src/data/videos/london-2017.json: 1014 characters
-src/data/videos/venice-2018.json: 1000 characters
+src/data/index.ts: 1102 characters
+src/data/videos/croatia-2015.json: 1092 characters
+src/data/videos/greece-2016.json: 1028 characters
+src/data/videos/london-2017.json: 1030 characters
+src/data/videos/venice-2018.json: 1016 characters
 src/layouts/Layout.astro: 758 characters
-src/pages/index.astro: 2261 characters
+src/pages/index.astro: 2257 characters
 src/pages/test.html.astro: 594 characters
 src/pages/test2.astro: 543 characters
 src/styles/global.css: 720 characters
@@ -5461,18 +5602,18 @@ ju-travel-video/
 │   ├── 2025_12_31_improvements-prompt.md
 │   └── 2026_01-01_improvements-look-and-feel.md
 ├── public/
-│   ├── images/
-│   │   └── stills/
-│   │       ├── croatia-2015/
-│   │       ├── greece-2016/
-│   │       ├── london-2017/
-│   │       └── venice-2018/
-│   └── styles/
+│   └── images/
+│       └── stills/
+│           ├── croatia-2015/
+│           ├── greece-2016/
+│           ├── london-2017/
+│           └── venice-2018/
 ├── scripts/
 │   └── update-stills.js
 ├── src/
 │   ├── assets/
 │   ├── components/
+│   │   ├── FilterBar.astro
 │   │   ├── Frame.astro
 │   │   ├── Icons.astro
 │   │   ├── PhotoCarousel.astro
@@ -5501,6 +5642,6 @@ ju-travel-video/
 └── tsconfig.json
 
 Generated at:
-Local: 2026-01-01 22:15:21 
-UTC:   2026-01-01 21:15:21 UTC
-Timestamp: 1767302121
+Local: 2026-01-03 00:06:01 
+UTC:   2026-01-02 23:06:01 UTC
+Timestamp: 1767395161
