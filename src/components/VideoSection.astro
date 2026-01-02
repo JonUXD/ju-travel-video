@@ -56,13 +56,13 @@ const { video } = Astro.props;
         </div>
 
         <!-- CELLS 3 & 4: GEAR (row 1-2, col 3-4 - spans 2 rows × 2 columns) -->
-        <div class="col-span-2 row-span-2 space-y-2">
+        <div class="col-span-2 row-span-2 space-y-1">
           <div class="flex items-center gap-2 text-gray-500 mb-2">
             <Icons name="gear" className="w-3.5 h-3.5" />
             <span class="text-xs font-medium uppercase tracking-wider">Gear</span>
           </div>
-          <p class="text-gray-800 font-medium text-sm">
-            {video.metadata.gear}
+          <p class="text-gray-700 text-xs leading-relaxed">
+            {video.metadata.camera}{video.metadata.gear ? `, ${video.metadata.gear}` : ''}
           </p>
         </div>
 

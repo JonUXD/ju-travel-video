@@ -17,6 +17,7 @@ export interface Video {
     places: string[];
     date: string;
     coordinates: number[];
+    camera: string;
     gear: string;
     music: {
       artist: string;
