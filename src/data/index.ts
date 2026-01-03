@@ -5,6 +5,11 @@ import croatia2015 from './videos/croatia-2015.json';
 import greece2016 from './videos/greece-2016.json';
 import iceland2019 from './videos/iceland-2019.json';
 import luxembourg2018 from './videos/luxembourg-2018.json';
+import marrakesh2019 from './videos/marrakesh-2019.json';
+import menorca2023 from './videos/menorca-2023.json';
+import tenerife2024 from './videos/tenerife-2024.json';
+import tokyo2025 from './videos/tokyo-2025.json';
+
 
 export interface Video {
   id: string;
@@ -37,7 +42,11 @@ export const allVideos: Video[] = [
   greece2016,
   croatia2015,
   iceland2019,
-  luxembourg2018
+  luxembourg2018,
+  marrakesh2019,
+  menorca2023,
+  tenerife2024,
+  tokyo2025
 ];
 
 // Sorted by date (newest first)

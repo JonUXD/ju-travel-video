@@ -1,0 +1,41 @@
+{
+  "id": "tokyo-2025",
+  "title": "Tokyo | 2025",
+  "slug": "tokyo-2025",
+  "youtubeId": "jrvkmRZElDo",
+  "description": "A travel film from my solo trip to Tokyo in February 2025, visiting Shibuya, Shinjuku, and Asakusa.",
+  "metadata": {
+    "country": "Japan",
+    "region": "Asia",
+    "places": [
+      "Shibuya",
+      "Shinjuku",
+      "Asakusa"
+    ],
+    "date": "2025-02-15",
+    "coordinates": [
+      35.6762,
+      139.6503
+    ],
+    "camera": "Olympus OM-D E-M5 Mark II",
+    "gear": "7Artisans 35mm f/1.2",
+    "music": {
+      "artist": "Noah Kahan",
+      "title": "Young Blood",
+      "spotify": "https://open.spotify.com/track/5ngcqrs4Xq915GUqNtNNr5?si=e9def71154f84c09",
+      "youtube": "https://www.youtube.com/watch?v=nf-w6C9oy2A"
+    }
+  },
+  "stills": [
+    "/images/stills/tokyo-2025/tokyo-2025-stills-01.png",
+    "/images/stills/tokyo-2025/tokyo-2025-stills-02.png",
+    "/images/stills/tokyo-2025/tokyo-2025-stills-03.png",
+    "/images/stills/tokyo-2025/tokyo-2025-stills-04.png",
+    "/images/stills/tokyo-2025/tokyo-2025-stills-05.png",
+    "/images/stills/tokyo-2025/tokyo-2025-stills-06.png",
+    "/images/stills/tokyo-2025/tokyo-2025-stills-07.png",
+    "/images/stills/tokyo-2025/tokyo-2025-stills-08.png",
+    "/images/stills/tokyo-2025/tokyo-2025-stills-09.png",
+    "/images/stills/tokyo-2025/tokyo-2025-stills-10.png"
+  ]
+}

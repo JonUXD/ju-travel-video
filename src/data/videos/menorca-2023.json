@@ -1,0 +1,40 @@
+{
+  "id": "menorca-2023",
+  "title": "Menorca | 2023",
+  "slug": "menorca-2023",
+  "youtubeId": "lvGIJYVPfMU",
+  "description": "A travel film from my trip to Menorca with my brother and sister in September 2023, traveling around the island by car.",
+  "metadata": {
+    "country": "Spain",
+    "region": "Europe",
+    "places": [
+      "Mahón",
+      "Ciutadella",
+      "Cala Turqueta"
+    ],
+    "date": "2023-09-15",
+    "coordinates": [
+      39.8895,
+      4.2648
+    ],
+    "camera": "GoPro Hero 11",
+    "gear": "",
+    "music": {
+      "artist": "Sons of the East",
+      "title": "California",
+      "spotify": "https://open.spotify.com/track/46BuJdwxV43a6qLrICP27l?si=026de235d3e643a5",
+      "youtube": "https://www.youtube.com/watch?v=ZBau4_NIgr8"
+    }
+  },
+  "stills": [
+    "/images/stills/menorca-2023/menorca-2023-stills-01.png",
+    "/images/stills/menorca-2023/menorca-2023-stills-02.png",
+    "/images/stills/menorca-2023/menorca-2023-stills-03.png",
+    "/images/stills/menorca-2023/menorca-2023-stills-04.png",
+    "/images/stills/menorca-2023/menorca-2023-stills-05.png",
+    "/images/stills/menorca-2023/menorca-2023-stills-06.png",
+    "/images/stills/menorca-2023/menorca-2023-stills-07.png",
+    "/images/stills/menorca-2023/menorca-2023-stills-08.png",
+    "/images/stills/menorca-2023/menorca-2023-stills-09.png"
+  ]
+}

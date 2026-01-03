@@ -1,0 +1,40 @@
+{
+  "id": "marrakesh-2019",
+  "title": "Marrakesh | 2019",
+  "slug": "marrakesh-2019",
+  "youtubeId": "PWfNdZJx0Vw",
+  "description": "A travel film from my trip to Morocco with my friends (Marrakesh and the Atlas Mountains) in March 2019.",
+  "metadata": {
+    "country": "Morocco",
+    "region": "Africa",
+    "places": [
+      "Marrakesh",
+      "Atlas Mountains"
+    ],
+    "date": "2019-03-01",
+    "coordinates": [
+      31.6295,
+      -7.9811
+    ],
+    "camera": "Olympus OM-D E-M5 Mark II",
+    "gear": "Olympus M.Zuiko 12-40mm f/2.8 PRO",
+    "music": {
+      "artist": "Ben Rector",
+      "title": "Brand New",
+      "spotify": "https://open.spotify.com/track/07m8PuXxxv5J4qPEDq6ZkK?si=027a95c4bd4743ec",
+      "youtube": "https://www.youtube.com/watch?v=gqtuxo-Y1AA"
+    }
+  },
+  "stills": [
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-01.png",
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-02.png",
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-03.png",
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-04.png",
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-05.png",
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-06.png",
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-07.png",
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-08.png",
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-09.png",
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-10.png"
+  ]
+}

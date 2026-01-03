@@ -10,7 +10,12 @@ const videos = [
   'greece-2016',
   'london-2017',
   'venice-2018',
-  'luxembourg-2018'
+  'luxembourg-2018',
+  'iceland-2019',
+  'marrakesh-2019',
+  'menorca-2023',
+  'tenerife-2024',
+  'tokyo-2025'
 ];
 
 console.log('📸 Updating stills in JSON files...\n');

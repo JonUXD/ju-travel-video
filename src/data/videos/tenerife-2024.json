@@ -1,0 +1,42 @@
+{
+  "id": "tenerife-2024",
+  "title": "Tenerife | 2024",
+  "slug": "tenerife-2024",
+  "youtubeId": "_VCzLTergS0",
+  "description": "A travel film from my trip to Tenerife with my brother and sister in September 2024, staying in Tabaiba and visiting Teide.",
+  "metadata": {
+    "country": "Spain",
+    "region": "Europe",
+    "places": [
+      "Tabaiba",
+      "Teide"
+    ],
+    "date": "2024-09-15",
+    "coordinates": [
+      28.2724,
+      -16.6425
+    ],
+    "camera": "GoPro Hero 11",
+    "gear": "",
+    "music": {
+      "artist": "Vance Joy",
+      "title": "Saturday Sun",
+      "spotify": "https://open.spotify.com/track/2RiBogNRfulkNf7fVbPOrJ?si=7f1658baa3ee48de",
+      "youtube": "https://www.youtube.com/watch?v=uKqMNQkjHmI"
+    }
+  },
+  "stills": [
+    "/images/stills/tenerife-2024/tenerife-2025-stills-01.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-02.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-03.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-04.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-05.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-06.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-07.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-08.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-09.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-10.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-11.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-12.png"
+  ]
+}
