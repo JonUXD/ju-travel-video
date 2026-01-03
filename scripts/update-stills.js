@@ -9,7 +9,8 @@ const videos = [
   'croatia-2015',
   'greece-2016',
   'london-2017',
-  'venice-2018'
+  'venice-2018',
+  'luxembourg-2018'
 ];
 
 console.log('📸 Updating stills in JSON files...\n');

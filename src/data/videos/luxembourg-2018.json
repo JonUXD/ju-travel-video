@@ -1,0 +1,37 @@
+{
+  "id": "luxembourg-2018",
+  "title": "Luxembourg | 2018",
+  "slug": "luxembourg-2018",
+  "youtubeId": "PKw_kI7GJqk",
+  "description": "A travel film from my trip to Luxembourg with my mom and sister in October 2018, showing beautiful autumn colors in Luxembourg City and Vianden Castle.",
+  "metadata": {
+    "country": "Luxembourg",
+    "region": "Europe",
+    "places": [
+      "Luxembourg City",
+      "Vianden Castle"
+    ],
+    "date": "2018-10-01",
+    "coordinates": [
+      49.6116,
+      6.1319
+    ],
+    "camera": "Olympus OM-D E-M5 Mark II",
+    "gear": "Olympus M.Zuiko 12-40mm f/2.8 PRO",
+    "music": {
+      "artist": "Xavier Rudd",
+      "title": "Honeymoon Bay",
+      "spotify": "https://open.spotify.com/track/7zu0fqKiRb1zaFuT7z6QDt?si=5598fbdc8123470a",
+      "youtube": "https://www.youtube.com/watch?v=eUBoznU1vk8"
+    }
+  },
+  "stills": [
+    "/images/stills/luxembourg-2018/luxembourg-2018-stills-01.png",
+    "/images/stills/luxembourg-2018/luxembourg-2018-stills-02.png",
+    "/images/stills/luxembourg-2018/luxembourg-2018-stills-03.png",
+    "/images/stills/luxembourg-2018/luxembourg-2018-stills-04.png",
+    "/images/stills/luxembourg-2018/luxembourg-2018-stills-05.png",
+    "/images/stills/luxembourg-2018/luxembourg-2018-stills-06.png",
+    "/images/stills/luxembourg-2018/luxembourg-2018-stills-07.png"
+  ]
+}

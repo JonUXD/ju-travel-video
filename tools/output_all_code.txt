@@ -5446,7 +5446,7 @@ import Icons from '../components/Icons.astro';
 <Layout>
   <main class="min-h-screen bg-gradient-to-b from-gray-100 to-white">
     <!-- Header - Centered -->
-    <header class="py-12 px-4 sm:px-8 text-center">
+    <header class="py-12 pb-4 px-4 sm:px-8 text-center">
       <div class="max-w-3xl mx-auto">
         <div class="mb-4">
           <span class="text-xs font-medium text-gray-500 uppercase tracking-widest">JON UGARTE</span>
@@ -5551,7 +5551,7 @@ METADATA
 ================================================================================
 
 Files Parsed: 30
-Total Characters: 176595
+Total Characters: 176600
 
 File List:
 ----------------------------------------
@@ -5579,7 +5579,7 @@ src/data/videos/greece-2016.json: 1028 characters
 src/data/videos/london-2017.json: 1030 characters
 src/data/videos/venice-2018.json: 1016 characters
 src/layouts/Layout.astro: 758 characters
-src/pages/index.astro: 2257 characters
+src/pages/index.astro: 2262 characters
 src/pages/test.html.astro: 594 characters
 src/pages/test2.astro: 543 characters
 src/styles/global.css: 720 characters
@@ -5642,6 +5642,6 @@ ju-travel-video/
 └── tsconfig.json
 
 Generated at:
-Local: 2026-01-03 00:06:01 
-UTC:   2026-01-02 23:06:01 UTC
-Timestamp: 1767395161
+Local: 2026-01-03 10:09:25 
+UTC:   2026-01-03 09:09:25 UTC
+Timestamp: 1767431365

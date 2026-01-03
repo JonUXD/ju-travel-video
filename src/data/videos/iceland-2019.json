@@ -1,0 +1,36 @@
+{
+  "id": "iceland-2019",
+  "title": "Iceland | 2019",
+  "slug": "iceland-2019",
+  "youtubeId": "KGQ5hglQg8c",
+  "description": "A travel film from my trip to Iceland with some friends (Reykjavík and the Ring Road) in October 2019.",
+  "metadata": {
+    "country": "Iceland",
+    "region": "Europe",
+    "places": [
+      "Reykjavík",
+      "Ring Road"
+    ],
+    "date": "2019-10-01",
+    "coordinates": [
+      64.1466,
+      -21.9426
+    ],
+    "camera": "Olympus OM-D E-M5 Mark II",
+    "gear": "Olympus M.Zuiko 12-40mm f/2.8 PRO",
+    "music": {
+      "artist": "Radical Face",
+      "title": "Welcome Home, Son",
+      "spotify": "https://open.spotify.com/track/6HTVZeVQ9J6Uiq6tHESxU9?si=61da5b5d62134b88",
+      "youtube": "https://www.youtube.com/watch?v=P8a4iiOnzsc"
+    }
+  },
+  "stills": [
+    "/images/stills/iceland-2019/iceland-2019-stills-01.png",
+    "/images/stills/iceland-2019/iceland-2019-stills-02.png",
+    "/images/stills/iceland-2019/iceland-2019-stills-03.png",
+    "/images/stills/iceland-2019/iceland-2019-stills-04.png",
+    "/images/stills/iceland-2019/iceland-2019-stills-05.png",
+    "/images/stills/iceland-2019/iceland-2019-stills-06.png"
+  ]
+}
