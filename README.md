@@ -157,3 +157,8 @@ Example json:
 ### Step 5: update the jsons with the newly uploaded stills
 
 Run: npm run update-stills
+
+# Tools and interesting links
+
+Resize for youtube thumbnail
+https://www.adobe.com/express/feature/image/resize

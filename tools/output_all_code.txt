@@ -159,6 +159,11 @@ Example json:
 
 Run: npm run update-stills
 
+# Tools and interesting links
+
+Resize for youtube thumbnail
+https://www.adobe.com/express/feature/image/resize
+
 --- package.json ---
 {
   "name": "ju-travel-video",
@@ -5015,7 +5020,7 @@ import background from '../assets/background.svg';
 
 --- src/components/VideoSection.astro ---
 ---
-// src/components/VideoSectionTest.astro - Final version with spacing and size fixes
+// src/components/VideoSection.astro - Updated with flexible location cell
 import type { Video } from '../data/index';
 import PhotoCarousel from './PhotoCarousel.astro';
 import Icons from './Icons.astro';
@@ -5049,19 +5054,21 @@ const { video } = Astro.props;
     <div class="lg:col-span-2 lg:pl-4">
       
       <!-- 4x2 GRID: 4 columns wide, 2 rows tall -->
-      <div class="grid grid-cols-4 grid-rows-2 gap-5 mb-6">
+      <div class="grid grid-cols-4 grid-rows-[minmax(0,_auto)_minmax(0,_auto)] gap-5 mb-6">
         
-        <!-- CELL 1: Location (row 1, col 1) -->
-        <div class="space-y-2">
+        <!-- CELL 1: Location (row 1, col 1) - ALLOW EXPANSION -->
+        <div class="space-y-2 min-h-0 self-start">
           <div class="flex items-center gap-2 text-gray-500">
             <Icons name="location" className="w-3.5 h-3.5" />
             <span class="text-xs font-medium uppercase tracking-wider">Location</span>
           </div>
-          <p class="text-gray-800 font-medium text-sm">{video.metadata.places.join(', ')}</p>
+          <p class="text-gray-800 font-medium text-sm">
+            {video.metadata.places.join(', ')}
+          </p>
         </div>
 
-        <!-- CELL 2: Date (row 1, col 2) -->
-        <div class="space-y-2">
+        <!-- CELL 2: Date (row 1, col 2) - FIXED HEIGHT -->
+        <div class="space-y-2 min-h-0">
           <div class="flex items-center gap-2 text-gray-500">
             <Icons name="calendar" className="w-3.5 h-3.5" />
             <span class="text-xs font-medium uppercase tracking-wider">Date</span>
@@ -5072,32 +5079,36 @@ const { video } = Astro.props;
         </div>
 
         <!-- CELLS 3 & 4: GEAR (row 1-2, col 3-4 - spans 2 rows × 2 columns) -->
-        <div class="col-span-2 row-span-2 space-y-1">
+        <div class="col-span-2 row-span-2 space-y-1 min-h-0 self-start">
           <div class="flex items-center gap-2 text-gray-500 mb-2">
             <Icons name="gear" className="w-3.5 h-3.5" />
             <span class="text-xs font-medium uppercase tracking-wider">Gear</span>
           </div>
-          <p class="text-gray-700 text-xs leading-relaxed">
+          <p class="text-gray-700 text-xs leading-relaxed line-clamp-4">
             {video.metadata.camera}{video.metadata.gear ? `, ${video.metadata.gear}` : ''}
           </p>
         </div>
 
-        <!-- CELL 5: Country (row 2, col 1) -->
-        <div class="space-y-2">
+        <!-- CELL 5: Country (row 2, col 1) - FIXED HEIGHT -->
+        <div class="space-y-2 min-h-0">
           <div class="flex items-center gap-2 text-gray-500">
             <Icons name="country" className="w-3.5 h-3.5" />
             <span class="text-xs font-medium uppercase tracking-wider">Country</span>
           </div>
-          <p class="text-gray-800 font-medium text-sm">{video.metadata.country}</p>
+          <p class="text-gray-800 font-medium text-sm line-clamp-1">
+            {video.metadata.country}
+          </p>
         </div>
 
-        <!-- CELL 6: Region (row 2, col 2) -->
-        <div class="space-y-2">
+        <!-- CELL 6: Region (row 2, col 2) - FIXED HEIGHT -->
+        <div class="space-y-2 min-h-0">
           <div class="flex items-center gap-2 text-gray-500">
             <Icons name="region" className="w-3.5 h-3.5" />
             <span class="text-xs font-medium uppercase tracking-wider">Region</span>
           </div>
-          <p class="text-gray-800 font-medium text-sm">{video.metadata.region}</p>
+          <p class="text-gray-800 font-medium text-sm line-clamp-1">
+            {video.metadata.region}
+          </p>
         </div>
         
       </div> <!-- End 4x2 grid -->
@@ -5930,7 +5941,7 @@ METADATA
 ================================================================================
 
 Files Parsed: 36
-Total Characters: 188785
+Total Characters: 189155
 
 File List:
 ----------------------------------------
@@ -5940,7 +5951,7 @@ File List:
 .astro/types.d.ts: 39 characters
 .vscode/extensions.json: 87 characters
 .vscode/launch.json: 207 characters
-README.md: 4928 characters
+README.md: 5040 characters
 other/2025_12_31_improvements-prompt.md: 43195 characters
 other/2026_01-01_improvements-look-and-feel.md: 85577 characters
 package.json: 431 characters
@@ -5949,7 +5960,7 @@ src/components/FilterBar.astro: 3092 characters
 src/components/Frame.astro: 293 characters
 src/components/Icons.astro: 3888 characters
 src/components/PhotoCarousel.astro: 2093 characters
-src/components/VideoSection.astro: 5466 characters
+src/components/VideoSection.astro: 5724 characters
 src/components/VideoSectionTest.astro: 5405 characters
 src/components/Welcome.astro: 4921 characters
 src/data/index.ts: 1529 characters
@@ -6039,6 +6050,6 @@ ju-travel-video/
 └── tsconfig.json
 
 Generated at:
-Local: 2026-01-04 10:03:43 
-UTC:   2026-01-04 09:03:43 UTC
-Timestamp: 1767517423
+Local: 2026-01-04 12:26:48 
+UTC:   2026-01-04 11:26:48 UTC
+Timestamp: 1767526008
