@@ -1,51 +1,163 @@
 --- README.md ---
-# Astro Starter Kit: Basics
+# 🎬 Travel Video Portfolio
 
-```sh
-npm create astro@latest -- --template basics
-```
+A cinematic portfolio showcasing travel videos with YouTube embeds, photo carousels, and detailed metadata. Built with Astro + Tailwind CSS.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 🚀 Live Demo
+[Add your deployed URL here]
 
-## 🚀 Project Structure
+## ✨ Features
+- **YouTube Integration**: Embed videos with custom styling
+- **Photo Carousels**: Scrollable stills with hover effects  
+- **Smart Metadata**: Location, gear, music links in 4x2 grid
+- **Responsive Design**: Mobile-first, works on all devices
+- **Automated Workflow**: Script updates JSON when adding new images
+- **White Frame Design**: Clean, cinematic containers for each video
 
-Inside of your Astro project, you'll see the following folders and files:
+## 📁 Project Structure
 
 ```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+ju-travel-video/
+├── public/images/stills/      # Screenshots for each video
+├── scripts/                   # Utility scripts
+├── src/
+│   ├── components/           # UI components
+│   ├── data/videos/         # Video metadata (JSON files)
+│   ├── layouts/             # Page layouts
+│   ├── pages/               # Website pages
+│   └── styles/              # Global styles
+
+## Upload New videos
+
+### Step 1: Prepare the video description. Recommendation: use AI steps below
+
+Prepare prompt:
+
+chat.deepseek.com
+
+```
+I have a new video to upload and the description needs to be like the one below. The new video is a video I did with my friends to Iceland in october 2019. Using the Olympus EM5 Mark II and the Olympus 12-40 Pro 2.8. We visited the capital and we did the ring road. Coordinates you can use the capital. Music is Welcome Home, Son by Radical Face. Youtube link https://www.youtube.com/watch?v=P8a4iiOnzsc spotify link https://open.spotify.com/track/6HTVZeVQ9J6Uiq6tHESxU9?si=61da5b5d62134b88
+
+please provide the youtube description with the same format as the below youtube description. Ask me any question if there is something not clear. Provide in a code snippet so I can copy paste.
+
+
+Youtube description:
+
+A travel film from my trip to Greece with some friends (Athens and Crete) in August 2016.
+
+Music:
+Alle Farben feat. YouNotUs – Please Tell Rosie
+Spotify: https://open.spotify.com/track/5gF9zOYM9TmSzKHukbNjpB
+YouTube: https://www.youtube.com/watch?v=TQLgLcU81e4
+
+Gear:
+GoPro Hero 3
+
+---meta---
+country: Greece
+region: Europe
+places: Athens, Crete
+date: 2016-08-15
+coordinates: [35.3387, 25.1442]
+slug: greece-2016
+camera: GoPro Hero 3
+gear: 
+music:
+  artist: Alle Farben feat. YouNotUs
+  title: Please Tell Rosie
+  spotify: https://open.spotify.com/track/5gF9zOYM9TmSzKHukbNjpB
+  youtube: https://www.youtube.com/watch?v=TQLgLcU81e4
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+### Step 2: Upload new video file to https://www.youtube.com/@JUTravelVideo
 
-## 🧞 Commands
 
-All commands are run from the root of the project, from a terminal:
+### Step 3: extract some screenshots from the video and upload them to public/images/stills
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+format example greece-2016-stills-01.png
 
-## 👀 Want to learn more?
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+### Step 4: Create the json file in src/data/videos with the slug given by the prompt above. Recommendation: use AI with this prompt
 
+chat.deepseek.com
+
+```
+I have this description for my youtube video:
+
+
+A travel film from my trip to Iceland with some friends (Reykjavík and the Ring Road) in October 2019.
+
+Music:
+Radical Face – Welcome Home, Son
+Spotify: https://open.spotify.com/track/6HTVZeVQ9J6Uiq6tHESxU9?si=61da5b5d62134b88
+YouTube: https://www.youtube.com/watch?v=P8a4iiOnzsc
+
+Gear:
+Olympus OM-D E-M5 Mark II
+Olympus M.Zuiko 12-40mm f/2.8 PRO
+
+---meta---
+country: Iceland
+region: Europe
+places: Reykjavík, Ring Road
+date: 2019-10-01
+coordinates: [64.1466, -21.9426]
+slug: iceland-2019
+camera: Olympus OM-D E-M5 Mark II
+gear: Olympus M.Zuiko 12-40mm f/2.8 PRO
+music:
+  artist: Radical Face
+  title: Welcome Home, Son
+  spotify: https://open.spotify.com/track/6HTVZeVQ9J6Uiq6tHESxU9?si=61da5b5d62134b88
+  youtube: https://www.youtube.com/watch?v=P8a4iiOnzsc
+
+
+plesae create a json file with the same structure as below. Please ask me any question is not clear.
+
+Example json:
+
+{
+  "id": "greece-2016",
+  "title": "Greece | 2016",
+  "slug": "greece-2016",
+  "youtubeId": "Cfc8_m17rHc",
+  "description": "A travel film from my trip to Greece with some friends (Athens and Crete) in August 2016.",
+  "metadata": {
+    "country": "Greece",
+    "region": "Europe",
+    "places": [
+      "Athens",
+      "Crete"
+    ],
+    "date": "2016-08-15",
+    "coordinates": [
+      35.3387,
+      25.1442
+    ],
+    "camera": "GoPro Hero 3",
+    "gear": "",
+    "music": {
+      "artist": "Alle Farben feat. YouNotUs",
+      "title": "Please Tell Rosie",
+      "spotify": "https://open.spotify.com/track/5gF9zOYM9TmSzKHukbNjpB",
+      "youtube": "https://www.youtube.com/watch?v=TQLgLcU81e4"
+    }
+  },
+  "stills": [
+    "/images/stills/greece-2016/greece-2016-stills-01.png",
+    "/images/stills/greece-2016/greece-2016-stills-02.png",
+    "/images/stills/greece-2016/greece-2016-stills-03.png",
+    "/images/stills/greece-2016/greece-2016-stills-04.png",
+    "/images/stills/greece-2016/greece-2016-stills-05.png"
+  ]
+}
+
+
+```
+
+### Step 5: update the jsons with the newly uploaded stills
+
+Run: npm run update-stills
 
 --- package.json ---
 {
@@ -4378,7 +4490,13 @@ const videos = [
   'croatia-2015',
   'greece-2016',
   'london-2017',
-  'venice-2018'
+  'venice-2018',
+  'luxembourg-2018',
+  'iceland-2019',
+  'marrakesh-2019',
+  'menorca-2023',
+  'tenerife-2024',
+  'tokyo-2025'
 ];
 
 console.log('📸 Updating stills in JSON files...\n');
@@ -5242,6 +5360,13 @@ import london2017 from './videos/london-2017.json';
 import venice2018 from './videos/venice-2018.json';
 import croatia2015 from './videos/croatia-2015.json';
 import greece2016 from './videos/greece-2016.json';
+import iceland2019 from './videos/iceland-2019.json';
+import luxembourg2018 from './videos/luxembourg-2018.json';
+import marrakesh2019 from './videos/marrakesh-2019.json';
+import menorca2023 from './videos/menorca-2023.json';
+import tenerife2024 from './videos/tenerife-2024.json';
+import tokyo2025 from './videos/tokyo-2025.json';
+
 
 export interface Video {
   id: string;
@@ -5272,7 +5397,13 @@ export const allVideos: Video[] = [
   venice2018,
   london2017,
   greece2016,
-  croatia2015
+  croatia2015,
+  iceland2019,
+  luxembourg2018,
+  marrakesh2019,
+  menorca2023,
+  tenerife2024,
+  tokyo2025
 ];
 
 // Sorted by date (newest first)
@@ -5283,6 +5414,168 @@ export const sortedVideos = [...allVideos].sort(
 // Helper to get a video by slug
 export function getVideoBySlug(slug: string): Video | undefined {
   return allVideos.find(video => video.slug === slug);
+}
+
+--- src/data/videos/marrakesh-2019.json ---
+{
+  "id": "marrakesh-2019",
+  "title": "Marrakesh | 2019",
+  "slug": "marrakesh-2019",
+  "youtubeId": "PWfNdZJx0Vw",
+  "description": "A travel film from my trip to Morocco with my friends (Marrakesh and the Atlas Mountains) in March 2019.",
+  "metadata": {
+    "country": "Morocco",
+    "region": "Africa",
+    "places": [
+      "Marrakesh",
+      "Atlas Mountains"
+    ],
+    "date": "2019-03-01",
+    "coordinates": [
+      31.6295,
+      -7.9811
+    ],
+    "camera": "Olympus OM-D E-M5 Mark II",
+    "gear": "Olympus M.Zuiko 12-40mm f/2.8 PRO",
+    "music": {
+      "artist": "Ben Rector",
+      "title": "Brand New",
+      "spotify": "https://open.spotify.com/track/07m8PuXxxv5J4qPEDq6ZkK?si=027a95c4bd4743ec",
+      "youtube": "https://www.youtube.com/watch?v=gqtuxo-Y1AA"
+    }
+  },
+  "stills": [
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-01.png",
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-02.png",
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-03.png",
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-04.png",
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-05.png",
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-06.png",
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-07.png",
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-08.png",
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-09.png",
+    "/images/stills/marrakesh-2019/marrakesh-2019-stills-10.png"
+  ]
+}
+
+--- src/data/videos/tokyo-2025.json ---
+{
+  "id": "tokyo-2025",
+  "title": "Tokyo | 2025",
+  "slug": "tokyo-2025",
+  "youtubeId": "jrvkmRZElDo",
+  "description": "A travel film from my solo trip to Tokyo in February 2025, visiting Shibuya, Shinjuku, and Asakusa.",
+  "metadata": {
+    "country": "Japan",
+    "region": "Asia",
+    "places": [
+      "Shibuya",
+      "Shinjuku",
+      "Asakusa"
+    ],
+    "date": "2025-02-15",
+    "coordinates": [
+      35.6762,
+      139.6503
+    ],
+    "camera": "Olympus OM-D E-M5 Mark II",
+    "gear": "7Artisans 35mm f/1.2",
+    "music": {
+      "artist": "Noah Kahan",
+      "title": "Young Blood",
+      "spotify": "https://open.spotify.com/track/5ngcqrs4Xq915GUqNtNNr5?si=e9def71154f84c09",
+      "youtube": "https://www.youtube.com/watch?v=nf-w6C9oy2A"
+    }
+  },
+  "stills": [
+    "/images/stills/tokyo-2025/tokyo-2025-stills-01.png",
+    "/images/stills/tokyo-2025/tokyo-2025-stills-02.png",
+    "/images/stills/tokyo-2025/tokyo-2025-stills-03.png",
+    "/images/stills/tokyo-2025/tokyo-2025-stills-04.png",
+    "/images/stills/tokyo-2025/tokyo-2025-stills-05.png",
+    "/images/stills/tokyo-2025/tokyo-2025-stills-06.png",
+    "/images/stills/tokyo-2025/tokyo-2025-stills-07.png",
+    "/images/stills/tokyo-2025/tokyo-2025-stills-08.png",
+    "/images/stills/tokyo-2025/tokyo-2025-stills-09.png",
+    "/images/stills/tokyo-2025/tokyo-2025-stills-10.png"
+  ]
+}
+
+--- src/data/videos/iceland-2019.json ---
+{
+  "id": "iceland-2019",
+  "title": "Iceland | 2019",
+  "slug": "iceland-2019",
+  "youtubeId": "KGQ5hglQg8c",
+  "description": "A travel film from my trip to Iceland with some friends (Reykjavík and the Ring Road) in October 2019.",
+  "metadata": {
+    "country": "Iceland",
+    "region": "Europe",
+    "places": [
+      "Reykjavík",
+      "Ring Road"
+    ],
+    "date": "2019-10-01",
+    "coordinates": [
+      64.1466,
+      -21.9426
+    ],
+    "camera": "Olympus OM-D E-M5 Mark II",
+    "gear": "Olympus M.Zuiko 12-40mm f/2.8 PRO",
+    "music": {
+      "artist": "Radical Face",
+      "title": "Welcome Home, Son",
+      "spotify": "https://open.spotify.com/track/6HTVZeVQ9J6Uiq6tHESxU9?si=61da5b5d62134b88",
+      "youtube": "https://www.youtube.com/watch?v=P8a4iiOnzsc"
+    }
+  },
+  "stills": [
+    "/images/stills/iceland-2019/iceland-2019-stills-01.png",
+    "/images/stills/iceland-2019/iceland-2019-stills-02.png",
+    "/images/stills/iceland-2019/iceland-2019-stills-03.png",
+    "/images/stills/iceland-2019/iceland-2019-stills-04.png",
+    "/images/stills/iceland-2019/iceland-2019-stills-05.png",
+    "/images/stills/iceland-2019/iceland-2019-stills-06.png"
+  ]
+}
+
+--- src/data/videos/luxembourg-2018.json ---
+{
+  "id": "luxembourg-2018",
+  "title": "Luxembourg | 2018",
+  "slug": "luxembourg-2018",
+  "youtubeId": "PKw_kI7GJqk",
+  "description": "A travel film from my trip to Luxembourg with my mom and sister in October 2018, showing beautiful autumn colors in Luxembourg City and Vianden Castle.",
+  "metadata": {
+    "country": "Luxembourg",
+    "region": "Europe",
+    "places": [
+      "Luxembourg City",
+      "Vianden Castle"
+    ],
+    "date": "2018-10-01",
+    "coordinates": [
+      49.6116,
+      6.1319
+    ],
+    "camera": "Olympus OM-D E-M5 Mark II",
+    "gear": "Olympus M.Zuiko 12-40mm f/2.8 PRO",
+    "music": {
+      "artist": "Xavier Rudd",
+      "title": "Honeymoon Bay",
+      "spotify": "https://open.spotify.com/track/7zu0fqKiRb1zaFuT7z6QDt?si=5598fbdc8123470a",
+      "youtube": "https://www.youtube.com/watch?v=eUBoznU1vk8"
+    }
+  },
+  "stills": [
+    "/images/stills/luxembourg-2018/luxembourg-2018-stills-01.png",
+    "/images/stills/luxembourg-2018/luxembourg-2018-stills-02.png",
+    "/images/stills/luxembourg-2018/luxembourg-2018-stills-03.png",
+    "/images/stills/luxembourg-2018/luxembourg-2018-stills-04.png",
+    "/images/stills/luxembourg-2018/luxembourg-2018-stills-05.png",
+    "/images/stills/luxembourg-2018/luxembourg-2018-stills-06.png",
+    "/images/stills/luxembourg-2018/luxembourg-2018-stills-07.png"
+  ]
 }
 
 --- src/data/videos/greece-2016.json ---
@@ -5319,6 +5612,48 @@ export function getVideoBySlug(slug: string): Video | undefined {
     "/images/stills/greece-2016/greece-2016-stills-03.png",
     "/images/stills/greece-2016/greece-2016-stills-04.png",
     "/images/stills/greece-2016/greece-2016-stills-05.png"
+  ]
+}
+
+--- src/data/videos/menorca-2023.json ---
+{
+  "id": "menorca-2023",
+  "title": "Menorca | 2023",
+  "slug": "menorca-2023",
+  "youtubeId": "lvGIJYVPfMU",
+  "description": "A travel film from my trip to Menorca with my brother and sister in September 2023, traveling around the island by car.",
+  "metadata": {
+    "country": "Spain",
+    "region": "Europe",
+    "places": [
+      "Mahón",
+      "Ciutadella",
+      "Cala Turqueta"
+    ],
+    "date": "2023-09-15",
+    "coordinates": [
+      39.8895,
+      4.2648
+    ],
+    "camera": "GoPro Hero 11",
+    "gear": "",
+    "music": {
+      "artist": "Sons of the East",
+      "title": "California",
+      "spotify": "https://open.spotify.com/track/46BuJdwxV43a6qLrICP27l?si=026de235d3e643a5",
+      "youtube": "https://www.youtube.com/watch?v=ZBau4_NIgr8"
+    }
+  },
+  "stills": [
+    "/images/stills/menorca-2023/menorca-2023-stills-01.png",
+    "/images/stills/menorca-2023/menorca-2023-stills-02.png",
+    "/images/stills/menorca-2023/menorca-2023-stills-03.png",
+    "/images/stills/menorca-2023/menorca-2023-stills-04.png",
+    "/images/stills/menorca-2023/menorca-2023-stills-05.png",
+    "/images/stills/menorca-2023/menorca-2023-stills-06.png",
+    "/images/stills/menorca-2023/menorca-2023-stills-07.png",
+    "/images/stills/menorca-2023/menorca-2023-stills-08.png",
+    "/images/stills/menorca-2023/menorca-2023-stills-09.png"
   ]
 }
 
@@ -5430,6 +5765,50 @@ export function getVideoBySlug(slug: string): Video | undefined {
     "/images/stills/croatia-2015/croatia-2015-stills-04.png",
     "/images/stills/croatia-2015/croatia-2015-stills-05.png",
     "/images/stills/croatia-2015/croatia-2015-stills-06.png"
+  ]
+}
+
+--- src/data/videos/tenerife-2024.json ---
+{
+  "id": "tenerife-2024",
+  "title": "Tenerife | 2024",
+  "slug": "tenerife-2024",
+  "youtubeId": "_VCzLTergS0",
+  "description": "A travel film from my trip to Tenerife with my brother and sister in September 2024, staying in Tabaiba and visiting Teide.",
+  "metadata": {
+    "country": "Spain",
+    "region": "Europe",
+    "places": [
+      "Tabaiba",
+      "Teide"
+    ],
+    "date": "2024-09-15",
+    "coordinates": [
+      28.2724,
+      -16.6425
+    ],
+    "camera": "GoPro Hero 11",
+    "gear": "",
+    "music": {
+      "artist": "Vance Joy",
+      "title": "Saturday Sun",
+      "spotify": "https://open.spotify.com/track/2RiBogNRfulkNf7fVbPOrJ?si=7f1658baa3ee48de",
+      "youtube": "https://www.youtube.com/watch?v=uKqMNQkjHmI"
+    }
+  },
+  "stills": [
+    "/images/stills/tenerife-2024/tenerife-2025-stills-01.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-02.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-03.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-04.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-05.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-06.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-07.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-08.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-09.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-10.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-11.png",
+    "/images/stills/tenerife-2024/tenerife-2025-stills-12.png"
   ]
 }
 
@@ -5550,8 +5929,8 @@ import Icons from '../components/Icons.astro';
 METADATA
 ================================================================================
 
-Files Parsed: 30
-Total Characters: 176600
+Files Parsed: 36
+Total Characters: 188785
 
 File List:
 ----------------------------------------
@@ -5561,11 +5940,11 @@ File List:
 .astro/types.d.ts: 39 characters
 .vscode/extensions.json: 87 characters
 .vscode/launch.json: 207 characters
-README.md: 1522 characters
+README.md: 4928 characters
 other/2025_12_31_improvements-prompt.md: 43195 characters
 other/2026_01-01_improvements-look-and-feel.md: 85577 characters
 package.json: 431 characters
-scripts/update-stills.js: 1346 characters
+scripts/update-stills.js: 1458 characters
 src/components/FilterBar.astro: 3092 characters
 src/components/Frame.astro: 293 characters
 src/components/Icons.astro: 3888 characters
@@ -5573,10 +5952,16 @@ src/components/PhotoCarousel.astro: 2093 characters
 src/components/VideoSection.astro: 5466 characters
 src/components/VideoSectionTest.astro: 5405 characters
 src/components/Welcome.astro: 4921 characters
-src/data/index.ts: 1102 characters
+src/data/index.ts: 1529 characters
 src/data/videos/croatia-2015.json: 1092 characters
 src/data/videos/greece-2016.json: 1028 characters
+src/data/videos/iceland-2019.json: 1177 characters
 src/data/videos/london-2017.json: 1030 characters
+src/data/videos/luxembourg-2018.json: 1346 characters
+src/data/videos/marrakesh-2019.json: 1468 characters
+src/data/videos/menorca-2023.json: 1348 characters
+src/data/videos/tenerife-2024.json: 1536 characters
+src/data/videos/tokyo-2025.json: 1365 characters
 src/data/videos/venice-2018.json: 1016 characters
 src/layouts/Layout.astro: 758 characters
 src/pages/index.astro: 2262 characters
@@ -5606,7 +5991,13 @@ ju-travel-video/
 │       └── stills/
 │           ├── croatia-2015/
 │           ├── greece-2016/
+│           ├── iceland-2019/
 │           ├── london-2017/
+│           ├── luxembourg-2018/
+│           ├── marrakesh-2019/
+│           ├── menorca-2023/
+│           ├── tenerife-2024/
+│           ├── tokyo-2025/
 │           └── venice-2018/
 ├── scripts/
 │   └── update-stills.js
@@ -5624,7 +6015,13 @@ ju-travel-video/
 │   │   ├── videos/
 │   │   │   ├── croatia-2015.json
 │   │   │   ├── greece-2016.json
+│   │   │   ├── iceland-2019.json
 │   │   │   ├── london-2017.json
+│   │   │   ├── luxembourg-2018.json
+│   │   │   ├── marrakesh-2019.json
+│   │   │   ├── menorca-2023.json
+│   │   │   ├── tenerife-2024.json
+│   │   │   ├── tokyo-2025.json
 │   │   │   └── venice-2018.json
 │   │   └── index.ts
 │   ├── layouts/
@@ -5642,6 +6039,6 @@ ju-travel-video/
 └── tsconfig.json
 
 Generated at:
-Local: 2026-01-03 10:09:25 
-UTC:   2026-01-03 09:09:25 UTC
-Timestamp: 1767431365
+Local: 2026-01-04 10:03:43 
+UTC:   2026-01-04 09:03:43 UTC
+Timestamp: 1767517423
