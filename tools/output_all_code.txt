@@ -177,6 +177,7 @@ https://www.adobe.com/express/feature/image/resize
     "update-stills": "node scripts/update-stills.js"
   },
   "dependencies": {
+    "@astrojs/tailwind": "^6.0.2",
     "astro": "^5.16.6"
   },
   "devDependencies": {
@@ -194,6 +195,9 @@ https://www.adobe.com/express/feature/image/resize
   "exclude": ["dist"]
 }
 
+
+--- .vercel/project.json ---
+{"projectId":"prj_th95BqCDsltQfgs6nQxZrREINSVl","orgId":"team_Q33rfNYMg8LLYH7waxuHLJlJ","projectName":"ju-travel-video"}
 
 --- .astro/content.d.ts ---
 declare module 'astro:content' {
@@ -409,7 +413,7 @@ declare module 'astro:content' {
 
 --- .astro/types.d.ts ---
 /// <reference types="astro/client" />
-
+/// <reference path="content.d.ts" />
 
 --- tools/config.json ---
 {
@@ -4600,7 +4604,7 @@ console.log('🎉 All JSON files updated!');
 // src/components/Icons.astro
 
 interface Props {
-  name: 'location' | 'calendar' | 'spotify' | 'youtube' | 'region' | 'country' | 'gear' | 'music' | 'film';
+  name: 'location' | 'calendar' | 'spotify' | 'youtube' | 'region' | 'country' | 'gear' | 'music' | 'film' | 'github';
   className?: string;
 }
 
@@ -4663,360 +4667,47 @@ const { name, className = 'w-4 h-4' } = Astro.props;
   </svg>
 )}
 
---- src/components/VideoSectionTest.astro ---
+{name === 'github' && (
+  <svg class={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+  </svg>
+)}
+
+--- src/components/Footer.astro ---
 ---
-// src/components/VideoSectionTest.astro - Final version with spacing and size fixes
-import type { Video } from '../data/index';
-import PhotoCarousel from './PhotoCarousel.astro';
+// src/components/Footer.astro
 import Icons from './Icons.astro';
 
-interface Props {
-  video: Video;
-}
-
-const { video } = Astro.props;
+const currentYear = new Date().getFullYear();
 ---
 
-<section class="video-section mb-12 pb-8 last:mb-0 last:pb-0">
-  <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
-    <!-- Left Column: Video -->
-    <div class="lg:col-span-2">
-      <div class="w-full max-w-2xl">
-        <div class="relative pb-[56.25%] bg-black rounded-lg overflow-hidden shadow-md">
-          <iframe
-            src={`https://www.youtube.com/embed/${video.youtubeId}?modestbranding=1&rel=0`}
-            title={video.title}
-            class="absolute top-0 left-0 w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            loading="lazy"
-          ></iframe>
-        </div>
-      </div>
+<footer class="py-6 px-4 sm:px-8 border-t border-gray-300 bg-white">
+  <div class="max-w-3xl mx-auto text-center">
+    <!-- Main footer text -->
+    <div class="mb-4">
+      <p class="text-gray-500 text-sm mb-1">
+        Travel Video Portfolio • {currentYear}
+      </p>
+      <p class="text-gray-400 text-xs">
+        All videos shot and edited by Jon Ugarte
+      </p>
     </div>
-
-    <!-- Right Column: Metadata - 4x2 grid + music -->
-    <div class="lg:col-span-2 lg:pl-4">
-      
-      <!-- 4x2 GRID: 4 columns wide, 2 rows tall -->
-      <div class="grid grid-cols-4 grid-rows-2 gap-5 mb-6">
-        
-        <!-- CELL 1: Location (row 1, col 1) -->
-        <div class="space-y-2">
-          <div class="flex items-center gap-2 text-gray-500">
-            <Icons name="location" className="w-3.5 h-3.5" />
-            <span class="text-xs font-medium uppercase tracking-wider">Location</span>
-          </div>
-          <p class="text-gray-800 font-medium text-sm">{video.metadata.places.join(', ')}</p>
-        </div>
-
-        <!-- CELL 2: Date (row 1, col 2) -->
-        <div class="space-y-2">
-          <div class="flex items-center gap-2 text-gray-500">
-            <Icons name="calendar" className="w-3.5 h-3.5" />
-            <span class="text-xs font-medium uppercase tracking-wider">Date</span>
-          </div>
-          <p class="text-gray-800 font-medium text-sm">
-            {new Date(video.metadata.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-          </p>
-        </div>
-
-        <!-- CELLS 3 & 4: GEAR (row 1-2, col 3-4 - spans 2 rows × 2 columns) -->
-        <div class="col-span-2 row-span-2 space-y-2">
-          <div class="flex items-center gap-2 text-gray-500 mb-2">
-            <Icons name="gear" className="w-3.5 h-3.5" />
-            <span class="text-xs font-medium uppercase tracking-wider">Gear</span>
-          </div>
-          <p class="text-gray-800 font-medium text-sm">
-            {video.metadata.gear}
-          </p>
-        </div>
-
-        <!-- CELL 5: Country (row 2, col 1) -->
-        <div class="space-y-2">
-          <div class="flex items-center gap-2 text-gray-500">
-            <Icons name="country" className="w-3.5 h-3.5" />
-            <span class="text-xs font-medium uppercase tracking-wider">Country</span>
-          </div>
-          <p class="text-gray-800 font-medium text-sm">{video.metadata.country}</p>
-        </div>
-
-        <!-- CELL 6: Region (row 2, col 2) -->
-        <div class="space-y-2">
-          <div class="flex items-center gap-2 text-gray-500">
-            <Icons name="region" className="w-3.5 h-3.5" />
-            <span class="text-xs font-medium uppercase tracking-wider">Region</span>
-          </div>
-          <p class="text-gray-800 font-medium text-sm">{video.metadata.region}</p>
-        </div>
-        
-      </div> <!-- End 4x2 grid -->
-
-      <!-- Separator line -->
-      <div class="border-t border-gray-200 my-8"></div>
-
-      <!-- Music Section -->
-      <div class="space-y-3">
-        <div class="flex items-center gap-2 text-gray-500">
-          <Icons name="music" className="w-3.5 h-3.5" />
-          <span class="text-xs font-medium uppercase tracking-wider">Music</span>
-        </div>
-        
-        <!-- Music details -->
-        <div>
-          <!-- Row 1: Artist + Links (inline) -->
-          <div class="flex items-center gap-8 mb-1">
-            <!-- Artist name -->
-            <p class="text-gray-900 font-medium text-sm flex-shrink-0">{video.metadata.music.artist}</p>
-            
-            <!-- Spotify and YouTube links -->
-            <div class="flex gap-6 items-center">
-              <a 
-                href={video.metadata.music.spotify} 
-                target="_blank" 
-                class="text-gray-600 hover:text-gray-900 inline-flex items-center gap-2 transition-colors"
-              >
-                <Icons name="spotify" className="w-4 h-4" />
-                <span class="text-sm">Spotify</span>
-              </a>
-              <a 
-                href={video.metadata.music.youtube} 
-                target="_blank" 
-                class="text-gray-600 hover:text-gray-900 inline-flex items-center gap-2 transition-colors"
-              >
-                <Icons name="youtube" className="w-4 h-4" />
-                <span class="text-sm">YouTube</span>
-              </a>
-            </div>
-          </div>
-          
-          <!-- Row 2: Song title -->
-          <p class="text-gray-600 text-sm">{video.metadata.music.title}</p>
-        </div>
-      </div>
-      
-    </div> <!-- End right column -->
-    
-  </div> <!-- End main grid -->
-
-  <!-- Photo Carousel Below (Full width) -->
-  <div class="mt-6">
-    <PhotoCarousel stills={video.stills} title={video.title} />
+ 
+    <!-- Alternative subtle version -->
+    <a 
+    href="https://github.com/JonUXD/ju-travel-video" 
+    target="_blank"
+    rel="noopener noreferrer"
+    class="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 text-sm transition-colors duration-200 group"
+    aria-label="View source code on GitHub"
+    >
+    <Icons name="github" className="w-4 h-4 group-hover:scale-110 transition-transform" />
+    <span class="border-b border-transparent hover:border-gray-400 transition-border">
+        View source code
+    </span>
+    </a>
   </div>
-</section>
-
---- src/components/Welcome.astro ---
----
-import astroLogo from '../assets/astro.svg';
-import background from '../assets/background.svg';
----
-
-<div id="container">
-	<img id="background" src={background.src} alt="" fetchpriority="high" />
-	<main>
-		<section id="hero">
-			<a href="https://astro.build"
-				><img src={astroLogo.src} width="115" height="48" alt="Astro Homepage" /></a
-			>
-			<h1>
-				To get started, open the <code><pre>src/pages</pre></code> directory in your project.
-			</h1>
-			<section id="links">
-				<a class="button" href="https://docs.astro.build">Read our docs</a>
-				<a href="https://astro.build/chat"
-					>Join our Discord <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36"
-						><path
-							fill="currentColor"
-							d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69Zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69Z"
-						></path></svg
-					>
-				</a>
-			</section>
-		</section>
-	</main>
-
-	<a href="https://astro.build/blog/astro-5/" id="news" class="box">
-		<svg width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg"
-			><path
-				d="M24.667 12c1.333 1.414 2 3.192 2 5.334 0 4.62-4.934 5.7-7.334 12C18.444 28.567 18 27.456 18 26c0-4.642 6.667-7.053 6.667-14Zm-5.334-5.333c1.6 1.65 2.4 3.43 2.4 5.333 0 6.602-8.06 7.59-6.4 17.334C13.111 27.787 12 25.564 12 22.666c0-4.434 7.333-8 7.333-16Zm-6-5.333C15.111 3.555 16 5.556 16 7.333c0 8.333-11.333 10.962-5.333 22-3.488-.774-6-4-6-8 0-8.667 8.666-10 8.666-20Z"
-				fill="#111827"></path></svg
-		>
-		<h2>What's New in Astro 5.0?</h2>
-		<p>
-			From content layers to server islands, click to learn more about the new features and
-			improvements in Astro 5.0
-		</p>
-	</a>
-</div>
-
-<style>
-	#background {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
-		filter: blur(100px);
-	}
-
-	#container {
-		font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
-		height: 100%;
-	}
-
-	main {
-		height: 100%;
-		display: flex;
-		justify-content: center;
-	}
-
-	#hero {
-		display: flex;
-		align-items: start;
-		flex-direction: column;
-		justify-content: center;
-		padding: 16px;
-	}
-
-	h1 {
-		font-size: 22px;
-		margin-top: 0.25em;
-	}
-
-	#links {
-		display: flex;
-		gap: 16px;
-	}
-
-	#links a {
-		display: flex;
-		align-items: center;
-		padding: 10px 12px;
-		color: #111827;
-		text-decoration: none;
-		transition: color 0.2s;
-	}
-
-	#links a:hover {
-		color: rgb(78, 80, 86);
-	}
-
-	#links a svg {
-		height: 1em;
-		margin-left: 8px;
-	}
-
-	#links a.button {
-		color: white;
-		background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
-		box-shadow:
-			inset 0 0 0 1px rgba(255, 255, 255, 0.12),
-			inset 0 -2px 0 rgba(0, 0, 0, 0.24);
-		border-radius: 10px;
-	}
-
-	#links a.button:hover {
-		color: rgb(230, 230, 230);
-		box-shadow: none;
-	}
-
-	pre {
-		font-family:
-			ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono',
-			monospace;
-		font-weight: normal;
-		background: linear-gradient(14deg, #d83333 0%, #f041ff 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		margin: 0;
-	}
-
-	h2 {
-		margin: 0 0 1em;
-		font-weight: normal;
-		color: #111827;
-		font-size: 20px;
-	}
-
-	p {
-		color: #4b5563;
-		font-size: 16px;
-		line-height: 24px;
-		letter-spacing: -0.006em;
-		margin: 0;
-	}
-
-	code {
-		display: inline-block;
-		background:
-			linear-gradient(66.77deg, #f3cddd 0%, #f5cee7 100%) padding-box,
-			linear-gradient(155deg, #d83333 0%, #f041ff 18%, #f5cee7 45%) border-box;
-		border-radius: 8px;
-		border: 1px solid transparent;
-		padding: 6px 8px;
-	}
-
-	.box {
-		padding: 16px;
-		background: rgba(255, 255, 255, 1);
-		border-radius: 16px;
-		border: 1px solid white;
-	}
-
-	#news {
-		position: absolute;
-		bottom: 16px;
-		right: 16px;
-		max-width: 300px;
-		text-decoration: none;
-		transition: background 0.2s;
-		backdrop-filter: blur(50px);
-	}
-
-	#news:hover {
-		background: rgba(255, 255, 255, 0.55);
-	}
-
-	@media screen and (max-height: 368px) {
-		#news {
-			display: none;
-		}
-	}
-
-	@media screen and (max-width: 768px) {
-		#container {
-			display: flex;
-			flex-direction: column;
-		}
-
-		#hero {
-			display: block;
-			padding-top: 10%;
-		}
-
-		#links {
-			flex-wrap: wrap;
-		}
-
-		#links a.button {
-			padding: 14px 18px;
-		}
-
-		#news {
-			right: 16px;
-			left: 16px;
-			bottom: 2.5rem;
-			max-width: 100%;
-		}
-
-		h1 {
-			line-height: 1.5;
-		}
-	}
-</style>
-
+</footer>
 
 --- src/components/VideoSection.astro ---
 ---
@@ -5166,96 +4857,50 @@ const { video } = Astro.props;
   </div>
 </section>
 
---- src/components/FilterBar.astro ---
+--- src/components/Header.astro ---
 ---
-// src/components/FilterBar.astro
-import type { Video } from '../data/index';
+// src/components/Header.astro
+import Icons from './Icons.astro';
 
 interface Props {
-  videos: Video[];
-  activeFilters?: {
-    country?: string;
-    region?: string;
-    year?: string;
-    gear?: string;
-  };
+  title?: string;
+  subtitle?: string;
+  sortedVideos: Array<any>; // Adjust type as needed
 }
 
-const { videos, activeFilters = {} } = Astro.props;
-
-// Extract unique filter options from videos
-const countries = [...new Set(videos.map(v => v.metadata.country))];
-const regions = [...new Set(videos.map(v => v.metadata.region))];
-const years = [...new Set(videos.map(v => new Date(v.metadata.date).getFullYear().toString()))];
-const gearTypes = [...new Set(videos.map(v => v.metadata.gear.split(',').map(g => g.trim())).flat())];
+const { title = "Travel Videos", subtitle = "JON UGARTE", sortedVideos } = Astro.props;
 ---
 
-<div class="filter-bar mb-8 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
-  <div class="flex flex-wrap items-center gap-4">
-    <!-- Filter by Country -->
-    <div class="filter-group">
-      <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-        Country
-      </label>
-      <select class="filter-select text-sm border border-gray-300 rounded px-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent">
-        <option value="">All countries</option>
-        {countries.map(country => (
-          <option value={country} selected={activeFilters.country === country}>
-            {country}
-          </option>
-        ))}
-      </select>
+<header class="py-12 pb-4 px-4 sm:px-8 text-center">
+  <div class="max-w-3xl mx-auto">
+    <div class="mb-4">
+      <span class="text-xs font-medium text-gray-500 uppercase tracking-widest">
+        {subtitle}
+      </span>
     </div>
-
-    <!-- Filter by Region -->
-    <div class="filter-group">
-      <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-        Region
-      </label>
-      <select class="filter-select text-sm border border-gray-300 rounded px-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent">
-        <option value="">All regions</option>
-        {regions.map(region => (
-          <option value={region} selected={activeFilters.region === region}>
-            {region}
-          </option>
-        ))}
-      </select>
-    </div>
-
-    <!-- Filter by Year -->
-    <div class="filter-group">
-      <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-        Year
-      </label>
-      <select class="filter-select text-sm border border-gray-300 rounded px-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent">
-        <option value="">All years</option>
-        {years.sort((a, b) => b.localeCompare(a)).map(year => (
-          <option value={year} selected={activeFilters.year === year}>
-            {year}
-          </option>
-        ))}
-      </select>
-    </div>
-
-    <!-- Clear Filters Button -->
-    <div class="filter-group flex items-end">
-      <button class="clear-filters text-sm text-gray-600 hover:text-gray-900 px-3 py-1.5 border border-gray-300 rounded hover:bg-gray-50 transition-colors">
-        Clear filters
-      </button>
+    <h1 class="text-4xl font-light text-gray-900 tracking-tight mb-4">
+      {title}
+    </h1>
+    
+    <!-- Simple Stats -->
+    <div class="flex flex-wrap justify-center items-center gap-6 text-sm text-gray-600">
+      <span class="inline-flex items-center gap-2">
+        <Icons name="film" className="w-4 h-4" />
+        {sortedVideos.length} videos
+      </span>
+      
+      <span class="inline-flex items-center gap-2">
+        <Icons name="country" className="w-4 h-4" />
+        {new Set(sortedVideos.map(v => v.metadata.country)).size} countries
+      </span>
+      
+      <span class="inline-flex items-center gap-2">
+        <Icons name="gear" className="w-4 h-4" />
+        {sortedVideos.reduce((sum, video) => sum + video.stills.length, 0)} stills
+      </span>
     </div>
   </div>
-</div>
-
-<style>
-  .filter-select {
-    min-width: 140px;
-  }
-  
-  /* Optional: Add smooth transitions */
-  .filter-select, .clear-filters {
-    transition: all 0.2s ease;
-  }
-</style>
+</header>
 
 --- src/components/Frame.astro ---
 ---
@@ -5344,6 +4989,7 @@ const { stills, title } = Astro.props;
 --- src/layouts/Layout.astro ---
 ---
 // src/layouts/Layout.astro
+import '../styles/global.css';
 ---
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -5354,11 +5000,18 @@ const { stills, title } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Comprehensive favicon support -->
+    <!-- <link rel="icon" href="/favicon.ico" sizes="any"> -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/favicon.png">
     <meta name="generator" content={Astro.generator} />
-    <!-- Import global CSS - FIXED PATH -->
-    <link rel="stylesheet" href="/src/styles/global.css" />
-    <title>Travel Video Portfolio</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>Jon Ugarte - Travel Video Portfolio</title>
+    <meta name="description" content="Cinematic travel videos from around the world. Portfolio of travel films shot and edited by Jon Ugarte." />
+    <meta name="author" content="Jon Ugarte" />
+    
+    <!-- Import global CSS is done via the import above -->
   </head>
   <body class="bg-white text-gray-900">
     <slot />
@@ -5825,45 +5478,23 @@ export function getVideoBySlug(slug: string): Video | undefined {
 
 --- src/pages/index.astro ---
 ---
-// src/pages/index.astro - UPDATED HEADER with film icon
+// src/pages/index.astro
 import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import VideoSection from '../components/VideoSection.astro';
+import Frame from '../components/Frame.astro';
 import { sortedVideos } from '../data/index';
-import Frame from '../components/Frame.astro'
-import Icons from '../components/Icons.astro';
 ---
 
 <Layout>
   <main class="min-h-screen bg-gradient-to-b from-gray-100 to-white">
-    <!-- Header - Centered -->
-    <header class="py-12 pb-4 px-4 sm:px-8 text-center">
-      <div class="max-w-3xl mx-auto">
-        <div class="mb-4">
-          <span class="text-xs font-medium text-gray-500 uppercase tracking-widest">JON UGARTE</span>
-        </div>
-        <h1 class="text-4xl font-light text-gray-900 tracking-tight mb-4">
-          Travel Videos
-        </h1>
-        
-        <!-- Simple Stats - Using consistent icons from Icons component -->
-        <div class="flex flex-wrap justify-center items-center gap-6 text-sm text-gray-600">
-          <span class="inline-flex items-center gap-2">
-            <Icons name="film" className="w-4 h-4" />
-            {sortedVideos.length} videos
-          </span>
-          
-          <span class="inline-flex items-center gap-2">
-            <Icons name="country" className="w-4 h-4" />
-            {new Set(sortedVideos.map(v => v.metadata.country)).size} countries
-          </span>
-          
-          <span class="inline-flex items-center gap-2">
-            <Icons name="gear" className="w-4 h-4" />
-            {sortedVideos.reduce((sum, video) => sum + video.stills.length, 0)} stills
-          </span>
-        </div>
-      </div>
-    </header>
+    <!-- Header Component -->
+    <Header 
+      title="Travel Videos" 
+      subtitle="JON UGARTE" 
+      sortedVideos={sortedVideos} 
+    />
 
     <!-- Video Sections -->
     <div class="max-w-6xl mx-auto px-4 sm:px-8 pb-12">
@@ -5876,93 +5507,38 @@ import Icons from '../components/Icons.astro';
       </div>
     </div>
 
-    <!-- Footer - centered -->
-    <footer class="py-6 px-4 sm:px-8 border-t border-gray-300 bg-white">
-      <div class="max-w-3xl mx-auto text-center text-gray-500 text-sm">
-        <p class="mb-1">Travel Video Portfolio • {new Date().getFullYear()}</p>
-        <p class="text-xs">All videos shot and edited by Jon Ugarte</p>
-      </div>
-    </footer>
+    <!-- Footer Component -->
+    <Footer />
   </main>
 </Layout>
-
---- src/pages/test2.astro ---
----
-// src/pages/test2.astro
----
-
-<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    /* Direct CSS to test */
-    .test-red { background: red; color: white; padding: 1rem; margin: 1rem; }
-    .test-blue { background: blue; color: white; padding: 1rem; margin: 1rem; }
-  </style>
-</head>
-<body>
-  <div class="test-red">Direct CSS - should be red</div>
-  <div class="test-blue">Direct CSS - should be blue</div>
-  
-  <!-- Also test Tailwind if it loads -->
-  <div class="bg-green-500 text-white p-4 m-4">Tailwind - should be green</div>
-</body>
-</html>
-
---- src/pages/test.html.astro ---
----
-// Test if Tailwind works
----
-
-<!DOCTYPE html>
-<html>
-<head>
-  <link rel="stylesheet" href="/styles/global.css" />
-</head>
-<body class="p-8">
-  <!-- Test Tailwind classes -->
-  <div class="bg-red-500 text-white p-4 rounded mb-4">
-    This should be red with white text
-  </div>
-  <div class="bg-blue-500 text-white p-4 rounded mb-4">
-    This should be blue with white text
-  </div>
-  <div class="grid grid-cols-3 gap-4">
-    <div class="bg-green-500 p-4">Grid 1</div>
-    <div class="bg-yellow-500 p-4">Grid 2</div>
-    <div class="bg-purple-500 p-4">Grid 3</div>
-  </div>
-</body>
-</html>
-
 
 ================================================================================
 METADATA
 ================================================================================
 
-Files Parsed: 36
-Total Characters: 189155
+Files Parsed: 34
+Total Characters: 177114
 
 File List:
 ----------------------------------------
 .astro/content.d.ts: 6942 characters
 .astro/data-store.json: 1549 characters
 .astro/settings.json: 58 characters
-.astro/types.d.ts: 39 characters
+.astro/types.d.ts: 76 characters
+.vercel/project.json: 120 characters
 .vscode/extensions.json: 87 characters
 .vscode/launch.json: 207 characters
 README.md: 5040 characters
 other/2025_12_31_improvements-prompt.md: 43195 characters
 other/2026_01-01_improvements-look-and-feel.md: 85577 characters
-package.json: 431 characters
+package.json: 466 characters
 scripts/update-stills.js: 1458 characters
-src/components/FilterBar.astro: 3092 characters
+src/components/Footer.astro: 1072 characters
 src/components/Frame.astro: 293 characters
-src/components/Icons.astro: 3888 characters
+src/components/Header.astro: 1317 characters
+src/components/Icons.astro: 4799 characters
 src/components/PhotoCarousel.astro: 2093 characters
 src/components/VideoSection.astro: 5724 characters
-src/components/VideoSectionTest.astro: 5405 characters
-src/components/Welcome.astro: 4921 characters
 src/data/index.ts: 1529 characters
 src/data/videos/croatia-2015.json: 1092 characters
 src/data/videos/greece-2016.json: 1028 characters
@@ -5974,10 +5550,8 @@ src/data/videos/menorca-2023.json: 1348 characters
 src/data/videos/tenerife-2024.json: 1536 characters
 src/data/videos/tokyo-2025.json: 1365 characters
 src/data/videos/venice-2018.json: 1016 characters
-src/layouts/Layout.astro: 758 characters
-src/pages/index.astro: 2262 characters
-src/pages/test.html.astro: 594 characters
-src/pages/test2.astro: 543 characters
+src/layouts/Layout.astro: 1147 characters
+src/pages/index.astro: 895 characters
 src/styles/global.css: 720 characters
 tools/config.json: 235 characters
 tsconfig.json: 109 characters
@@ -5991,6 +5565,8 @@ ju-travel-video/
 │   ├── data-store.json
 │   ├── settings.json
 │   └── types.d.ts
+├── .vercel/
+│   └── project.json
 ├── .vscode/
 │   ├── extensions.json
 │   └── launch.json
@@ -6013,15 +5589,13 @@ ju-travel-video/
 ├── scripts/
 │   └── update-stills.js
 ├── src/
-│   ├── assets/
 │   ├── components/
-│   │   ├── FilterBar.astro
+│   │   ├── Footer.astro
 │   │   ├── Frame.astro
+│   │   ├── Header.astro
 │   │   ├── Icons.astro
 │   │   ├── PhotoCarousel.astro
-│   │   ├── VideoSection.astro
-│   │   ├── VideoSectionTest.astro
-│   │   └── Welcome.astro
+│   │   └── VideoSection.astro
 │   ├── data/
 │   │   ├── videos/
 │   │   │   ├── croatia-2015.json
@@ -6038,9 +5612,7 @@ ju-travel-video/
 │   ├── layouts/
 │   │   └── Layout.astro
 │   ├── pages/
-│   │   ├── index.astro
-│   │   ├── test.html.astro
-│   │   └── test2.astro
+│   │   └── index.astro
 │   └── styles/
 │       └── global.css
 ├── tools/
@@ -6050,6 +5622,6 @@ ju-travel-video/
 └── tsconfig.json
 
 Generated at:
-Local: 2026-01-04 12:26:48 
-UTC:   2026-01-04 11:26:48 UTC
-Timestamp: 1767526008
+Local: 2026-01-05 16:20:30 
+UTC:   2026-01-05 15:20:30 UTC
+Timestamp: 1767626430

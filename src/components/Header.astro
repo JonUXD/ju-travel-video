@@ -1,0 +1,43 @@
+---
+// src/components/Header.astro
+import Icons from './Icons.astro';
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  sortedVideos: Array<any>; // Adjust type as needed
+}
+
+const { title = "Travel Videos", subtitle = "JON UGARTE", sortedVideos } = Astro.props;
+---
+
+<header class="py-12 pb-4 px-4 sm:px-8 text-center">
+  <div class="max-w-3xl mx-auto">
+    <div class="mb-4">
+      <span class="text-xs font-medium text-gray-500 uppercase tracking-widest">
+        {subtitle}
+      </span>
+    </div>
+    <h1 class="text-4xl font-light text-gray-900 tracking-tight mb-4">
+      {title}
+    </h1>
+    
+    <!-- Simple Stats -->
+    <div class="flex flex-wrap justify-center items-center gap-6 text-sm text-gray-600">
+      <span class="inline-flex items-center gap-2">
+        <Icons name="film" className="w-4 h-4" />
+        {sortedVideos.length} videos
+      </span>
+      
+      <span class="inline-flex items-center gap-2">
+        <Icons name="country" className="w-4 h-4" />
+        {new Set(sortedVideos.map(v => v.metadata.country)).size} countries
+      </span>
+      
+      <span class="inline-flex items-center gap-2">
+        <Icons name="gear" className="w-4 h-4" />
+        {sortedVideos.reduce((sum, video) => sum + video.stills.length, 0)} stills
+      </span>
+    </div>
+  </div>
+</header>

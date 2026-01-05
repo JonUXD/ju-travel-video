@@ -7,10 +7,13 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "update-stills": "node scripts/update-stills.js"
+    "update-stills": "node scripts/update-stills.js",
+    "optimize-images": "node scripts/optimize-images.js"
   },
   "dependencies": {
-    "astro": "^5.16.6"
+    "@astrojs/tailwind": "^6.0.2",
+    "astro": "^5.16.6",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",

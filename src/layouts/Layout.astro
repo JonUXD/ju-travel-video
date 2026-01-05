@@ -1,5 +1,6 @@
 ---
 // src/layouts/Layout.astro
+import '../styles/global.css';
 ---
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,11 +11,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Comprehensive favicon support -->
+    <!-- <link rel="icon" href="/favicon.ico" sizes="any"> -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/favicon.png">
     <meta name="generator" content={Astro.generator} />
-    <!-- Import global CSS - FIXED PATH -->
-    <link rel="stylesheet" href="/src/styles/global.css" />
-    <title>Travel Video Portfolio</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>Jon Ugarte - Travel Video Portfolio</title>
+    <meta name="description" content="Cinematic travel videos from around the world. Portfolio of travel films shot and edited by Jon Ugarte." />
+    <meta name="author" content="Jon Ugarte" />
+    
+    <!-- Import global CSS is done via the import above -->
   </head>
   <body class="bg-white text-gray-900">
     <slot />
