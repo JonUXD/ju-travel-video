@@ -1,0 +1,82 @@
+---
+// components/mobile/PhotoCarousel.astro - CSS ONLY (PROPER WIDTH)
+interface Props {
+  stills: string[];
+  title: string;
+}
+
+const { stills, title } = Astro.props;
+
+const getThumbnail = (image: string) => {
+  return image.includes('.webp') 
+    ? image.replace('.webp', '-thumb.webp')
+    : image;
+};
+---
+
+<div class="mobile-photo-carousel">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-xs font-medium text-gray-500 uppercase tracking-widest">
+      Film Stills • {stills.length} images
+    </h3>
+    <span class="text-xs text-gray-400">Swipe →</span>
+  </div>
+  
+  {stills.length > 0 ? (
+    <!-- SIMPLIFIED: Just use the container without complex calculations -->
+    <div class="relative">
+      <div class="overflow-x-auto snap-x snap-mandatory scrollbar-hide">
+        <div class="flex">
+          {stills.map((image, index) => (
+            <!-- KEY FIX: Use full width of parent with proper box-sizing -->
+            <div class="flex-shrink-0 w-full snap-center px-4 box-border">
+              <div class="relative rounded-xl overflow-hidden bg-gray-100 aspect-[16/9]">
+                <img
+                  src={getThumbnail(image)}
+                  alt={`Still ${index + 1} from ${title}`}
+                  class="w-full h-full object-cover"
+                  loading="lazy"
+                  width="375"
+                  height="211"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  ) : (
+    <p class="text-gray-400 text-sm italic py-8 text-center">No stills available</p>
+  )}
+  
+  <style>
+    .mobile-photo-carousel {
+      touch-action: pan-x pinch-zoom;
+    }
+    
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    
+    /* KEY FIX: Ensure proper sizing */
+    .mobile-photo-carousel > div > div {
+      width: 100%;
+    }
+    
+    .mobile-photo-carousel .snap-center {
+      width: 100%;
+      scroll-snap-align: center;
+    }
+    
+    @media (min-width: 769px) {
+      .mobile-photo-carousel {
+        display: none;
+      }
+    }
+  </style>
+</div>

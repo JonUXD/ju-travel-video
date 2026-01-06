@@ -97,3 +97,39 @@ Create a dedicated mobile experience for the travel video portfolio that priorit
 ---
 *Document created: [Date]*
 *Last updated: [Date]*
+
+
+
+
+#########################
+
+Update 6 Jan 2026 12:44
+
+# Mobile Version Implementation
+
+## Files Created
+`components/mobile/VideoSection.astro` - Mobile video card
+`components/mobile/PhotoCarousel.astro` - Swipe carousel with dots
+`components/mobile/Header.astro` - Minimal mobile header
+
+## Key Features
+• Mobile-optimized YouTube (playsinline=1)
+• Swipe carousel with snap points & dots
+• Simplified metadata (Country+Year, Places, Date)
+• Full details inline (no expand/collapse)
+• Card design with shadows & rounded corners
+• Touch-optimized (44px+ tap targets)
+• Safe area support for notched phones
+• Native app-like animations
+• CSS scroll snap for carousel
+
+## Design Decisions
+• Separate mobile components (not responsive CSS)
+• Removed complex metadata grid
+• No hamburger menu or footer on mobile
+• Card-based vertical feed (Instagram/VSCO style)
+• Touch-first interactions only
+
+## Breakpoint
+Mobile: ≤768px (uses `block lg:hidden`)
+Desktop: >768px (uses `hidden lg:block`)

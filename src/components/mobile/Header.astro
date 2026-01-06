@@ -1,0 +1,75 @@
+---
+// components/mobile/Header.astro - SIMPLIFIED (no stats toggle)
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  sortedVideos: Array<any>;
+}
+
+const { 
+  title = "Travel Videos", 
+  subtitle = "JON UGARTE", 
+  sortedVideos 
+} = Astro.props;
+---
+
+<!-- Mobile Header -->
+<header 
+  class="mobile-header sticky top-0 z-40 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200 transition-transform duration-300"
+  style="padding-top: env(safe-area-inset-top);"
+>
+  <div class="px-4 py-3">
+    <!-- Simple centered title only -->
+    <div class="text-center">
+      <p class="text-xs font-medium text-gray-500 uppercase tracking-widest mb-0.5">
+        {subtitle}
+      </p>
+      <h1 class="text-lg font-light text-gray-900 tracking-tight">
+        {title}
+      </h1>
+    </div>
+  </div>
+</header>
+
+<style>
+  .mobile-header {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .mobile-header.hidden {
+    transform: translateY(-100%);
+  }
+
+  @media (min-width: 769px) {
+    .mobile-header {
+      display: none;
+    }
+  }
+</style>
+
+<!-- Simple scroll behavior -->
+<script>
+{
+  document.addEventListener('DOMContentLoaded', () => {
+    const header = document.querySelector('.mobile-header');
+    if (!header) return;
+    
+    let lastScrollTop = 0;
+    
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      if (scrollTop > lastScrollTop && scrollTop > 100) {
+        // Scrolling down, hide header
+        header.classList.add('hidden');
+      } else {
+        // Scrolling up, show header
+        header.classList.remove('hidden');
+      }
+      
+      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    });
+  });
+}
+</script>

@@ -1,34 +1,54 @@
 ---
-// src/pages/index.astro
+// src/pages/index.astro - FINAL CORRECT VERSION
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import MobileHeader from '../components/mobile/Header.astro';
 import VideoSection from '../components/VideoSection.astro';
+import MobileVideoSection from '../components/mobile/VideoSection.astro';
+import Footer from '../components/Footer.astro';
 import Frame from '../components/Frame.astro';
 import { sortedVideos } from '../data/index';
 ---
 
 <Layout>
   <main class="min-h-screen bg-gradient-to-b from-gray-100 to-white">
-    <!-- Header Component -->
-    <Header 
-      title="Travel Videos" 
-      subtitle="JON UGARTE" 
-      sortedVideos={sortedVideos} 
-    />
+    <!-- DESKTOP HEADER (hidden on mobile) -->
+    <div class="hidden md:block">
+      <Header sortedVideos={sortedVideos} />
+    </div>
 
-    <!-- Video Sections -->
-    <div class="max-w-6xl mx-auto px-4 sm:px-8 pb-12">
-      <div class="space-y-8">
-        {sortedVideos.map((video, index) => (
-          <Frame>
-            <VideoSection video={video} />
-          </Frame>
-        ))}
+    <!-- MOBILE HEADER (hidden on desktop) -->
+    <div class="block md:hidden">
+      <MobileHeader sortedVideos={sortedVideos} />
+    </div>
+
+    <!-- DESKTOP VIDEOS -->
+    <div class="hidden md:block">
+      <div class="max-w-6xl mx-auto px-4 sm:px-8 pb-12">
+        <div class="space-y-8">
+          {sortedVideos.map((video) => (
+            <Frame>
+              <VideoSection video={video} />
+            </Frame>
+          ))}
+        </div>
       </div>
     </div>
 
-    <!-- Footer Component -->
-    <Footer />
+    <!-- MOBILE VIDEOS -->
+    <div class="block md:hidden">
+      <div class="px-4 pb-12">
+        <div class="space-y-4">
+          {sortedVideos.map((video) => (
+            <MobileVideoSection video={video} />
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER (desktop only) - YOUR VERSION IS CORRECT! -->
+    <div class="hidden md:block">
+      <Footer />
+    </div>
   </main>
 </Layout>
