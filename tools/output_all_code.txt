@@ -460,7 +460,7 @@ declare module 'astro:content' {
 
 --- .astro/types.d.ts ---
 /// <reference types="astro/client" />
-
+/// <reference path="content.d.ts" />
 
 --- tools/config.json ---
 {
@@ -4635,6 +4635,42 @@ Create a dedicated mobile experience for the travel video portfolio that priorit
 *Document created: [Date]*
 *Last updated: [Date]*
 
+
+
+
+#########################
+
+Update 6 Jan 2026 12:44
+
+# Mobile Version Implementation
+
+## Files Created
+`components/mobile/VideoSection.astro` - Mobile video card
+`components/mobile/PhotoCarousel.astro` - Swipe carousel with dots
+`components/mobile/Header.astro` - Minimal mobile header
+
+## Key Features
+• Mobile-optimized YouTube (playsinline=1)
+• Swipe carousel with snap points & dots
+• Simplified metadata (Country+Year, Places, Date)
+• Full details inline (no expand/collapse)
+• Card design with shadows & rounded corners
+• Touch-optimized (44px+ tap targets)
+• Safe area support for notched phones
+• Native app-like animations
+• CSS scroll snap for carousel
+
+## Design Decisions
+• Separate mobile components (not responsive CSS)
+• Removed complex metadata grid
+• No hamburger menu or footer on mobile
+• Card-based vertical feed (Instagram/VSCO style)
+• Touch-first interactions only
+
+## Breakpoint
+Mobile: ≤768px (uses `block lg:hidden`)
+Desktop: >768px (uses `hidden lg:block`)
+
 --- scripts/update-stills.js ---
 // scripts/update-stills.js
 import { readdirSync, readFileSync, writeFileSync } from 'fs';
@@ -5391,7 +5427,7 @@ const { stills, title } = Astro.props;
 
 --- src/components/mobile/VideoSection.astro ---
 ---
-// components/mobile/VideoSection.astro - SIMPLIFIED (no expand/collapse)
+// src/components/mobile/VideoSection.astro - SIMPLIFIED VERSION
 import type { Video } from '../../data/index';
 import PhotoCarousel from './PhotoCarousel.astro';
 import Icons from '../Icons.astro';
@@ -5425,7 +5461,7 @@ const formattedDate = new Date(video.metadata.date).toLocaleDateString('en-US', 
     </div>
   </div>
 
-  <!-- Title & Basic Info -->
+  <!-- SIMPLIFIED METADATA (Country + Year, Places, Date) -->
   <div class="p-5">
     <!-- Country & Year -->
     <div class="mb-3">
@@ -5435,70 +5471,15 @@ const formattedDate = new Date(video.metadata.date).toLocaleDateString('en-US', 
     </div>
 
     <!-- Places -->
-    <div class="flex items-start gap-2 mb-4">
+    <div class="flex items-start gap-2 mb-3">
       <Icons name="location" className="w-4 h-4 mt-0.5 text-gray-500 flex-shrink-0" />
       <p class="text-gray-700 text-base">{video.metadata.places.join(', ')}</p>
     </div>
 
     <!-- Date -->
-    <div class="flex items-center gap-2 text-gray-500 text-sm mb-6">
+    <div class="flex items-center gap-2 text-gray-500 text-sm mb-1">
       <Icons name="calendar" className="w-4 h-4" />
       <span>{formattedDate}</span>
-    </div>
-
-    <!-- Details Section (always visible) -->
-    <div class="details-section space-y-6 pt-4 border-t border-gray-100">
-      <!-- Camera & Gear -->
-      <div class="space-y-2">
-        <div class="flex items-center gap-2 text-gray-500">
-          <Icons name="gear" className="w-4 h-4" />
-          <span class="text-sm font-medium uppercase tracking-wider">Camera & Gear</span>
-        </div>
-        <p class="text-gray-800 text-sm">
-          {video.metadata.camera}{video.metadata.gear ? `, ${video.metadata.gear}` : ''}
-        </p>
-      </div>
-
-      <!-- Region -->
-      <div class="space-y-2">
-        <div class="flex items-center gap-2 text-gray-500">
-          <Icons name="region" className="w-4 h-4" />
-          <span class="text-sm font-medium uppercase tracking-wider">Region</span>
-        </div>
-        <p class="text-gray-800 text-sm">{video.metadata.region}</p>
-      </div>
-
-      <!-- Music -->
-      <div class="space-y-3">
-        <div class="flex items-center gap-2 text-gray-500">
-          <Icons name="music" className="w-4 h-4" />
-          <span class="text-sm font-medium uppercase tracking-wider">Music</span>
-        </div>
-        
-        <div>
-          <p class="text-gray-900 font-medium text-sm">{video.metadata.music.artist}</p>
-          <p class="text-gray-600 text-xs mt-1">{video.metadata.music.title}</p>
-        </div>
-        
-        <div class="flex gap-4 pt-1">
-          <a 
-            href={video.metadata.music.spotify} 
-            target="_blank" 
-            class="text-gray-700 hover:text-gray-900 inline-flex items-center gap-2 transition-colors text-sm"
-          >
-            <Icons name="spotify" className="w-4 h-4" />
-            <span>Spotify</span>
-          </a>
-          <a 
-            href={video.metadata.music.youtube} 
-            target="_blank" 
-            class="text-gray-700 hover:text-gray-900 inline-flex items-center gap-2 transition-colors text-sm"
-          >
-            <Icons name="youtube" className="w-4 h-4" />
-            <span>YouTube</span>
-          </a>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -5523,8 +5504,7 @@ const formattedDate = new Date(video.metadata.date).toLocaleDateString('en-US', 
 
 --- src/components/mobile/Header.astro ---
 ---
-// components/mobile/Header.astro
-import Icons from '../Icons.astro';
+// components/mobile/Header.astro - SIMPLIFIED (no stats toggle)
 
 interface Props {
   title?: string;
@@ -5537,89 +5517,35 @@ const {
   subtitle = "JON UGARTE", 
   sortedVideos 
 } = Astro.props;
-
-const totalVideos = sortedVideos.length;
-const totalCountries = new Set(sortedVideos.map(v => v.metadata.country)).size;
-const totalStills = sortedVideos.reduce((sum, video) => sum + video.stills.length, 0);
 ---
 
 <!-- Mobile Header -->
 <header 
-  class="mobile-header sticky top-0 z-40 w-full bg-white/95 backdrop-blur-sm supports-[backdrop-filter]:bg-white/60 border-b border-gray-200 transition-all duration-300"
-  data-header
+  class="mobile-header sticky top-0 z-40 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200 transition-transform duration-300"
+  style="padding-top: env(safe-area-inset-top);"
 >
   <div class="px-4 py-3">
-    <!-- Minimal header content -->
-    <div class="flex items-center justify-between">
-      <!-- Title -->
-      <div>
-        <p class="text-xs font-medium text-gray-500 uppercase tracking-widest mb-0.5">
-          {subtitle}
-        </p>
-        <h1 class="text-lg font-light text-gray-900 tracking-tight">
-          {title}
-        </h1>
-      </div>
-
-      <!-- Stats toggle button (optional) -->
-      <button 
-        class="stats-toggle p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100 transition-colors"
-        aria-label="Show stats"
-        data-stats-toggle
-      >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Stats panel (hidden by default) -->
-    <div 
-      class="stats-panel mt-3 pt-3 border-t border-gray-100 overflow-hidden"
-      style="max-height: 0; opacity: 0;"
-      data-stats-panel
-    >
-      <div class="grid grid-cols-3 gap-4 text-center">
-        <div class="space-y-1">
-          <div class="flex items-center justify-center gap-1.5 text-gray-500">
-            <Icons name="film" className="w-3.5 h-3.5" />
-            <span class="text-xs font-medium">Videos</span>
-          </div>
-          <p class="text-lg font-semibold text-gray-900">{totalVideos}</p>
-        </div>
-
-        <div class="space-y-1">
-          <div class="flex items-center justify-center gap-1.5 text-gray-500">
-            <Icons name="country" className="w-3.5 h-3.5" />
-            <span class="text-xs font-medium">Countries</span>
-          </div>
-          <p class="text-lg font-semibold text-gray-900">{totalCountries}</p>
-        </div>
-
-        <div class="space-y-1">
-          <div class="flex items-center justify-center gap-1.5 text-gray-500">
-            <Icons name="gear" className="w-3.5 h-3.5" />
-            <span class="text-xs font-medium">Stills</span>
-          </div>
-          <p class="text-lg font-semibold text-gray-900">{totalStills}</p>
-        </div>
-      </div>
+    <!-- Simple centered title only -->
+    <div class="text-center">
+      <p class="text-xs font-medium text-gray-500 uppercase tracking-widest mb-0.5">
+        {subtitle}
+      </p>
+      <h1 class="text-lg font-light text-gray-900 tracking-tight">
+        {title}
+      </h1>
     </div>
   </div>
 </header>
 
 <style>
-  /* Mobile header styles */
   .mobile-header {
     padding-top: env(safe-area-inset-top);
   }
 
   .mobile-header.hidden {
     transform: translateY(-100%);
-    opacity: 0;
   }
 
-  /* Hide on desktop */
   @media (min-width: 769px) {
     .mobile-header {
       display: none;
@@ -5627,158 +5553,78 @@ const totalStills = sortedVideos.reduce((sum, video) => sum + video.stills.lengt
   }
 </style>
 
+<!-- Simple scroll behavior -->
 <script>
 {
-  // Self-executing function
-  (function() {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initMobileHeader);
-    } else {
-      initMobileHeader();
-    }
-
-    function initMobileHeader() {
-      const header = document.querySelector('[data-header]') as HTMLElement;
-      const statsToggle = document.querySelector('[data-stats-toggle]') as HTMLButtonElement;
-      const statsPanel = document.querySelector('[data-stats-panel]') as HTMLElement;
-
-      if (!header) return;
-
-      // Scroll behavior - hide/show header
-      let lastScrollTop = 0;
-      const headerHeight = header.offsetHeight;
-      let isStatsOpen = false;
-
-      window.addEventListener('scroll', () => {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        // Show/hide header based on scroll direction
-        if (scrollTop > lastScrollTop && scrollTop > headerHeight) {
-          // Scrolling down, hide header
-          header.classList.add('hidden');
-        } else {
-          // Scrolling up, show header
-          header.classList.remove('hidden');
-        }
-        
-        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-      }, { passive: true });
-
-      // Toggle stats panel
-      if (statsToggle && statsPanel) {
-        statsToggle.addEventListener('click', () => {
-          isStatsOpen = !isStatsOpen;
-          
-          if (isStatsOpen) {
-            // Open stats
-            statsPanel.style.maxHeight = statsPanel.scrollHeight + 'px';
-            statsPanel.style.opacity = '1';
-            statsPanel.style.marginTop = '0.75rem';
-            statsPanel.style.paddingTop = '0.75rem';
-            statsToggle.setAttribute('aria-label', 'Hide stats');
-          } else {
-            // Close stats
-            statsPanel.style.maxHeight = '0';
-            statsPanel.style.opacity = '0';
-            statsPanel.style.marginTop = '0';
-            statsPanel.style.paddingTop = '0';
-            statsToggle.setAttribute('aria-label', 'Show stats');
-          }
-        });
+  document.addEventListener('DOMContentLoaded', () => {
+    const header = document.querySelector('.mobile-header');
+    if (!header) return;
+    
+    let lastScrollTop = 0;
+    
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      if (scrollTop > lastScrollTop && scrollTop > 100) {
+        // Scrolling down, hide header
+        header.classList.add('hidden');
+      } else {
+        // Scrolling up, show header
+        header.classList.remove('hidden');
       }
-
-      // Close stats when clicking outside on mobile
-      document.addEventListener('click', (e: MouseEvent) => {
-        if (!isStatsOpen || !statsPanel || !statsToggle) return;
-        
-        const target = e.target as Node;
-        if (!statsPanel.contains(target) && target !== statsToggle) {
-          isStatsOpen = false;
-          statsPanel.style.maxHeight = '0';
-          statsPanel.style.opacity = '0';
-          statsPanel.style.marginTop = '0';
-          statsPanel.style.paddingTop = '0';
-          statsToggle.setAttribute('aria-label', 'Show stats');
-        }
-      });
-    }
-  })();
+      
+      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    });
+  });
 }
 </script>
 
 --- src/components/mobile/PhotoCarousel.astro ---
 ---
-// components/mobile/PhotoCarousel.astro
+// components/mobile/PhotoCarousel.astro - CSS ONLY (PROPER WIDTH)
 interface Props {
   stills: string[];
   title: string;
 }
 
 const { stills, title } = Astro.props;
+
+const getThumbnail = (image: string) => {
+  return image.includes('.webp') 
+    ? image.replace('.webp', '-thumb.webp')
+    : image;
+};
 ---
 
 <div class="mobile-photo-carousel">
-  <!-- Header with dots indicator -->
   <div class="flex items-center justify-between mb-4">
     <h3 class="text-xs font-medium text-gray-500 uppercase tracking-widest">
       Film Stills • {stills.length} images
     </h3>
-    <div class="flex gap-1.5 dots-container">
-      {stills.map((_, index) => (
-        <button 
-          class="dot w-2 h-2 rounded-full bg-gray-300 transition-all duration-200"
-          data-index={index}
-          aria-label={`Go to image ${index + 1}`}
-        ></button>
-      ))}
-    </div>
+    <span class="text-xs text-gray-400">Swipe →</span>
   </div>
   
   {stills.length > 0 ? (
+    <!-- SIMPLIFIED: Just use the container without complex calculations -->
     <div class="relative">
-      <!-- Carousel Container -->
-      <div 
-        class="carousel-container flex overflow-x-auto scrollbar-hide snap-x snap-mandatory"
-        style="scroll-behavior: smooth;"
-        data-carousel
-      >
-        {stills.map((image, index) => {
-          // Get thumbnail path
-          const thumbnail = image.includes('.webp') 
-            ? image.replace('.webp', '-thumb.webp')
-            : image;
-          
-          return (
-            <div class="carousel-item flex-shrink-0 w-full snap-center px-1">
+      <div class="overflow-x-auto snap-x snap-mandatory scrollbar-hide">
+        <div class="flex">
+          {stills.map((image, index) => (
+            <!-- KEY FIX: Use full width of parent with proper box-sizing -->
+            <div class="flex-shrink-0 w-full snap-center px-4 box-border">
               <div class="relative rounded-xl overflow-hidden bg-gray-100 aspect-[16/9]">
-                <!-- SIMPLE IMAGE TAG - NO SPINNER, NO PROGRESSIVE LOADING -->
                 <img
-                  src={thumbnail}
+                  src={getThumbnail(image)}
                   alt={`Still ${index + 1} from ${title}`}
                   class="w-full h-full object-cover"
                   loading="lazy"
                   width="375"
                   height="211"
-                  data-index={index}
                 />
               </div>
             </div>
-          );
-        })}
-      </div>
-
-      <!-- Navigation buttons (optional, for accessibility) -->
-      <div class="flex justify-center mt-4 gap-3">
-        <button class="carousel-prev p-2 text-gray-500 hover:text-gray-700" aria-label="Previous image">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <button class="carousel-next p-2 text-gray-500 hover:text-gray-700" aria-label="Next image">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
+          ))}
+        </div>
       </div>
     </div>
   ) : (
@@ -5786,199 +5632,35 @@ const { stills, title } = Astro.props;
   )}
   
   <style>
-    /* Mobile carousel styles */
     .mobile-photo-carousel {
       touch-action: pan-x pinch-zoom;
     }
-
-    .carousel-container {
-      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-      scrollbar-width: none; /* Firefox */
+    
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
-
-    .carousel-container::-webkit-scrollbar {
-      display: none; /* Chrome, Safari */
+    
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
     }
-
-    .carousel-item {
+    
+    /* KEY FIX: Ensure proper sizing */
+    .mobile-photo-carousel > div > div {
+      width: 100%;
+    }
+    
+    .mobile-photo-carousel .snap-center {
+      width: 100%;
       scroll-snap-align: center;
     }
-
-    .dot.active {
-      background-color: #4b5563; /* gray-700 */
-      transform: scale(1.2);
-    }
-
-    .image-loading {
-      opacity: 1;
-      transition: opacity 0.3s;
-    }
-
-    .image-loading.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    /* Hide on desktop */
+    
     @media (min-width: 769px) {
       .mobile-photo-carousel {
         display: none;
       }
     }
   </style>
-
-  <!-- JavaScript for mobile carousel -->
-   <!-- Replace the entire <script> section in PhotoCarousel.astro with this: -->
-
-<script>
-{
-  // Wait for DOM to be ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCarousel);
-  } else {
-    initCarousel();
-  }
-
-  function initCarousel() {
-    const currentScript = document.currentScript;
-    if (!currentScript) return;
-
-    const carousel = currentScript.closest('.mobile-photo-carousel');
-    if (!carousel) return;
-
-    const container = carousel.querySelector('[data-carousel]') as HTMLElement;
-    const dots = carousel.querySelectorAll('.dot');
-    const prevBtn = carousel.querySelector('.carousel-prev') as HTMLButtonElement;
-    const nextBtn = carousel.querySelector('.carousel-next') as HTMLButtonElement;
-    const images = carousel.querySelectorAll('img');
-
-    if (!container || dots.length === 0) return;
-
-    const firstItem = container.firstElementChild as HTMLElement;
-    if (!firstItem) return;
-
-    // Initialize dots
-    dots[0]?.classList.add('active');
-
-    // Update dots based on scroll position
-    const updateDots = () => {
-      const scrollLeft = container.scrollLeft;
-      const itemWidth = firstItem.offsetWidth || 0;
-      if (itemWidth === 0) return;
-      
-      const currentIndex = Math.round(scrollLeft / itemWidth);
-      
-      dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentIndex);
-      });
-    };
-
-    // Scroll to specific index
-    const scrollToIndex = (index: number) => {
-      const itemWidth = firstItem.offsetWidth || 0;
-      if (itemWidth === 0) return;
-      
-      container.scrollTo({
-        left: index * itemWidth,
-        behavior: 'smooth'
-      });
-    };
-
-    // Click dot to navigate
-    dots.forEach((dot, index) => {
-      dot.addEventListener('click', () => scrollToIndex(index));
-    });
-
-    // Previous/next buttons
-    prevBtn?.addEventListener('click', () => {
-      const scrollLeft = container.scrollLeft;
-      const itemWidth = firstItem.offsetWidth || 0;
-      if (itemWidth === 0) return;
-      
-      const currentIndex = Math.floor(scrollLeft / itemWidth);
-      scrollToIndex(Math.max(0, currentIndex - 1));
-    });
-
-    nextBtn?.addEventListener('click', () => {
-      const scrollLeft = container.scrollLeft;
-      const itemWidth = firstItem.offsetWidth || 0;
-      if (itemWidth === 0) return;
-      
-      const currentIndex = Math.floor(scrollLeft / itemWidth);
-      scrollToIndex(Math.min(dots.length - 1, currentIndex + 1));
-    });
-
-    // Update dots on scroll
-    container.addEventListener('scroll', updateDots);
-
-    // Load higher quality images when visible
-    if (images.length > 0) {
-      const imageObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const img = entry.target as HTMLImageElement;
-            const highResSrc = img.getAttribute('data-src');
-            
-            if (highResSrc && img.src !== highResSrc) {
-              const tempImg = new Image();
-              tempImg.onload = () => {
-                img.src = highResSrc;
-                img.classList.add('loaded');
-                // Hide loading spinner
-                const loadingEl = img.parentElement?.querySelector('.image-loading');
-                if (loadingEl) {
-                  loadingEl.classList.add('hidden');
-                }
-              };
-              tempImg.src = highResSrc;
-            }
-            
-            imageObserver.unobserve(img);
-          }
-        });
-      }, {
-        rootMargin: '50px' // Start loading before it's fully visible
-      });
-
-      images.forEach(img => imageObserver.observe(img));
-    }
-
-    // Touch swipe handling with proper typing
-    let startX = 0;
-    let scrollLeft = 0;
-    let isDragging = false;
-
-    container.addEventListener('touchstart', (e: TouchEvent) => {
-      startX = e.touches[0].pageX;
-      scrollLeft = container.scrollLeft;
-      isDragging = true;
-    });
-
-    container.addEventListener('touchmove', (e: TouchEvent) => {
-      if (!isDragging) return;
-      e.preventDefault();
-      
-      const x = e.touches[0].pageX;
-      const walk = (x - startX) * 2; // Multiply for better feel
-      
-      container.scrollLeft = scrollLeft - walk;
-    });
-
-    container.addEventListener('touchend', () => {
-      isDragging = false;
-      
-      // Snap to nearest item
-      const itemWidth = firstItem.offsetWidth || 0;
-      if (itemWidth === 0) return;
-      
-      const currentScroll = container.scrollLeft;
-      const targetIndex = Math.round(currentScroll / itemWidth);
-      
-      scrollToIndex(targetIndex);
-    });
-  }
-}
-</script>
 </div>
 
 --- src/layouts/Layout.astro ---
@@ -6473,101 +6155,80 @@ export function getVideoBySlug(slug: string): Video | undefined {
 
 --- src/pages/index.astro ---
 ---
-// components/mobile/Header.astro - UPDATED (no hamburger)
-
-interface Props {
-  title?: string;
-  subtitle?: string;
-  sortedVideos: Array<any>;
-}
-
-const { 
-  title = "Travel Videos", 
-  subtitle = "JON UGARTE", 
-  sortedVideos 
-} = Astro.props;
+// src/pages/index.astro - FINAL CORRECT VERSION
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import MobileHeader from '../components/mobile/Header.astro';
+import VideoSection from '../components/VideoSection.astro';
+import MobileVideoSection from '../components/mobile/VideoSection.astro';
+import Footer from '../components/Footer.astro';
+import Frame from '../components/Frame.astro';
+import { sortedVideos } from '../data/index';
 ---
 
-<!-- Mobile Header -->
-<header 
-  class="mobile-header sticky top-0 z-40 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200 transition-transform duration-300"
-  style="padding-top: env(safe-area-inset-top);"
->
-  <div class="px-4 py-3">
-    <!-- Simple centered title only -->
-    <div class="text-center">
-      <p class="text-xs font-medium text-gray-500 uppercase tracking-widest mb-0.5">
-        {subtitle}
-      </p>
-      <h1 class="text-lg font-light text-gray-900 tracking-tight">
-        {title}
-      </h1>
+<Layout>
+  <main class="min-h-screen bg-gradient-to-b from-gray-100 to-white">
+    <!-- DESKTOP HEADER (hidden on mobile) -->
+    <div class="hidden md:block">
+      <Header sortedVideos={sortedVideos} />
     </div>
-  </div>
-</header>
 
-<style>
-  .mobile-header {
-    padding-top: env(safe-area-inset-top);
-  }
+    <!-- MOBILE HEADER (hidden on desktop) -->
+    <div class="block md:hidden">
+      <MobileHeader sortedVideos={sortedVideos} />
+    </div>
 
-  .mobile-header.hidden {
-    transform: translateY(-100%);
-  }
+    <!-- DESKTOP VIDEOS -->
+    <div class="hidden md:block">
+      <div class="max-w-6xl mx-auto px-4 sm:px-8 pb-12">
+        <div class="space-y-8">
+          {sortedVideos.map((video) => (
+            <Frame>
+              <VideoSection video={video} />
+            </Frame>
+          ))}
+        </div>
+      </div>
+    </div>
 
-  @media (min-width: 769px) {
-    .mobile-header {
-      display: none;
-    }
-  }
-</style>
+    <!-- MOBILE VIDEOS -->
+    <div class="block md:hidden">
+      <div class="px-4 pb-12">
+        <div class="space-y-4">
+          {sortedVideos.map((video) => (
+            <MobileVideoSection video={video} />
+          ))}
+        </div>
+      </div>
+    </div>
 
-<!-- Simple scroll behavior -->
-<script>
-{
-  document.addEventListener('DOMContentLoaded', () => {
-    const header = document.querySelector('.mobile-header');
-    if (!header) return;
-    
-    let lastScrollTop = 0;
-    
-    window.addEventListener('scroll', () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      
-      if (scrollTop > lastScrollTop && scrollTop > 100) {
-        // Scrolling down, hide header
-        header.classList.add('hidden');
-      } else {
-        // Scrolling up, show header
-        header.classList.remove('hidden');
-      }
-      
-      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-    });
-  });
-}
-</script>
+    <!-- FOOTER (desktop only) - YOUR VERSION IS CORRECT! -->
+    <div class="hidden md:block">
+      <Footer />
+    </div>
+  </main>
+</Layout>
 
 ================================================================================
 METADATA
 ================================================================================
 
 Files Parsed: 39
-Total Characters: 209178
+Total Characters: 197560
 
 File List:
 ----------------------------------------
 .astro/content.d.ts: 6942 characters
 .astro/data-store.json: 1549 characters
 .astro/settings.json: 58 characters
-.astro/types.d.ts: 39 characters
+.astro/types.d.ts: 76 characters
 .vercel/project.json: 120 characters
 .vscode/extensions.json: 87 characters
 .vscode/launch.json: 207 characters
 README.md: 6424 characters
 other/2025_12_31_improvements-prompt.md: 43195 characters
 other/2026_01-01_improvements-look-and-feel.md: 85577 characters
-other/2026_01_05_movile-version.md: 2993 characters
+other/2026_01_05_movile-version.md: 3980 characters
 package.json: 548 characters
 scripts/optimize-images.js: 8155 characters
 scripts/update-stills.js: 1458 characters
@@ -6577,9 +6238,9 @@ src/components/Header.astro: 1317 characters
 src/components/Icons.astro: 4799 characters
 src/components/PhotoCarousel.astro: 2093 characters
 src/components/VideoSection.astro: 5724 characters
-src/components/mobile/Header.astro: 6051 characters
-src/components/mobile/PhotoCarousel.astro: 8303 characters
-src/components/mobile/VideoSection.astro: 4226 characters
+src/components/mobile/Header.astro: 1733 characters
+src/components/mobile/PhotoCarousel.astro: 2184 characters
+src/components/mobile/VideoSection.astro: 2152 characters
 src/data/index.ts: 1529 characters
 src/data/videos/croatia-2015.json: 1098 characters
 src/data/videos/greece-2016.json: 1033 characters
@@ -6592,7 +6253,7 @@ src/data/videos/tenerife-2024.json: 1548 characters
 src/data/videos/tokyo-2025.json: 1375 characters
 src/data/videos/venice-2018.json: 1021 characters
 src/layouts/Layout.astro: 1147 characters
-src/pages/index.astro: 1727 characters
+src/pages/index.astro: 1596 characters
 src/styles/global.css: 720 characters
 tools/config.json: 235 characters
 tsconfig.json: 109 characters
@@ -6680,6 +6341,6 @@ ju-travel-video/
 └── tsconfig.json
 
 Generated at:
-Local: 2026-01-06 12:42:34 
-UTC:   2026-01-06 11:42:34 UTC
-Timestamp: 1767699754
+Local: 2026-01-15 08:40:49 
+UTC:   2026-01-15 07:40:49 UTC
+Timestamp: 1768462849
