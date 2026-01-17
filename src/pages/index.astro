@@ -7,10 +7,14 @@ import VideoSection from '../components/VideoSection.astro';
 import MobileVideoSection from '../components/mobile/VideoSection.astro';
 import Footer from '../components/Footer.astro';
 import Frame from '../components/Frame.astro';
+import Gallery from '../components/Gallery.astro'; // ADD THIS IMPORT
 import { sortedVideos } from '../data/index';
 ---
 
 <Layout>
+  <!-- Include Gallery component once -->
+  <Gallery />
+  
   <main class="min-h-screen bg-gradient-to-b from-gray-100 to-white">
     <!-- DESKTOP HEADER (hidden on mobile) -->
     <div class="hidden md:block">
@@ -46,7 +50,7 @@ import { sortedVideos } from '../data/index';
       </div>
     </div>
 
-    <!-- FOOTER (desktop only) - YOUR VERSION IS CORRECT! -->
+    <!-- FOOTER (desktop only) -->
     <div class="hidden md:block">
       <Footer />
     </div>

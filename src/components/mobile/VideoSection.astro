@@ -56,9 +56,13 @@ const formattedDate = new Date(video.metadata.date).toLocaleDateString('en-US', 
   </div>
 
   <!-- Photo Carousel -->
-  <div class="px-5 pb-5">
-    <PhotoCarousel stills={video.stills} title={video.title} />
-  </div>
+  <PhotoCarousel 
+    stills={video.stills}
+    title={video.title}
+    videoSlug={video.slug}
+    country={video.metadata.country}
+    year={new Date(video.metadata.date).getFullYear().toString()}
+  />
 
   <style>
     .mobile-video-card {

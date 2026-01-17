@@ -1,11 +1,19 @@
 ---
-// src/components/PhotoCarousel.astro - UPDATED
+// src/components/PhotoCarousel.astro - CORRECTED
 interface Props {
   stills: string[];
   title: string;
+  videoSlug: string;    // Make sure this is passed
+  country: string;      // Make sure this is passed  
+  year: string;         // Make sure this is passed
 }
 
-const { stills, title } = Astro.props;
+const { stills, title, videoSlug, country, year } = Astro.props;
+
+// Helper to get thumbnail
+const getThumbnail = (image: string) => {
+  return image.replace('.webp', '-thumb.webp');
+};
 ---
 
 <div class="photo-carousel mt-6">
@@ -18,26 +26,33 @@ const { stills, title } = Astro.props;
   
   {stills.length > 0 ? (
     <div class="relative">
-      <!-- Removed gradients for cleaner look -->
       <div class="flex space-x-3 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
         {stills.map((image, index) => (
           <div class="flex-shrink-0 w-64 snap-center">
-            <div class="relative rounded overflow-hidden bg-gray-100 aspect-[16/9] group cursor-pointer">
-              <img
-                src={image}
-                alt={`Still ${index + 1} from ${title}`}
-                class="w-full h-full object-cover transition-all duration-400 ease-out group-hover:scale-105"
-                loading="lazy"
-                width="384"
-                height="216"
-              />
-              <!-- Simplified overlay -->
-              <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <!-- Number badge - smaller -->
-              <div class="absolute top-2 right-2 bg-black/80 text-white text-xs font-medium px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                {index + 1}/{stills.length}
+            <!-- CRITICAL: Add the GLightbox link wrapper -->
+            <a
+              href={image}  
+              class="glightbox block"
+              data-gallery={videoSlug}
+              data-description={`${country} ${year}`}
+            >
+              <div class="relative rounded overflow-hidden bg-gray-100 aspect-[16/9] group">
+                <img
+                  src={getThumbnail(image)}
+                  alt={`Still ${index + 1} from ${title}`}
+                  class="w-full h-full object-cover transition-all duration-400 ease-out group-hover:scale-105"
+                  loading="lazy"
+                  width="384"
+                  height="216"
+                />
+                <!-- Overlay gradient -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <!-- Number badge -->
+                <div class="absolute top-2 right-2 bg-black/80 text-white text-xs font-medium px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  {index + 1}/{stills.length}
+                </div>
               </div>
-            </div>
+            </a>
           </div>
         ))}
       </div>
@@ -45,19 +60,4 @@ const { stills, title } = Astro.props;
   ) : (
     <p class="text-gray-400 text-sm italic">No stills available</p>
   )}
-  
-  <style>
-    .scrollbar-hide {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-    .scrollbar-hide::-webkit-scrollbar {
-      display: none;
-    }
-    
-    /* Smooth scrolling */
-    .snap-x {
-      scroll-behavior: smooth;
-    }
-  </style>
 </div>

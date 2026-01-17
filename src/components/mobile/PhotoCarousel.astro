@@ -1,16 +1,17 @@
 ---
-// components/mobile/PhotoCarousel.astro - CSS ONLY (PROPER WIDTH)
+// src/components/mobile/PhotoCarousel.astro - UPDATED
 interface Props {
   stills: string[];
   title: string;
+  videoSlug: string;
+  country: string;
+  year: string;
 }
 
-const { stills, title } = Astro.props;
+const { stills, title, videoSlug, country, year } = Astro.props;
 
 const getThumbnail = (image: string) => {
-  return image.includes('.webp') 
-    ? image.replace('.webp', '-thumb.webp')
-    : image;
+  return image.replace('.webp', '-thumb.webp');
 };
 ---
 
@@ -23,23 +24,29 @@ const getThumbnail = (image: string) => {
   </div>
   
   {stills.length > 0 ? (
-    <!-- SIMPLIFIED: Just use the container without complex calculations -->
     <div class="relative">
       <div class="overflow-x-auto snap-x snap-mandatory scrollbar-hide">
         <div class="flex">
           {stills.map((image, index) => (
-            <!-- KEY FIX: Use full width of parent with proper box-sizing -->
             <div class="flex-shrink-0 w-full snap-center px-4 box-border">
-              <div class="relative rounded-xl overflow-hidden bg-gray-100 aspect-[16/9]">
-                <img
-                  src={getThumbnail(image)}
-                  alt={`Still ${index + 1} from ${title}`}
-                  class="w-full h-full object-cover"
-                  loading="lazy"
-                  width="375"
-                  height="211"
-                />
-              </div>
+              <!-- GLightbox link wrapper (SAME AS DESKTOP) -->
+              <a
+                href={image}
+                class="glightbox block"
+                data-gallery={videoSlug}
+                data-description={`${country} ${year}`}
+              >
+                <div class="relative rounded-xl overflow-hidden bg-gray-100 aspect-[16/9]">
+                  <img
+                    src={getThumbnail(image)}
+                    alt={`Still ${index + 1} from ${title}`}
+                    class="w-full h-full object-cover"
+                    loading="lazy"
+                    width="375"
+                    height="211"
+                  />
+                </div>
+              </a>
             </div>
           ))}
         </div>
@@ -63,7 +70,6 @@ const getThumbnail = (image: string) => {
       display: none;
     }
     
-    /* KEY FIX: Ensure proper sizing */
     .mobile-photo-carousel > div > div {
       width: 100%;
     }
@@ -71,6 +77,13 @@ const getThumbnail = (image: string) => {
     .mobile-photo-carousel .snap-center {
       width: 100%;
       scroll-snap-align: center;
+    }
+    
+    /* Ensure GLightbox links look correct */
+    a.glightbox {
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
     
     @media (min-width: 769px) {

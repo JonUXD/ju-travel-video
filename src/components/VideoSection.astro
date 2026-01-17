@@ -141,6 +141,12 @@ const { video } = Astro.props;
 
   <!-- Photo Carousel Below (Full width) -->
   <div class="mt-6">
-    <PhotoCarousel stills={video.stills} title={video.title} />
+  <PhotoCarousel 
+    stills={video.stills} 
+    title={video.title}
+    videoSlug={video.slug}
+    country={video.metadata.country}
+    year={new Date(video.metadata.date).getFullYear().toString()}
+  />
   </div>
 </section>
