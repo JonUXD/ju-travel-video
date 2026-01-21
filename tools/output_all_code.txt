@@ -461,7 +461,7 @@ declare module 'astro:content' {
 
 --- .astro/types.d.ts ---
 /// <reference types="astro/client" />
-
+/// <reference path="content.d.ts" />
 
 --- tools/config.json ---
 {
@@ -5296,6 +5296,98 @@ const currentYear = new Date().getFullYear();
   </div>
 </footer>
 
+--- src/components/ActiveFilters.astro ---
+---
+// src/components/ActiveFilters.astro
+interface Props {
+  filters: {
+    country?: string;
+    year?: string;
+    location?: string;
+    camera?: string;
+  };
+}
+
+const { filters } = Astro.props;
+const hasFilters = filters.country || filters.year || filters.location || filters.camera;
+---
+
+{hasFilters && (
+  <div class="max-w-6xl mx-auto px-4 sm:px-8 py-3">
+    <div class="flex flex-wrap items-center gap-2 text-sm">
+      <span class="text-gray-500">Active filters:</span>
+      
+      {filters.country && (
+        <span class="inline-flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs">
+          Country: {filters.country}
+          <a 
+            href={`?${new URLSearchParams({
+              ...(filters.year && { year: filters.year }),
+              ...(filters.location && { location: filters.location }),
+              ...(filters.camera && { camera: filters.camera })
+            })}`}
+            class="text-gray-400 hover:text-gray-600 ml-1 no-underline"
+          >
+            ×
+          </a>
+        </span>
+      )}
+      
+      {filters.year && (
+        <span class="inline-flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs">
+          Year: {filters.year}
+          <a 
+            href={`?${new URLSearchParams({
+              ...(filters.country && { country: filters.country }),
+              ...(filters.location && { location: filters.location }),
+              ...(filters.camera && { camera: filters.camera })
+            })}`}
+            class="text-gray-400 hover:text-gray-600 ml-1 no-underline"
+          >
+            ×
+          </a>
+        </span>
+      )}
+      
+      {filters.location && (
+        <span class="inline-flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs">
+          Location: {filters.location}
+          <a 
+            href={`?${new URLSearchParams({
+              ...(filters.country && { country: filters.country }),
+              ...(filters.year && { year: filters.year }),
+              ...(filters.camera && { camera: filters.camera })
+            })}`}
+            class="text-gray-400 hover:text-gray-600 ml-1 no-underline"
+          >
+            ×
+          </a>
+        </span>
+      )}
+      
+      {filters.camera && (
+        <span class="inline-flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs">
+          Camera: {filters.camera}
+          <a 
+            href={`?${new URLSearchParams({
+              ...(filters.country && { country: filters.country }),
+              ...(filters.year && { year: filters.year }),
+              ...(filters.location && { location: filters.location })
+            })}`}
+            class="text-gray-400 hover:text-gray-600 ml-1 no-underline"
+          >
+            ×
+          </a>
+        </span>
+      )}
+      
+      <a href="?" class="text-gray-500 hover:text-gray-700 text-xs ml-2">
+        Clear all
+      </a>
+    </div>
+  </div>
+)}
+
 --- src/components/VideoSection.astro ---
 ---
 // src/components/VideoSection.astro - Updated with flexible location cell
@@ -5452,14 +5544,11 @@ const { video } = Astro.props;
 
 --- src/components/Gallery.astro ---
 ---
-// src/components/Gallery.astro
+// src/components/Gallery.astro - UPDATED with better arrow visibility
 // Gallery component initializes GLightbox with custom styling
 // Include this component once on any page that needs the gallery
 ---
 
-<div class="fixed bottom-4 right-4 bg-green-500 text-white px-3 py-1 rounded text-sm z-50">
-  Gallery Loaded ✓
-</div>
 <style>
   /* GLightbox Custom Styling - Clean, matches your monochrome aesthetic */
   
@@ -5491,53 +5580,80 @@ const { video } = Astro.props;
     display: none !important;
   }
   
-  /* 5. NAVIGATION ARROWS - Minimal design */
+  /* 5. NAVIGATION ARROWS - COMPLETE REDESIGN for visibility */
   :global(.gbtn) {
-    opacity: 0.7 !important;
-    transition: opacity 0.2s ease !important;
-    background: none !important;
-    width: 48px !important;
-    height: 48px !important;
+    opacity: 0.9 !important;
+    transition: all 0.2s ease !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    width: 56px !important;
+    height: 56px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
   
   :global(.gbtn:hover) {
     opacity: 1 !important;
+    background: rgba(0, 0, 0, 0.9) !important;
+    transform: scale(1.05) !important;
   }
   
   :global(.gbtn svg) {
     fill: white !important;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)) !important;
+    width: 24px !important;
+    height: 24px !important;
+    filter: none !important;
+    stroke: none !important;
   }
   
-  /* 6. CLOSE BUTTON - Custom X design */
+  /* Position arrows closer to edges */
+  :global(.gnext) {
+    right: 24px !important;
+  }
+  
+  :global(.gprev) {
+    left: 24px !important;
+  }
+  
+  /* 6. CLOSE BUTTON - Custom X design with dark background */
   :global(.glightbox-close) {
     top: 24px !important;
     right: 24px !important;
-    width: 40px !important;
-    height: 40px !important;
-    background: none !important;
-    font-size: 0 !important; /* Hide default X */
+    width: 56px !important;
+    height: 56px !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    border-radius: 50% !important;
+    font-size: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s ease !important;
+  }
+  
+  :global(.glightbox-close:hover) {
+    background: rgba(0, 0, 0, 0.9) !important;
+    transform: scale(1.05) !important;
   }
   
   :global(.glightbox-close:before),
   :global(.glightbox-close:after) {
     content: '' !important;
     position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    width: 20px !important;
+    width: 24px !important;
     height: 2px !important;
     background: white !important;
-    opacity: 0.7 !important;
+    border-radius: 1px !important;
+    opacity: 0.9 !important;
     transition: opacity 0.2s ease !important;
   }
   
   :global(.glightbox-close:before) {
-    transform: translate(-50%, -50%) rotate(45deg) !important;
+    transform: rotate(45deg) !important;
   }
   
   :global(.glightbox-close:after) {
-    transform: translate(-50%, -50%) rotate(-45deg) !important;
+    transform: rotate(-45deg) !important;
   }
   
   :global(.glightbox-close:hover:before),
@@ -5553,7 +5669,7 @@ const { video } = Astro.props;
   /* 8. MOBILE OPTIMIZATIONS */
   @media (max-width: 768px) {
     :global(.gslide) {
-      border-radius: 0 !important; /* Full screen on mobile */
+      border-radius: 0 !important;
       max-width: 100vw !important;
       max-height: 100vh !important;
     }
@@ -5564,8 +5680,26 @@ const { video } = Astro.props;
     }
     
     :global(.gbtn) {
-      width: 40px !important;
-      height: 40px !important;
+      width: 48px !important;
+      height: 48px !important;
+      background: rgba(0, 0, 0, 0.8) !important;
+    }
+    
+    :global(.gbtn svg) {
+      width: 20px !important;
+      height: 20px !important;
+    }
+    
+    :global(.glightbox-close) {
+      width: 48px !important;
+      height: 48px !important;
+      top: 16px !important;
+      right: 16px !important;
+    }
+    
+    :global(.glightbox-close:before),
+    :global(.glightbox-close:after) {
+      width: 20px !important;
     }
   }
 </style>
@@ -5605,8 +5739,6 @@ const { video } = Astro.props;
     
     console.log('✅ Gallery initialized with custom styling');
   });
-  console.log('Gallery.astro is being processed by Astro');
-
 </script>
 
 --- src/components/Header.astro ---
@@ -6483,58 +6615,6 @@ export function getVideoBySlug(slug: string): Video | undefined {
   ]
 }
 
---- src/pages/test-glightbox.astro ---
----
-// src/pages/test-glightbox.astro
-import Layout from '../layouts/Layout.astro';
-import Gallery from '../components/Gallery.astro';
----
-
-<Layout>
-  <!-- Include Gallery component once per page -->
-  <Gallery />
-  
-  <main class="p-8 max-w-6xl mx-auto">
-    <h1 class="text-3xl font-light text-gray-900 mb-2">Gallery Test</h1>
-    <p class="text-gray-600 mb-8">Click any image to test the gallery</p>
-        
-    <!-- In test-glightbox.astro -->
-    <div class="grid grid-cols-2 gap-4 mb-8">
-    <!-- Tokyo Gallery Group -->
-    <div>
-        <h3 class="font-medium mb-2">Tokyo Gallery (should be separate)</h3>
-        <a href="/images/stills/tokyo-2025/tokyo-2025-stills-01.webp" 
-        class="glightbox" 
-        data-gallery="tokyo-2025">
-        <img src="..." alt="Tokyo 1">
-        </a>
-        <a href="/images/stills/tokyo-2025/tokyo-2025-stills-02.webp"
-        class="glightbox" 
-        data-gallery="tokyo-2025">
-        <img src="..." alt="Tokyo 2">
-        </a>
-    </div>
-    
-    <!-- Iceland Gallery Group -->
-    <div>
-        <h3 class="font-medium mb-2">Iceland Gallery (should be separate)</h3>
-        <a href="/images/stills/iceland-2019/iceland-2019-stills-01.webp"
-        class="glightbox"
-        data-gallery="iceland-2019">
-        <img src="..." alt="Iceland 1">
-        </a>
-        <a href="/images/stills/iceland-2019/iceland-2019-stills-02.webp"
-        class="glightbox"
-        data-gallery="iceland-2019">
-        <img src="..." alt="Iceland 2">
-        </a>
-    </div>
-    </div>    
-    
-
-  </main>
-</Layout>
-
 --- src/pages/index.astro ---
 ---
 // src/pages/index.astro - FINAL CORRECT VERSION
@@ -6600,14 +6680,14 @@ METADATA
 ================================================================================
 
 Files Parsed: 42
-Total Characters: 209120
+Total Characters: 211556
 
 File List:
 ----------------------------------------
 .astro/content.d.ts: 6942 characters
 .astro/data-store.json: 1550 characters
 .astro/settings.json: 58 characters
-.astro/types.d.ts: 39 characters
+.astro/types.d.ts: 76 characters
 .vercel/project.json: 120 characters
 .vscode/extensions.json: 87 characters
 .vscode/launch.json: 207 characters
@@ -6619,9 +6699,10 @@ other/2026_01_15_full_screen_gallery.md: 4995 characters
 package.json: 575 characters
 scripts/optimize-images.js: 8155 characters
 scripts/update-stills.js: 1458 characters
+src/components/ActiveFilters.astro: 2976 characters
 src/components/Footer.astro: 1072 characters
 src/components/Frame.astro: 293 characters
-src/components/Gallery.astro: 4113 characters
+src/components/Gallery.astro: 5089 characters
 src/components/Header.astro: 1317 characters
 src/components/Icons.astro: 4799 characters
 src/components/PhotoCarousel.astro: 2373 characters
@@ -6642,7 +6723,6 @@ src/data/videos/tokyo-2025.json: 1375 characters
 src/data/videos/venice-2018.json: 1021 characters
 src/layouts/Layout.astro: 1147 characters
 src/pages/index.astro: 1698 characters
-src/pages/test-glightbox.astro: 1553 characters
 src/styles/global.css: 720 characters
 tools/config.json: 235 characters
 tsconfig.json: 109 characters
@@ -6688,6 +6768,7 @@ ju-travel-video/
 │   │   │   ├── Header.astro
 │   │   │   ├── PhotoCarousel.astro
 │   │   │   └── VideoSection.astro
+│   │   ├── ActiveFilters.astro
 │   │   ├── Footer.astro
 │   │   ├── Frame.astro
 │   │   ├── Gallery.astro
@@ -6711,8 +6792,7 @@ ju-travel-video/
 │   ├── layouts/
 │   │   └── Layout.astro
 │   ├── pages/
-│   │   ├── index.astro
-│   │   └── test-glightbox.astro
+│   │   └── index.astro
 │   └── styles/
 │       └── global.css
 ├── staging/
@@ -6733,6 +6813,6 @@ ju-travel-video/
 └── tsconfig.json
 
 Generated at:
-Local: 2026-01-17 12:27:01 
-UTC:   2026-01-17 11:27:01 UTC
-Timestamp: 1768649221
+Local: 2026-01-21 19:14:49 
+UTC:   2026-01-21 18:14:49 UTC
+Timestamp: 1769019289

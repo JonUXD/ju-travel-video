@@ -1,0 +1,90 @@
+---
+// src/components/ActiveFilters.astro
+interface Props {
+  filters: {
+    country?: string;
+    year?: string;
+    location?: string;
+    camera?: string;
+  };
+}
+
+const { filters } = Astro.props;
+const hasFilters = filters.country || filters.year || filters.location || filters.camera;
+---
+
+{hasFilters && (
+  <div class="max-w-6xl mx-auto px-4 sm:px-8 py-3">
+    <div class="flex flex-wrap items-center gap-2 text-sm">
+      <span class="text-gray-500">Active filters:</span>
+      
+      {filters.country && (
+        <span class="inline-flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs">
+          Country: {filters.country}
+          <a 
+            href={`?${new URLSearchParams({
+              ...(filters.year && { year: filters.year }),
+              ...(filters.location && { location: filters.location }),
+              ...(filters.camera && { camera: filters.camera })
+            })}`}
+            class="text-gray-400 hover:text-gray-600 ml-1 no-underline"
+          >
+            ×
+          </a>
+        </span>
+      )}
+      
+      {filters.year && (
+        <span class="inline-flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs">
+          Year: {filters.year}
+          <a 
+            href={`?${new URLSearchParams({
+              ...(filters.country && { country: filters.country }),
+              ...(filters.location && { location: filters.location }),
+              ...(filters.camera && { camera: filters.camera })
+            })}`}
+            class="text-gray-400 hover:text-gray-600 ml-1 no-underline"
+          >
+            ×
+          </a>
+        </span>
+      )}
+      
+      {filters.location && (
+        <span class="inline-flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs">
+          Location: {filters.location}
+          <a 
+            href={`?${new URLSearchParams({
+              ...(filters.country && { country: filters.country }),
+              ...(filters.year && { year: filters.year }),
+              ...(filters.camera && { camera: filters.camera })
+            })}`}
+            class="text-gray-400 hover:text-gray-600 ml-1 no-underline"
+          >
+            ×
+          </a>
+        </span>
+      )}
+      
+      {filters.camera && (
+        <span class="inline-flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs">
+          Camera: {filters.camera}
+          <a 
+            href={`?${new URLSearchParams({
+              ...(filters.country && { country: filters.country }),
+              ...(filters.year && { year: filters.year }),
+              ...(filters.location && { location: filters.location })
+            })}`}
+            class="text-gray-400 hover:text-gray-600 ml-1 no-underline"
+          >
+            ×
+          </a>
+        </span>
+      )}
+      
+      <a href="?" class="text-gray-500 hover:text-gray-700 text-xs ml-2">
+        Clear all
+      </a>
+    </div>
+  </div>
+)}
