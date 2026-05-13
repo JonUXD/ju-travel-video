@@ -23,3 +23,12 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 .vercel
+
+# photos in staging folder
+# Ignore all image files in staging folders
+staging/**/*.png
+staging/**/*.jpg
+staging/**/*.jpeg
+staging/**/*.webp
+staging/**/*.JPG
+staging/**/*.PNG
