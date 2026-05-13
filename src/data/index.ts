@@ -9,6 +9,7 @@ import marrakesh2019 from './videos/marrakesh-2019.json';
 import menorca2023 from './videos/menorca-2023.json';
 import tenerife2024 from './videos/tenerife-2024.json';
 import tokyo2025 from './videos/tokyo-2025.json';
+import colombia2026 from './videos/colombia-2026.json';
 
 
 export interface Video {
@@ -46,7 +47,8 @@ export const allVideos: Video[] = [
   marrakesh2019,
   menorca2023,
   tenerife2024,
-  tokyo2025
+  tokyo2025,
+  colombia2026
 ];
 
 // Sorted by date (newest first)

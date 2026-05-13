@@ -1,0 +1,41 @@
+{
+  "id": "colombia-2026",
+  "title": "Colombia | 2026",
+  "slug": "colombia-2026",
+  "youtubeId": "uNz1rPwCX0E",
+  "description": "A travel film from my trip to Colombia with friends (Medellín, Barranquilla, Tayrona, and Santa Marta) in February 2026.",
+  "metadata": {
+    "country": "Colombia",
+    "region": "South America",
+    "places": [
+      "Medellín",
+      "Barranquilla",
+      "Tayrona",
+      "Santa Marta"
+    ],
+    "date": "2026-02-15",
+    "coordinates": [
+      6.2442,
+      -75.5812
+    ],
+    "camera": "Lumix S9",
+    "gear": "18-40mm lens",
+    "music": {
+      "artist": "KAROL G, Manu Chao",
+      "title": "Viajando Por El Mundo",
+      "spotify": "https://open.spotify.com/track/4w6Wpq1KWk485krowaqUIV?si=25b43a2dd65040a4",
+      "youtube": "https://www.youtube.com/watch?v=4HjDhF5Rxr0"
+    }
+  },
+  "stills": [
+    "/images/stills/colombia-2026/colombia-2026-stills-01.webp",
+    "/images/stills/colombia-2026/colombia-2026-stills-02.webp",
+    "/images/stills/colombia-2026/colombia-2026-stills-03.webp",
+    "/images/stills/colombia-2026/colombia-2026-stills-04.webp",
+    "/images/stills/colombia-2026/colombia-2026-stills-05.webp",
+    "/images/stills/colombia-2026/colombia-2026-stills-06.webp",
+    "/images/stills/colombia-2026/colombia-2026-stills-07.webp",
+    "/images/stills/colombia-2026/colombia-2026-stills-08.webp",
+    "/images/stills/colombia-2026/colombia-2026-stills-09.webp"
+  ]
+}

@@ -463,14 +463,6 @@ declare module 'astro:content' {
 /// <reference types="astro/client" />
 /// <reference path="content.d.ts" />
 
---- tools/config.json ---
-{
-  "include_extensions": [".tsx", ".ts", ".json", ".js", ".css", ".md", ".html", ".astro"],
-  "exclude_folders": ["node_modules", "dist", ".git"],
-  "exclude_files": [".env", ".DS_Store", "package-lock.json", "output_all_code.txt"]
-}
-
-
 --- other/2025_12_31_improvements-prompt.md ---
 # 🎬 Travel Video Portfolio — UI/UX Design Iteration Prompt
 
@@ -5737,7 +5729,6 @@ const { video } = Astro.props;
       autoplayVideos: false,
     });
     
-    console.log('✅ Gallery initialized with custom styling');
   });
 </script>
 
@@ -6679,8 +6670,8 @@ import { sortedVideos } from '../data/index';
 METADATA
 ================================================================================
 
-Files Parsed: 42
-Total Characters: 211556
+Files Parsed: 41
+Total Characters: 211259
 
 File List:
 ----------------------------------------
@@ -6702,7 +6693,7 @@ scripts/update-stills.js: 1458 characters
 src/components/ActiveFilters.astro: 2976 characters
 src/components/Footer.astro: 1072 characters
 src/components/Frame.astro: 293 characters
-src/components/Gallery.astro: 5089 characters
+src/components/Gallery.astro: 5027 characters
 src/components/Header.astro: 1317 characters
 src/components/Icons.astro: 4799 characters
 src/components/PhotoCarousel.astro: 2373 characters
@@ -6724,7 +6715,6 @@ src/data/videos/venice-2018.json: 1021 characters
 src/layouts/Layout.astro: 1147 characters
 src/pages/index.astro: 1698 characters
 src/styles/global.css: 720 characters
-tools/config.json: 235 characters
 tsconfig.json: 109 characters
 
 Directory Structure:
@@ -6806,13 +6796,11 @@ ju-travel-video/
 │   ├── tenerife-2024/
 │   ├── tokyo-2025/
 │   └── venice-2018/
-├── tools/
-│   └── config.json
 ├── README.md
 ├── package.json
 └── tsconfig.json
 
 Generated at:
-Local: 2026-01-21 19:14:49 
-UTC:   2026-01-21 18:14:49 UTC
-Timestamp: 1769019289
+Local: 2026-05-12 22:32:28 
+UTC:   2026-05-12 20:32:28 UTC
+Timestamp: 1778617948
