@@ -1,0 +1,42 @@
+{
+  "id": "fez-2025",
+  "title": "Fez | 2025",
+  "slug": "fez-2025",
+  "youtubeId": "z8haKLdIOFo",
+  "description": "A travel film from my trip to Fez, Morocco in November 2025.",
+  "metadata": {
+    "country": "Morocco",
+    "region": "Africa",
+    "places": [
+      "Fez"
+    ],
+    "date": "2025-11-15",
+    "coordinates": [
+      34.0181,
+      -5.0078
+    ],
+    "camera": "Olympus OM-D E-M5 Mark II",
+    "gear": "7 Artisans 35mm f/1.2",
+    "music": {
+      "artist": "Noah Kahan",
+      "title": "Carlo's Song",
+      "spotify": "https://open.spotify.com/track/7qjCmoM2kKXAt2QIPhLVIg?si=2d79c1801041414e",
+      "youtube": "https://www.youtube.com/watch?v=PqkCMX10Ho4"
+    }
+  },
+  "stills": [
+    "/images/stills/fez-2025/fez-2025-stills-01.webp",
+    "/images/stills/fez-2025/fez-2025-stills-02.webp",
+    "/images/stills/fez-2025/fez-2025-stills-03.webp",
+    "/images/stills/fez-2025/fez-2025-stills-04.webp",
+    "/images/stills/fez-2025/fez-2025-stills-05.webp",
+    "/images/stills/fez-2025/fez-2025-stills-06.webp",
+    "/images/stills/fez-2025/fez-2025-stills-07.webp",
+    "/images/stills/fez-2025/fez-2025-stills-08.webp",
+    "/images/stills/fez-2025/fez-2025-stills-09.webp",
+    "/images/stills/fez-2025/fez-2025-stills-10.webp",
+    "/images/stills/fez-2025/fez-2025-stills-11.webp",
+    "/images/stills/fez-2025/fez-2025-stills-12.webp",
+    "/images/stills/fez-2025/fez-2025-stills-13.webp"
+  ]
+}

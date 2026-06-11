@@ -10,6 +10,7 @@ import menorca2023 from './videos/menorca-2023.json';
 import tenerife2024 from './videos/tenerife-2024.json';
 import tokyo2025 from './videos/tokyo-2025.json';
 import colombia2026 from './videos/colombia-2026.json';
+import fez2025 from './videos/fez-2025.json';
 
 
 export interface Video {
@@ -48,7 +49,8 @@ export const allVideos: Video[] = [
   menorca2023,
   tenerife2024,
   tokyo2025,
-  colombia2026
+  fez2025,
+  colombia2026,
 ];
 
 // Sorted by date (newest first)
