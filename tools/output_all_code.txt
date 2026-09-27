@@ -455,7 +455,7 @@ declare module 'astro:content' {
 --- .astro/settings.json ---
 {
 	"_variables": {
-		"lastUpdateCheck": 1778619352996
+		"lastUpdateCheck": 1790533424968
 	}
 }
 
@@ -5053,6 +5053,257 @@ main().catch(error => {
   process.exit(1);
 });
 
+--- prompts/new_video.md ---
+# 🎬 Vibe Coding: Add a New Travel Video
+
+Copy this entire prompt into DeepSeek (or any AI). The AI will guide you step by step. After each step, reply **"done"** to continue.
+
+---
+
+## INSTRUCTIONS FOR THE AI
+
+You are helping me add a new video to my Astro + Tailwind travel video portfolio. I already have:
+
+- The video uploaded to YouTube
+- Screenshots extracted from the video
+
+Guide me through these 6 steps. After each step, wait for me to reply **"done"** before proceeding to the next step.
+
+### Step 1: Collect video information
+
+Ask me for these details:
+
+- YouTube URL
+- Trip date (YYYY-MM-DD)
+- Country
+- Region
+- Places (comma separated)
+- Camera used
+- Gear/Lens
+- Music artist
+- Music title
+- Spotify URL
+- YouTube music URL
+- Short description (1 sentence)
+
+### Step 2: Generate the JSON file
+
+Create the JSON file content using my answers. Tell me to save it as `src/data/videos/{slug}.json` (slug is lowercase with hyphens, e.g., `fez-2025`).
+
+### Step 3: Update index.ts
+
+Tell me exactly what to add to `src/data/index.ts`:
+
+- The import line
+- Where to add the video in the `allVideos` array (newest first)
+
+### Step 4: Prepare screenshots
+
+Tell me to:
+
+- Create folder `staging/{slug}/`
+- Copy my screenshots there (any filenames are fine)
+
+### Step 5: Run optimization
+
+Tell me to run:
+
+```bash
+npm run optimize-images {slug}
+
+Ask me to share the output.
+
+Step 6: Test and deploy
+
+Tell me to:
+
+Run npm run dev to test locally
+Push to GitHub: git add . && git commit -m "Add {slug}" && git push
+PROJECT STRUCTURE REFERENCE
+
+text
+ju-travel-video/
+├── staging/           # Put raw screenshots here
+├── public/images/stills/  # Optimized images go here
+├── src/
+│   ├── data/
+│   │   ├── index.ts   # Import all videos here
+│   │   └── videos/    # JSON files here
+│   └── pages/
+│       └── index.astro
+├── scripts/
+│   ├── optimize-images.js  # Run this after adding screenshots
+│   └── update-stills.js
+└── package.json
+Example JSON structure:
+
+json
+{
+  "id": "fez-2025",
+  "title": "Fez | 2025",
+  "slug": "fez-2025",
+  "youtubeId": "z8haKLdIOFo",
+  "description": "A travel film from my trip to Fez in November 2025.",
+  "metadata": {
+    "country": "Morocco",
+    "region": "Africa",
+    "places": ["Fez"],
+    "date": "2025-11-15",
+    "coordinates": [34.0181, -5.0078],
+    "camera": "Olympus OM-D E-M5 Mark II",
+    "gear": "7 Artisans 35mm f/1.2",
+    "music": {
+      "artist": "Noah Kahan",
+      "title": "Carlo's Song",
+      "spotify": "https://open.spotify.com/track/...",
+      "youtube": "https://www.youtube.com/watch?v=..."
+    }
+  },
+  "stills": []
+}
+START HERE
+
+Ask me for Step 1: my video details.
+
+text
+
+---
+
+## How to use this:
+
+1. **Copy the entire Markdown block above**
+2. **Paste into DeepSeek (or Claude, ChatGPT, etc.)**
+3. **The AI will ask you for your video details**
+4. **Reply with your details, then "done"**
+5. **Follow each step the AI gives you**
+
+The AI will handle:
+- Creating the JSON file content
+- Telling you exactly what to add to `index.ts`
+- Generating the correct slug from your video title
+- Providing the exact commands to run
+
+Want me to save this as a file you can download?
+i need a standalone md file careful with the formatting
+Here's your standalone Markdown file. Copy the entire block below:
+
+markdown
+# 🎬 Vibe Coding: Add a New Travel Video
+
+Copy this entire prompt into DeepSeek (or any AI). The AI will guide you step by step. After each step, reply **"done"** to continue.
+
+---
+
+## INSTRUCTIONS FOR THE AI
+
+You are helping me add a new video to my Astro + Tailwind travel video portfolio. I already have:
+
+- The video uploaded to YouTube
+- Screenshots extracted from the video
+
+Guide me through these 6 steps. After each step, wait for me to reply **"done"** before proceeding to the next step.
+
+### Step 1: Collect video information
+
+Ask me for these details:
+
+- YouTube URL
+- Trip date (YYYY-MM-DD)
+- Country
+- Region
+- Places (comma separated)
+- Camera used
+- Gear/Lens
+- Music artist
+- Music title
+- Spotify URL
+- YouTube music URL
+- Short description (1 sentence)
+
+### Step 2: Generate the JSON file
+
+Create the JSON file content using my answers. Tell me to save it as `src/data/videos/{slug}.json` (slug is lowercase with hyphens, e.g., `fez-2025`).
+
+### Step 3: Update index.ts
+
+Tell me exactly what to add to `src/data/index.ts`:
+
+- The import line
+- Where to add the video in the `allVideos` array (newest first)
+
+### Step 4: Prepare screenshots
+
+Tell me to:
+
+- Create folder `staging/{slug}/`
+- Copy my screenshots there (any filenames are fine)
+
+### Step 5: Run optimization
+
+Tell me to run:
+
+```bash
+npm run optimize-images {slug}
+Ask me to share the output.
+
+Step 6: Test and deploy
+
+Tell me to:
+
+Run npm run dev to test locally
+Push to GitHub: git add . && git commit -m "Add {slug}" && git push
+PROJECT STRUCTURE REFERENCE
+
+text
+ju-travel-video/
+├── staging/              # Put raw screenshots here
+├── public/images/stills/ # Optimized images go here
+├── src/
+│   ├── data/
+│   │   ├── index.ts      # Import all videos here
+│   │   └── videos/       # JSON files here
+│   └── pages/
+│       └── index.astro
+├── scripts/
+│   ├── optimize-images.js
+│   └── update-stills.js
+└── package.json
+EXAMPLE JSON STRUCTURE
+
+json
+{
+  "id": "fez-2025",
+  "title": "Fez | 2025",
+  "slug": "fez-2025",
+  "youtubeId": "z8haKLdIOFo",
+  "description": "A travel film from my trip to Fez in November 2025.",
+  "metadata": {
+    "country": "Morocco",
+    "region": "Africa",
+    "places": ["Fez"],
+    "date": "2025-11-15",
+    "coordinates": [34.0181, -5.0078],
+    "camera": "Olympus OM-D E-M5 Mark II",
+    "gear": "7 Artisans 35mm f/1.2",
+    "music": {
+      "artist": "Noah Kahan",
+      "title": "Carlo's Song",
+      "spotify": "https://open.spotify.com/track/...",
+      "youtube": "https://www.youtube.com/watch?v=..."
+    }
+  },
+  "stills": []
+}
+START HERE
+
+Ask me for Step 1: my video details.
+
+text
+
+---
+
+**Save this as `add-video-prompt.md`** and copy-paste it into DeepSeek when you're ready to add your next video.
+
 --- .vscode/extensions.json ---
 {
   "recommendations": ["astro-build.astro-vscode"],
@@ -6095,6 +6346,8 @@ import menorca2023 from './videos/menorca-2023.json';
 import tenerife2024 from './videos/tenerife-2024.json';
 import tokyo2025 from './videos/tokyo-2025.json';
 import colombia2026 from './videos/colombia-2026.json';
+import fez2025 from './videos/fez-2025.json';
+import newYork2026 from './videos/new-york-2026.json';
 
 
 export interface Video {
@@ -6133,7 +6386,9 @@ export const allVideos: Video[] = [
   menorca2023,
   tenerife2024,
   tokyo2025,
-  colombia2026
+  fez2025,
+  colombia2026,
+  newYork2026,
 ];
 
 // Sorted by date (newest first)
@@ -6430,6 +6685,47 @@ export function getVideoBySlug(slug: string): Video | undefined {
   ]
 }
 
+--- src/data/videos/new-york-2026.json ---
+{
+  "id": "new-york-2026",
+  "title": "New York | 2026",
+  "slug": "new-york-2026",
+  "youtubeId": "DjqxXZNmmaQ",
+  "description": "Trip to NY I did on a house swap and stayed in Brooklyn for one week, to explore the city and 'live' it.",
+  "metadata": {
+    "country": "United States",
+    "region": "North America",
+    "places": [
+      "New York"
+    ],
+    "date": "2026-05-23",
+    "coordinates": [
+      40.7128,
+      -74.006
+    ],
+    "camera": "Panasonic S9",
+    "gear": "Panasonic 24-60 2.8",
+    "music": {
+      "artist": "Belle and Sebastian",
+      "title": "Sleep the Clock Around",
+      "spotify": "https://open.spotify.com/track/2Z5kQTijIo3yVIL0EPrq9T?si=6a79413ccdc74464",
+      "youtube": "https://www.youtube.com/watch?v=Xs7bjvySG80"
+    }
+  },
+  "stills": [
+    "/images/stills/new-york-2026/new-york-2026-stills-01.webp",
+    "/images/stills/new-york-2026/new-york-2026-stills-02.webp",
+    "/images/stills/new-york-2026/new-york-2026-stills-03.webp",
+    "/images/stills/new-york-2026/new-york-2026-stills-04.webp",
+    "/images/stills/new-york-2026/new-york-2026-stills-05.webp",
+    "/images/stills/new-york-2026/new-york-2026-stills-06.webp",
+    "/images/stills/new-york-2026/new-york-2026-stills-07.webp",
+    "/images/stills/new-york-2026/new-york-2026-stills-08.webp",
+    "/images/stills/new-york-2026/new-york-2026-stills-09.webp",
+    "/images/stills/new-york-2026/new-york-2026-stills-10.webp"
+  ]
+}
+
 --- src/data/videos/venice-2018.json ---
 {
   "id": "venice-2018",
@@ -6541,6 +6837,50 @@ export function getVideoBySlug(slug: string): Video | undefined {
   ]
 }
 
+--- src/data/videos/fez-2025.json ---
+{
+  "id": "fez-2025",
+  "title": "Fez | 2025",
+  "slug": "fez-2025",
+  "youtubeId": "z8haKLdIOFo",
+  "description": "A travel film from my trip to Fez, Morocco in November 2025.",
+  "metadata": {
+    "country": "Morocco",
+    "region": "Africa",
+    "places": [
+      "Fez"
+    ],
+    "date": "2025-11-15",
+    "coordinates": [
+      34.0181,
+      -5.0078
+    ],
+    "camera": "Olympus OM-D E-M5 Mark II",
+    "gear": "7 Artisans 35mm f/1.2",
+    "music": {
+      "artist": "Noah Kahan",
+      "title": "Carlo's Song",
+      "spotify": "https://open.spotify.com/track/7qjCmoM2kKXAt2QIPhLVIg?si=2d79c1801041414e",
+      "youtube": "https://www.youtube.com/watch?v=PqkCMX10Ho4"
+    }
+  },
+  "stills": [
+    "/images/stills/fez-2025/fez-2025-stills-01.webp",
+    "/images/stills/fez-2025/fez-2025-stills-02.webp",
+    "/images/stills/fez-2025/fez-2025-stills-03.webp",
+    "/images/stills/fez-2025/fez-2025-stills-04.webp",
+    "/images/stills/fez-2025/fez-2025-stills-05.webp",
+    "/images/stills/fez-2025/fez-2025-stills-06.webp",
+    "/images/stills/fez-2025/fez-2025-stills-07.webp",
+    "/images/stills/fez-2025/fez-2025-stills-08.webp",
+    "/images/stills/fez-2025/fez-2025-stills-09.webp",
+    "/images/stills/fez-2025/fez-2025-stills-10.webp",
+    "/images/stills/fez-2025/fez-2025-stills-11.webp",
+    "/images/stills/fez-2025/fez-2025-stills-12.webp",
+    "/images/stills/fez-2025/fez-2025-stills-13.webp"
+  ]
+}
+
 --- src/data/videos/tenerife-2024.json ---
 {
   "id": "tenerife-2024",
@@ -6649,8 +6989,8 @@ import { sortedVideos } from '../data/index';
 METADATA
 ================================================================================
 
-Files Parsed: 42
-Total Characters: 210506
+Files Parsed: 45
+Total Characters: 219500
 
 File List:
 ----------------------------------------
@@ -6667,6 +7007,7 @@ other/2026_01-01_improvements-look-and-feel.md: 85577 characters
 other/2026_01_05_movile-version.md: 3980 characters
 other/2026_01_15_full_screen_gallery.md: 4995 characters
 package.json: 575 characters
+prompts/new_video.md: 6008 characters
 scripts/optimize-images.js: 5937 characters
 scripts/update-stills.js: 1458 characters
 src/components/ActiveFilters.astro: 2976 characters
@@ -6680,15 +7021,17 @@ src/components/VideoSection.astro: 5864 characters
 src/components/mobile/Header.astro: 1733 characters
 src/components/mobile/PhotoCarousel.astro: 2466 characters
 src/components/mobile/VideoSection.astro: 2256 characters
-src/data/index.ts: 1601 characters
+src/data/index.ts: 1729 characters
 src/data/videos/colombia-2026.json: 1430 characters
 src/data/videos/croatia-2015.json: 1098 characters
+src/data/videos/fez-2025.json: 1421 characters
 src/data/videos/greece-2016.json: 1033 characters
 src/data/videos/iceland-2019.json: 1183 characters
 src/data/videos/london-2017.json: 1035 characters
 src/data/videos/luxembourg-2018.json: 1353 characters
 src/data/videos/marrakesh-2019.json: 1478 characters
 src/data/videos/menorca-2023.json: 1357 characters
+src/data/videos/new-york-2026.json: 1437 characters
 src/data/videos/tenerife-2024.json: 1548 characters
 src/data/videos/tokyo-2025.json: 1375 characters
 src/data/videos/venice-2018.json: 1021 characters
@@ -6716,17 +7059,21 @@ ju-travel-video/
 │   ├── 2026_01-01_improvements-look-and-feel.md
 │   ├── 2026_01_05_movile-version.md
 │   └── 2026_01_15_full_screen_gallery.md
+├── prompts/
+│   └── new_video.md
 ├── public/
 │   └── images/
 │       └── stills/
 │           ├── colombia-2026/
 │           ├── croatia-2015/
+│           ├── fez-2025/
 │           ├── greece-2016/
 │           ├── iceland-2019/
 │           ├── london-2017/
 │           ├── luxembourg-2018/
 │           ├── marrakesh-2019/
 │           ├── menorca-2023/
+│           ├── new-york-2026/
 │           ├── tenerife-2024/
 │           ├── tokyo-2025/
 │           └── venice-2018/
@@ -6751,12 +7098,14 @@ ju-travel-video/
 │   │   ├── videos/
 │   │   │   ├── colombia-2026.json
 │   │   │   ├── croatia-2015.json
+│   │   │   ├── fez-2025.json
 │   │   │   ├── greece-2016.json
 │   │   │   ├── iceland-2019.json
 │   │   │   ├── london-2017.json
 │   │   │   ├── luxembourg-2018.json
 │   │   │   ├── marrakesh-2019.json
 │   │   │   ├── menorca-2023.json
+│   │   │   ├── new-york-2026.json
 │   │   │   ├── tenerife-2024.json
 │   │   │   ├── tokyo-2025.json
 │   │   │   └── venice-2018.json
@@ -6777,6 +7126,7 @@ ju-travel-video/
 │   ├── luxembourg-2018/
 │   ├── marrakesh-2019/
 │   ├── menorca-2023/
+│   ├── new-york-2026/
 │   ├── tenerife-2024/
 │   ├── tokyo-2025/
 │   └── venice-2018/
@@ -6785,6 +7135,6 @@ ju-travel-video/
 └── tsconfig.json
 
 Generated at:
-Local: 2026-06-11 22:31:21 
-UTC:   2026-06-11 20:31:21 UTC
-Timestamp: 1781209881
+Local: 2026-09-27 20:25:02 
+UTC:   2026-09-27 18:25:02 UTC
+Timestamp: 1790533502

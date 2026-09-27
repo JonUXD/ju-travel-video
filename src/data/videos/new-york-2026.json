@@ -1,0 +1,39 @@
+{
+  "id": "new-york-2026",
+  "title": "New York | 2026",
+  "slug": "new-york-2026",
+  "youtubeId": "DjqxXZNmmaQ",
+  "description": "Trip to NY I did on a house swap and stayed in Brooklyn for one week, to explore the city and 'live' it.",
+  "metadata": {
+    "country": "United States",
+    "region": "North America",
+    "places": [
+      "New York"
+    ],
+    "date": "2026-05-23",
+    "coordinates": [
+      40.7128,
+      -74.006
+    ],
+    "camera": "Panasonic S9",
+    "gear": "Panasonic 24-60 2.8",
+    "music": {
+      "artist": "Belle and Sebastian",
+      "title": "Sleep the Clock Around",
+      "spotify": "https://open.spotify.com/track/2Z5kQTijIo3yVIL0EPrq9T?si=6a79413ccdc74464",
+      "youtube": "https://www.youtube.com/watch?v=Xs7bjvySG80"
+    }
+  },
+  "stills": [
+    "/images/stills/new-york-2026/new-york-2026-stills-01.webp",
+    "/images/stills/new-york-2026/new-york-2026-stills-02.webp",
+    "/images/stills/new-york-2026/new-york-2026-stills-03.webp",
+    "/images/stills/new-york-2026/new-york-2026-stills-04.webp",
+    "/images/stills/new-york-2026/new-york-2026-stills-05.webp",
+    "/images/stills/new-york-2026/new-york-2026-stills-06.webp",
+    "/images/stills/new-york-2026/new-york-2026-stills-07.webp",
+    "/images/stills/new-york-2026/new-york-2026-stills-08.webp",
+    "/images/stills/new-york-2026/new-york-2026-stills-09.webp",
+    "/images/stills/new-york-2026/new-york-2026-stills-10.webp"
+  ]
+}
